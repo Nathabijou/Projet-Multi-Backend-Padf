@@ -32,156 +32,83 @@ public class DashboardImpl implements DashboardIService {
         Long sectionId = filter.getSectionId();
         Long quartierId = filter.getQuartierId();
         Long arrondissementId = filter.getArrondissementId();
-
         String projetId = filter.getProjetId();
-        LocalDate dateDebut = LocalDate.of(2019, 1, 1); // oswa pi bonè si ou gen done pi ansyen
-        LocalDate dateFin = LocalDate.now(); // jiska jodi a
 
+        LocalDate dateDebut = LocalDate.of(2019, 1, 1); // Required only for count methods
+        LocalDate dateFin = LocalDate.now(); // Required only for count methods
 
-        long totalBeneficiaires = projetBeneficiaireDao.countBeneficiairesByFilters(
-                composanteId, zoneId, departementId,arrondissementId, communeId, sectionId, quartierId, projetId);
+        KpiResponse response = new KpiResponse();
 
-        long totalFemmes = projetBeneficiaireDao.countBySexe(
-                composanteId, zoneId, departementId, arrondissementId,communeId, sectionId, quartierId, projetId, "F");
+        // --- Dashboard: Beneficiary Counts ---
+        response.setTotalBeneficiaires(projetBeneficiaireDao.countBeneficiairesByFilters(
+                composanteId, zoneId, departementId, arrondissementId, communeId, sectionId, quartierId, projetId));
+        response.setTotalFemmes(projetBeneficiaireDao.countBySexe(
+                composanteId, zoneId, departementId, arrondissementId, communeId, sectionId, quartierId, projetId, "F"));
+        response.setTotalHommes(projetBeneficiaireDao.countBySexe(
+                composanteId, zoneId, departementId, arrondissementId, communeId, sectionId, quartierId, projetId, "M"));
+        response.setTotalQualifier(projetBeneficiaireDao.countByQualification(
+                composanteId, zoneId, departementId, arrondissementId, communeId, sectionId, quartierId, projetId, "Q"));
+        response.setTotalNonQualifier(projetBeneficiaireDao.countByQualification(
+                composanteId, zoneId, departementId, arrondissementId, communeId, sectionId, quartierId, projetId, "NQ"));
 
-        long totalHommes = projetBeneficiaireDao.countBySexe(
-                composanteId, zoneId, departementId,arrondissementId, communeId, sectionId, quartierId, projetId, "M");
+        // --- Dashboard: Detailed Beneficiary Counts for Chart ---
+        response.setTotalFilleQualifier(projetBeneficiaireDao.countBySexeAndQualification(
+                "F", "Q", composanteId, zoneId, departementId, arrondissementId, communeId, sectionId, quartierId, projetId));
+        response.setTotalFilleNonQualifier(projetBeneficiaireDao.countBySexeAndQualification(
+                "F", "NQ", composanteId, zoneId, departementId, arrondissementId, communeId, sectionId, quartierId, projetId));
+        response.setTotalGarconQualifier(projetBeneficiaireDao.countBySexeAndQualification(
+                "M", "Q", composanteId, zoneId, departementId, arrondissementId, communeId, sectionId, quartierId, projetId));
+        response.setTotalGarconNonQualifier(projetBeneficiaireDao.countBySexeAndQualification(
+                "M", "NQ", composanteId, zoneId, departementId, arrondissementId, communeId, sectionId, quartierId, projetId));
 
+        // --- Payroll: Total Amounts by Payment Method (NO DATES) ---
+        response.setTotalMonCash(payrollDao.sumByMethodePaiement(
+                "MonCash", composanteId, zoneId, departementId, arrondissementId, communeId, sectionId, quartierId, projetId));
+        response.setTotalLajanCash(payrollDao.sumByMethodePaiement(
+                "LajanCash", composanteId, zoneId, departementId, arrondissementId, communeId, sectionId, quartierId, projetId));
+        response.setTotalMontantPaye(response.getTotalMonCash() + response.getTotalLajanCash());
 
-        long totalQualifier = projetBeneficiaireDao.countByQualification(
-                composanteId, zoneId, departementId,arrondissementId, communeId, sectionId, quartierId, projetId, "Q");
+        // --- Payroll: Detailed Counts by Gender and Payment Method (WITH DATES) ---
+        response.setTotalFilleMoncash(payrollDao.countBySexeAndMethodePaiement(
+                composanteId, zoneId, departementId, arrondissementId, communeId, sectionId, quartierId, projetId, "F", "MonCash", dateDebut, dateFin));
+        response.setTotalFilleCash(payrollDao.countBySexeAndMethodePaiement(
+                composanteId, zoneId, departementId, arrondissementId, communeId, sectionId, quartierId, projetId, "F", "LajanCash", dateDebut, dateFin));
+        response.setTotalGarconMoncash(payrollDao.countBySexeAndMethodePaiement(
+                composanteId, zoneId, departementId, arrondissementId, communeId, sectionId, quartierId, projetId, "M", "MonCash", dateDebut, dateFin));
+        response.setTotalGarconCash(payrollDao.countBySexeAndMethodePaiement(
+                composanteId, zoneId, departementId, arrondissementId, communeId, sectionId, quartierId, projetId, "M", "LajanCash", dateDebut, dateFin));
 
-        long totalNonQualifier = projetBeneficiaireDao.countByQualification(
-                composanteId, zoneId, departementId,arrondissementId, communeId, sectionId, quartierId, projetId, "NQ");
+        // --- Payroll: Total Amounts by Gender and Payment Method ---
+        response.setTotalFilleMonCashMontant(payrollDao.sumBySexeAndMethodePaiement(
+                composanteId, zoneId, departementId, arrondissementId, communeId, sectionId, quartierId, projetId, "F", "MonCash"));
+        response.setTotalFilleLajanCashMontant(payrollDao.sumBySexeAndMethodePaiement(
+                composanteId, zoneId, departementId, arrondissementId, communeId, sectionId, quartierId, projetId, "F", "LajanCash"));
+        response.setTotalGarconMonCashMontant(payrollDao.sumBySexeAndMethodePaiement(
+                composanteId, zoneId, departementId, arrondissementId, communeId, sectionId, quartierId, projetId, "M", "MonCash"));
+        response.setTotalGarconLajanCashMontant(payrollDao.sumBySexeAndMethodePaiement(
+                composanteId, zoneId, departementId, arrondissementId, communeId, sectionId, quartierId, projetId, "M", "LajanCash"));
 
-        long totalFilleQualifier = projetBeneficiaireDao.countBySexeAndQualification(
-                "F", "Q", composanteId, zoneId, departementId, arrondissementId, communeId, sectionId, quartierId, projetId);
+        // --- Payroll: Detailed Amounts (Montant) by Combination (NO DATES) ---
+        // Fille
+        response.setTotalFilleQualifierMonCashMontant(payrollDao.sumBySexeAndQualificationAndMethodePaiement(
+                composanteId, zoneId, departementId, arrondissementId, communeId, sectionId, quartierId, projetId, "F", "Q", "MonCash"));
+        response.setTotalFilleQualifierLajanCashMontant(payrollDao.sumBySexeAndQualificationAndMethodePaiement(
+                composanteId, zoneId, departementId, arrondissementId, communeId, sectionId, quartierId, projetId, "F", "Q", "LajanCash"));
+        response.setTotalFilleNonQualifierMonCashMontant(payrollDao.sumBySexeAndQualificationAndMethodePaiement(
+                composanteId, zoneId, departementId, arrondissementId, communeId, sectionId, quartierId, projetId, "F", "NQ", "MonCash"));
+        response.setTotalFilleNonQualifierLajanCashMontant(payrollDao.sumBySexeAndQualificationAndMethodePaiement(
+                composanteId, zoneId, departementId, arrondissementId, communeId, sectionId, quartierId, projetId, "F", "NQ", "LajanCash"));
 
-        long totalFilleNonQualifier = projetBeneficiaireDao.countBySexeAndQualification(
-                "F", "NQ", composanteId, zoneId, departementId, arrondissementId, communeId, sectionId, quartierId, projetId);
+        // Garçon
+        response.setTotalGarconQualifierMonCashMontant(payrollDao.sumBySexeAndQualificationAndMethodePaiement(
+                composanteId, zoneId, departementId, arrondissementId, communeId, sectionId, quartierId, projetId, "M", "Q", "MonCash"));
+        response.setTotalGarconQualifierLajanCashMontant(payrollDao.sumBySexeAndQualificationAndMethodePaiement(
+                composanteId, zoneId, departementId, arrondissementId, communeId, sectionId, quartierId, projetId, "M", "Q", "LajanCash"));
+        response.setTotalGarconNonQualifierMonCashMontant(payrollDao.sumBySexeAndQualificationAndMethodePaiement(
+                composanteId, zoneId, departementId, arrondissementId, communeId, sectionId, quartierId, projetId, "M", "NQ", "MonCash"));
+        response.setTotalGarconNonQualifierLajanCashMontant(payrollDao.sumBySexeAndQualificationAndMethodePaiement(
+                composanteId, zoneId, departementId, arrondissementId, communeId, sectionId, quartierId, projetId, "M", "NQ", "LajanCash"));
 
-        long totalGarconQualifier = projetBeneficiaireDao.countBySexeAndQualification(
-                "M", "Q", composanteId, zoneId, departementId, arrondissementId, communeId, sectionId, quartierId, projetId);
-
-        long totalGarconNonQualifier = projetBeneficiaireDao.countBySexeAndQualification(
-                "M", "NQ", composanteId, zoneId, departementId, arrondissementId, communeId, sectionId, quartierId, projetId);
-
-
-
-        double totalMonCash = payrollDao.sumByMethodePaiement(
-                "MonCash", composanteId, zoneId, departementId,arrondissementId, communeId, sectionId, quartierId, projetId);
-
-        double totalLajanCash = payrollDao.sumByMethodePaiement(
-                "LajanCash", composanteId, zoneId, departementId,arrondissementId, communeId, sectionId, quartierId, projetId);
-
-        int totalFilleMoncash = (int) payrollDao.countBySexeAndMethodePaiement(
-                composanteId, zoneId, departementId, arrondissementId,communeId, sectionId, quartierId, projetId,
-                "F", "MonCash",
-                dateDebut, dateFin
-        );
-
-        int totalFilleCash = (int) payrollDao.countBySexeAndMethodePaiement(
-                composanteId, zoneId, departementId,arrondissementId, communeId, sectionId, quartierId, projetId,
-                "F", "LajanCash", dateDebut, dateFin
-        );
-
-        int totalGarconMoncash = (int) payrollDao.countBySexeAndMethodePaiement(
-                composanteId, zoneId, departementId,arrondissementId, communeId, sectionId, quartierId, projetId,
-                "M", "MonCash", dateDebut, dateFin
-        );
-
-        int totalGarconCash = (int) payrollDao.countBySexeAndMethodePaiement(
-                composanteId, zoneId, departementId,arrondissementId, communeId, sectionId, quartierId, projetId,
-                "M", "LajanCash", dateDebut, dateFin
-        );
-
-        double totalFilleQualifierMoncash = payrollDao.sumBySexeQualificationAndMethodePaiement(
-                composanteId, zoneId, departementId, arrondissementId,
-                communeId, sectionId, quartierId, projetId,
-                "F", "Q", "MonCash"
-        );
-
-        double totalFilleQualifierLajanCash = payrollDao.sumBySexeQualificationAndMethodePaiement(
-                composanteId, zoneId, departementId, arrondissementId,
-                communeId, sectionId, quartierId, projetId,
-                "F", "Q", "LajanCash"
-        );
-
-        double totalFilleNonQualifierMoncash = payrollDao.sumBySexeQualificationAndMethodePaiement(
-                composanteId, zoneId, departementId, arrondissementId,
-                communeId, sectionId, quartierId, projetId,
-                "F", "NQ", "MonCash"
-        );
-
-        double totalFilleNonQualifierLajanCash = payrollDao.sumBySexeQualificationAndMethodePaiement(
-                composanteId, zoneId, departementId, arrondissementId,
-                communeId, sectionId, quartierId, projetId,
-                "F", "NQ", "LajanCash"
-        );
-
-        double totalGarconQualifierMoncash = payrollDao.sumBySexeQualificationAndMethodePaiement(
-                composanteId, zoneId, departementId, arrondissementId,
-                communeId, sectionId, quartierId, projetId,
-                "M", "Q", "MonCash"
-        );
-
-        double totalGarconQualifierLajanCash = payrollDao.sumBySexeQualificationAndMethodePaiement(
-                composanteId, zoneId, departementId, arrondissementId,
-                communeId, sectionId, quartierId, projetId,
-                "M", "Q", "LajanCash"
-        );
-
-
-
-
-        // **Ajoute sa yo tou ki manke nan vèsyon ou te bay la**
-
-        double totalFilleMonCashMontant = payrollDao.sumBySexeAndMethodePaiement(
-                composanteId, zoneId, departementId,arrondissementId, communeId, sectionId, quartierId, projetId,
-                "F", "MonCash"
-        );
-
-        double totalFilleLajanCashMontant = payrollDao.sumBySexeAndMethodePaiement(
-                composanteId, zoneId, departementId,arrondissementId, communeId, sectionId, quartierId, projetId,
-                "F", "LajanCash"
-        );
-
-        double totalGarconMonCashMontant = payrollDao.sumBySexeAndMethodePaiement(
-                composanteId, zoneId, departementId, arrondissementId,communeId, sectionId, quartierId, projetId,
-                "M", "MonCash"
-        );
-
-        double totalGarconLajanCashMontant = payrollDao.sumBySexeAndMethodePaiement(
-                composanteId, zoneId, departementId, arrondissementId,communeId, sectionId, quartierId, projetId,
-                "M", "LajanCash"
-        );
-
-
-
-
-        return new KpiResponse(
-                totalBeneficiaires,
-                totalFemmes,
-                totalHommes,
-                totalQualifier,
-                totalNonQualifier,
-                totalMonCash,
-                totalLajanCash,
-                totalFilleQualifier,
-                totalFilleNonQualifier,
-                totalGarconQualifier,
-                totalGarconNonQualifier,
-                totalFilleMoncash,
-                totalFilleCash,
-                totalGarconMoncash,
-                totalGarconCash,
-                totalFilleQualifierMoncash,
-                totalFilleQualifierLajanCash,
-                totalFilleNonQualifierMoncash,
-                totalFilleNonQualifierLajanCash,
-                totalGarconQualifierMoncash,
-                totalGarconQualifierLajanCash
-        );
+        return response;
     }
-
 }
