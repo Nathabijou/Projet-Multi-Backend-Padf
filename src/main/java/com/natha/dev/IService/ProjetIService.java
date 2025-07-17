@@ -24,10 +24,4 @@ public interface ProjetIService {
 
     List<BeneficiaireDto> findBeneficiairesByProjetId(String idProjet);
 
-
-
-
-
-
-
 }

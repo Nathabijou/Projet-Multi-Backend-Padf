@@ -19,7 +19,7 @@ public interface PayrollDao extends JpaRepository<Payroll, String> {
     SELECT COALESCE(SUM(p.montantPayer * p.nbreJourTravail), 0) FROM Payroll p
     WHERE p.methodePaiement = :methode
       AND (:composanteId IS NULL OR p.projetBeneficiaire.projet.composante.id = :composanteId)
-      AND (:zoneId IS NULL OR p.projetBeneficiaire.projet.quartier.sectionCommunale.commune.arrondissement.departement.zone.id = :zoneId)
+      AND (:zoneId IS NULL OR EXISTS (SELECT 1 FROM ZoneDepartement zd WHERE zd.departement = p.projetBeneficiaire.projet.quartier.sectionCommunale.commune.arrondissement.departement AND zd.zone.id = :zoneId))
       AND (:departementId IS NULL OR p.projetBeneficiaire.projet.quartier.sectionCommunale.commune.arrondissement.departement.id = :departementId)
       AND (:arrondissementId IS NULL OR p.projetBeneficiaire.projet.quartier.sectionCommunale.commune.arrondissement.id = :arrondissementId)
       AND (:communeId IS NULL OR p.projetBeneficiaire.projet.quartier.sectionCommunale.commune.id = :communeId)
@@ -47,7 +47,7 @@ public interface PayrollDao extends JpaRepository<Payroll, String> {
     WHERE b.sexe = :sexe
       AND p.methodePaiement = :methodePaiement
       AND (:composanteId IS NULL OR pb.projet.composante.id = :composanteId)
-      AND (:zoneId IS NULL OR pb.projet.quartier.sectionCommunale.commune.arrondissement.departement.zone.id = :zoneId)
+      AND (:zoneId IS NULL OR EXISTS (SELECT 1 FROM ZoneDepartement zd WHERE zd.departement = pb.projet.quartier.sectionCommunale.commune.arrondissement.departement AND zd.zone.id = :zoneId))
       AND (:departementId IS NULL OR pb.projet.quartier.sectionCommunale.commune.arrondissement.departement.id = :departementId)
       AND (:arrondissementId IS NULL OR pb.projet.quartier.sectionCommunale.commune.arrondissement.id = :arrondissementId)
       AND (:communeId IS NULL OR pb.projet.quartier.sectionCommunale.commune.id = :communeId)
@@ -78,7 +78,7 @@ public interface PayrollDao extends JpaRepository<Payroll, String> {
       AND b.qualification = :qualification
       AND p.methodePaiement = :methodePaiement
       AND (:composanteId IS NULL OR pb.projet.composante.id = :composanteId)
-      AND (:zoneId IS NULL OR pb.projet.quartier.sectionCommunale.commune.arrondissement.departement.zone.id = :zoneId)
+      AND (:zoneId IS NULL OR EXISTS (SELECT 1 FROM ZoneDepartement zd WHERE zd.departement = pb.projet.quartier.sectionCommunale.commune.arrondissement.departement AND zd.zone.id = :zoneId))
       AND (:departementId IS NULL OR pb.projet.quartier.sectionCommunale.commune.arrondissement.departement.id = :departementId)
       AND (:arrondissementId IS NULL OR pb.projet.quartier.sectionCommunale.commune.arrondissement.id = :arrondissementId)
       AND (:communeId IS NULL OR pb.projet.quartier.sectionCommunale.commune.id = :communeId)
@@ -110,7 +110,7 @@ public interface PayrollDao extends JpaRepository<Payroll, String> {
       AND (:sexe IS NULL OR b.sexe = :sexe)
       AND (:methodePaiement IS NULL OR p.methodePaiement = :methodePaiement)
       AND (:composanteId IS NULL OR pb.projet.composante.id = :composanteId)
-      AND (:zoneId IS NULL OR pb.projet.quartier.sectionCommunale.commune.arrondissement.departement.zone.id = :zoneId)
+      AND (:zoneId IS NULL OR EXISTS (SELECT 1 FROM ZoneDepartement zd WHERE zd.departement = pb.projet.quartier.sectionCommunale.commune.arrondissement.departement AND zd.zone.id = :zoneId))
       AND (:departementId IS NULL OR pb.projet.quartier.sectionCommunale.commune.arrondissement.departement.id = :departementId)
       AND (:arrondissementId IS NULL OR pb.projet.quartier.sectionCommunale.commune.arrondissement.id = :arrondissementId)
       AND (:communeId IS NULL OR pb.projet.quartier.sectionCommunale.commune.id = :communeId)

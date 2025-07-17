@@ -18,10 +18,9 @@ SELECT COUNT(pb) FROM ProjetBeneficiaire pb
 JOIN pb.projet.quartier.sectionCommunale.commune c
 LEFT JOIN c.arrondissement a
 LEFT JOIN a.departement d
-LEFT JOIN d.zones z
 WHERE pb.beneficiaire.sexe = :sexe
   AND (:composanteId IS NULL OR pb.projet.composante.id = :composanteId)
-  AND (:zoneId IS NULL OR z.id = :zoneId)
+  AND (:zoneId IS NULL OR EXISTS (SELECT 1 FROM ZoneDepartement zd WHERE zd.departement = d AND zd.zone.id = :zoneId))
   AND (:departementId IS NULL OR d.id = :departementId)
   AND (:arrondissementId IS NULL OR a.id = :arrondissementId)
   AND (:communeId IS NULL OR c.id = :communeId)
@@ -46,10 +45,9 @@ SELECT COUNT(pb) FROM ProjetBeneficiaire pb
 JOIN pb.projet.quartier.sectionCommunale.commune c
 LEFT JOIN c.arrondissement a
 LEFT JOIN a.departement d
-LEFT JOIN d.zones z
 WHERE pb.beneficiaire.qualification = :qualification
   AND (:composanteId IS NULL OR pb.projet.composante.id = :composanteId)
-  AND (:zoneId IS NULL OR z.id = :zoneId)
+  AND (:zoneId IS NULL OR EXISTS (SELECT 1 FROM ZoneDepartement zd WHERE zd.departement = d AND zd.zone.id = :zoneId))
   AND (:departementId IS NULL OR d.id = :departementId)
   AND (:arrondissementId IS NULL OR a.id = :arrondissementId)
   AND (:communeId IS NULL OR c.id = :communeId)
@@ -74,9 +72,8 @@ WHERE pb.beneficiaire.qualification = :qualification
     JOIN pb.projet.quartier.sectionCommunale.commune c
     LEFT JOIN c.arrondissement a
     LEFT JOIN a.departement d
-    LEFT JOIN d.zones z
     WHERE (:composanteId IS NULL OR pb.projet.composante.id = :composanteId)
-      AND (:zoneId IS NULL OR z.id = :zoneId)
+      AND (:zoneId IS NULL OR EXISTS (SELECT 1 FROM ZoneDepartement zd WHERE zd.departement = d AND zd.zone.id = :zoneId))
       AND (:departementId IS NULL OR d.id = :departementId)
       AND (:arrondissementId IS NULL OR a.id = :arrondissementId)
       AND (:communeId IS NULL OR c.id = :communeId)
@@ -101,11 +98,10 @@ WHERE pb.beneficiaire.qualification = :qualification
     JOIN pb.projet.quartier.sectionCommunale.commune c
     LEFT JOIN c.arrondissement a
     LEFT JOIN a.departement d
-    LEFT JOIN d.zones z
     WHERE b.sexe = :sexe
       AND b.qualification = :qualification
       AND (:composanteId IS NULL OR pb.projet.composante.id = :composanteId)
-      AND (:zoneId IS NULL OR z.id = :zoneId)
+      AND (:zoneId IS NULL OR EXISTS (SELECT 1 FROM ZoneDepartement zd WHERE zd.departement = d AND zd.zone.id = :zoneId))
       AND (:departementId IS NULL OR d.id = :departementId)
       AND (:arrondissementId IS NULL OR a.id = :arrondissementId)
       AND (:communeId IS NULL OR c.id = :communeId)

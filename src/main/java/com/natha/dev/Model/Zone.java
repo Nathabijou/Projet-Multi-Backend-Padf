@@ -21,15 +21,8 @@ public class Zone {
     @JoinColumn(name = "composante_id")
     private Composante composante;
 
-    // Zone.java
-    @ManyToMany
-    @JoinTable(
-            name = "zone_departement",
-            joinColumns = @JoinColumn(name = "zone_id"),
-            inverseJoinColumns = @JoinColumn(name = "departement_id")
-    )
-    private List<Departement> departements;
-
-
+    // Ansyen relasyon @ManyToMany retire
+    @OneToMany(mappedBy = "zone", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ZoneDepartement> zoneDepartements;
 
 }

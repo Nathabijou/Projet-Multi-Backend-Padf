@@ -45,7 +45,13 @@ public class QuartierServiceImpl implements QuartierIService {
     }
 
     private QuartierDto convertToDto(Quartier quartier) {
-        return new QuartierDto(quartier.getId(), quartier.getName(), quartier.getSectionCommunale().getId());
+        QuartierDto dto = new QuartierDto();
+        dto.setId(quartier.getId());
+        dto.setName(quartier.getName());
+        if (quartier.getSectionCommunale() != null) {
+            dto.setSectionCommunaleId(quartier.getSectionCommunale().getId());
+        }
+        // Ou ka ajoute konvèsyon pou lis pwojè yo isit la si sa nesesè
+        return dto;
     }
 }
-

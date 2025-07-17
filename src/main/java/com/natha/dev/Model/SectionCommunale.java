@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Entity
 @Getter
 @Setter
@@ -17,6 +19,9 @@ public class SectionCommunale {
     private Long id;
 
     private String name;
+
+    @OneToMany(mappedBy = "sectionCommunale", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Quartier> quartiers;
 
     @ManyToOne
     private Commune commune;

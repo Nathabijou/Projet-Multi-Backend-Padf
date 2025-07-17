@@ -1,6 +1,5 @@
 package com.natha.dev.ServiceImpl;
 
-
 import com.natha.dev.Dao.*;
 import com.natha.dev.Dto.BeneficiaireDto;
 import com.natha.dev.Dto.ProjetDto;
@@ -100,7 +99,7 @@ public class ProjetImpl implements ProjetIService {
         List<ProjetBeneficiaire> relations = projetBeneficiaireDao.findByProjetIdProjet(idProjet);
 
         return relations.stream()
-                .map(pb -> BeneficiaireImpl.convertToDto(pb.getBeneficiaire())) // ✅ OK
+                .map(pb -> BeneficiaireImpl.convertToDto(pb.getBeneficiaire())) // 
                 .collect(Collectors.toList());
     }
 
@@ -265,15 +264,15 @@ public class ProjetImpl implements ProjetIService {
         dto.setQuartierId(p.getQuartier() != null ? p.getQuartier().getId() : null);
 
         if (p.getComposante() != null) {
-    dto.setComposanteId(p.getComposante().getId());
-    dto.setComposanteCode(p.getComposante().getCode());
-    dto.setComposanteNom(p.getComposante().getNom());
+            dto.setComposanteId(p.getComposante().getId());
+            dto.setComposanteCode(p.getComposante().getCode());
+            dto.setComposanteNom(p.getComposante().getNom());
 
-    if (p.getComposante().getApplicationInstance() != null) {
-        dto.setApplicationCode(p.getComposante().getApplicationInstance().getCode());
+            if (p.getComposante().getApplicationInstance() != null) {
+                dto.setApplicationCode(p.getComposante().getApplicationInstance().getCode());
 //        dto.setApplicationNom(p.getComposante().getApplicationInstance().getNom());
-    }
-}
+            }
+        }
         return dto;
     }
 }

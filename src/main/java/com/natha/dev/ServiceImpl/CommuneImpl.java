@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
 @Service
 public class CommuneImpl implements CommuneIService {
 
@@ -58,16 +59,15 @@ public class CommuneImpl implements CommuneIService {
     }
 
     @Override
-    public List<CommuneDto> getByArrondissmentId(Long arrondissmentId) {
-        return communeDao.findByArrondissementId(arrondissmentId).stream().map(this::convertToDto).toList();
+    public List<CommuneDto> findByArrondissementId(Long arrondissementId) {
+        List<Commune> communes = communeDao.findByArrondissementId(arrondissementId);
+        return convertToDtoList(communes);
     }
-
 
     @Override
-    public List<CommuneDto> findByArrondissementId(Long arrondissementId) {
-        return communeDao.findByArrondissementId(arrondissementId).stream().map(this::convertToDto).toList();
+    public List<CommuneDto> getByArrondissementId(Long arrondissementId) {
+        return communeDao.findCommunesWithProjetsByArrondissementId(arrondissementId).stream().map(this::convertToDto).toList();
     }
-
 
 
     @Override
@@ -110,8 +110,3 @@ public class CommuneImpl implements CommuneIService {
                 .collect(Collectors.toList());
     }
 }
-
-
-
-
-

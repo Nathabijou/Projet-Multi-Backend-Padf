@@ -10,7 +10,7 @@ import java.util.List;
 public interface DepartementDao extends JpaRepository<Departement, Long> {
 
 
-    @Query("SELECT DISTINCT d FROM Departement d JOIN d.zones z WHERE z.id = :zoneId")
+    @Query("SELECT zd.departement FROM ZoneDepartement zd WHERE zd.zone.id = :zoneId")
     List<Departement> findByZoneId(@Param("zoneId") Long zoneId);
 
 }

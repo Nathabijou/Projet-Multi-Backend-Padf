@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -13,4 +15,6 @@ public class ArrondissementDto {
     private Long id;
     private String name;
     private Long departementId;
+    private String nameDepartement;
+    private List<CommuneDto> communes;
 }

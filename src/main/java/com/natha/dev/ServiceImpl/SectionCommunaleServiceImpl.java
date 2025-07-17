@@ -29,7 +29,7 @@ public class SectionCommunaleServiceImpl implements SectionCommunaleIService {
 
     @Override
     public List<SectionCommunaleDto> getByCommune(Long communeId) {
-        return dao.findByCommuneId(communeId).stream()
+        return dao.findByCommuneIdWithProjet(communeId).stream()
                 .map(this::convertToDto)
                 .toList();
     }
@@ -45,7 +45,13 @@ public class SectionCommunaleServiceImpl implements SectionCommunaleIService {
     }
 
     private SectionCommunaleDto convertToDto(SectionCommunale section) {
-        return new SectionCommunaleDto(section.getId(), section.getName(), section.getCommune().getId());
+        SectionCommunaleDto dto = new SectionCommunaleDto();
+        dto.setId(section.getId());
+        dto.setName(section.getName());
+        if (section.getCommune() != null) {
+            dto.setCommuneId(section.getCommune().getId());
+        }
+        // Ou ka ajoute konvèsyon pou lis katye yo isit la si sa nesesè
+        return dto;
     }
 }
-

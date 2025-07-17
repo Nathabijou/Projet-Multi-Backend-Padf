@@ -24,6 +24,9 @@ public class Commune {
     @OneToMany(mappedBy = "commune", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Groupe> groupes;
 
+    @OneToMany(mappedBy = "commune", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<SectionCommunale> sectionCommunales;
+
 
     @ManyToOne
     @JoinColumn(name = "arrondissement_id")

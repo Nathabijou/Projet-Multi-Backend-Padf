@@ -24,9 +24,9 @@ public class CommuneController {
         return communeIService.save(dto);
     }
     //@PreAuthorize("hasAnyRole('ADMIN', 'SUPERADMIN','MANAGER')")
-    @GetMapping("/communes/arrondissment/{id}")
-    public List<CommuneDto> getByDepartement(@PathVariable Long id) {
-        return communeIService.getByArrondissmentId(id);
+    @GetMapping("/communes/arrondissement/{id}")
+    public List<CommuneDto> getByArrondissementId(@PathVariable Long id) {
+        return communeIService.getByArrondissementId(id);
     }
     //@PreAuthorize("hasAnyRole('ADMIN', 'SUPERADMIN')")
     @GetMapping("/communes/all")
