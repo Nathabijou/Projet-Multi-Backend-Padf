@@ -175,7 +175,7 @@ public class UserService {
         mailMessage.setText(greeting + " " + userFirstName + " " + userLastName + ",\n\n"
                 + "Nous vous informons que vous avez créé un compte avec l'adresse e-mail : " + userEmail + ".\n"
                 + " Pour finaliser la création de votre compte, veuillez cliquer sur le lien suivant :\n"
-                + "https://padf.up.railway.app/ \n\n"
+                + "https://padf.algoleaders.com/ \n\n"
                 + "Votre nom d'utilisateur est : " + userName + "\n\n");
 
 

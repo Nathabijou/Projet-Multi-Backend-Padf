@@ -141,7 +141,7 @@ public interface PayrollDao extends JpaRepository<Payroll, String> {
     SELECT new com.natha.dev.Dto.PayrollFlatData(
     pr.name, p.debutPeriode, p.finPeriode, 
     b.nom, b.prenom, b.sexe, b.qualification, 
-    p.nbreJourTravail, p.montantPayer / p.nbreJourTravail, 
+    p.nbreJourTravail, p.montantPayer, 
     b.identification, b.telephonePaiement, p.methodePaiement
     )
     FROM Payroll p 
