@@ -1,6 +1,7 @@
 package com.natha.dev.Controller;
 
 import com.natha.dev.Dto.PayrollDto;
+import com.natha.dev.Dto.PeriodeMethodePaiementDTO;
 import com.natha.dev.IService.PayrollIService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -34,6 +35,18 @@ public class PayrollController {
                 payrollIService.getPayrollsByProjetBeneficiaire(projetId, beneficiaireId)
         );
     }
+
+    //@PreAuthorize("hasAnyRole('ADMIN', 'SUPERADMIN','MANAGER','USER')")
+    @GetMapping("/projet/{projetId}")
+    public ResponseEntity<List<PayrollDto>> getPayrollsByProjet(@PathVariable String projetId) {
+        return ResponseEntity.ok(payrollIService.getPayrollsByProjet(projetId));
+    }
+
+    @GetMapping("/methode-paiement-par-periode/{projetId}")
+    public ResponseEntity<List<PeriodeMethodePaiementDTO>> getMethodePaiementParPeriode(@PathVariable String projetId) {
+        return ResponseEntity.ok(payrollIService.getMethodePaiementParPeriode(projetId));
+    }
+
     //@PreAuthorize("hasAnyRole('ADMIN', 'SUPERADMIN','MANAGER','USER')")
     @PutMapping("/payrolls/{payrollId}")
     public ResponseEntity<PayrollDto> updatePayroll(

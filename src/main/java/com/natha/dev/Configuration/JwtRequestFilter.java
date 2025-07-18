@@ -15,14 +15,10 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-
-
 import java.io.IOException;
 
 @Component
 public class JwtRequestFilter extends OncePerRequestFilter {
-
-
 
     @Autowired
     private JwtUtil jwtUtil;
@@ -68,14 +64,5 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
         filterChain.doFilter(request, response);
 
-    }
-    @Override
-    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
-        String path = request.getRequestURI();
-        return path.equals("/reset") ||
-                path.equals("/authenticate") ||
-                path.equals("/registerNewUser") ||
-                path.equals("/verify-otp") ||
-                path.equals("/newPasswordRegister");
     }
 }

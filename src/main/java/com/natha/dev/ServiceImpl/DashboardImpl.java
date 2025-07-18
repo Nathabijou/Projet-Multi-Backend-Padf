@@ -6,22 +6,18 @@ import com.natha.dev.Dao.ProjetBeneficiaireDao;
 import com.natha.dev.Dto.KpiResponse;
 import com.natha.dev.IService.DashboardIService;
 import com.natha.dev.Model.DashboardFilter;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 
 @Service
+@RequiredArgsConstructor
 public class DashboardImpl implements DashboardIService {
 
-    @Autowired
-    private BeneficiaireDao beneficiaireDao;
-
-    @Autowired
-    private ProjetBeneficiaireDao projetBeneficiaireDao;
-
-    @Autowired
-    private PayrollDao payrollDao;
+    private final BeneficiaireDao beneficiaireDao;
+    private final ProjetBeneficiaireDao projetBeneficiaireDao;
+    private final PayrollDao payrollDao;
 
     @Override
     public KpiResponse getKpiData(DashboardFilter filter, String username) {

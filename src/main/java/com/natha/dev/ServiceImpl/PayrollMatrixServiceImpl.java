@@ -31,7 +31,7 @@ public class PayrollMatrixServiceImpl {
         // === 1. Kreye peryòd yo ak index yo ===
         int idx = 0;
         for (PayrollFlatData row : rawData) {
-            PeriodeDTO periode = new PeriodeDTO(row.getDateDebut(), row.getDateFin());
+            PeriodeDTO periode = new PeriodeDTO(row.getDateDebut(), row.getDateFin(), row.getMethodePaiement());
             if (!periodeIndex.containsKey(periode)) {
                 periodeIndex.put(periode, idx++);
             }
@@ -56,7 +56,7 @@ public class PayrollMatrixServiceImpl {
                 return b;
             });
 
-            PeriodeDTO periode = new PeriodeDTO(row.getDateDebut(), row.getDateFin());
+            PeriodeDTO periode = new PeriodeDTO(row.getDateDebut(), row.getDateFin(), row.getMethodePaiement());
             int pos = periodeIndex.get(periode);
 
             PayrollColDTO col = new PayrollColDTO();

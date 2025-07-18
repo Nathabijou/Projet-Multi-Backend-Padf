@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+
 @Setter
 @Getter
 public class PayrollFlatData {
@@ -18,11 +19,12 @@ public class PayrollFlatData {
     private double montantParJour;
     private String identification;
     private String telephonePaiement;
+    private String methodePaiement;
 
     public PayrollFlatData(String nomProjet, LocalDate dateDebut, LocalDate dateFin,
                            String nom, String prenom, String sexe, String qualification,
                            int nbJours, double montantParJour,
-                           String identification, String telephonePaiement) {
+                           String identification, String telephonePaiement, String methodePaiement) {
         this.nomProjet = nomProjet;
         this.dateDebut = dateDebut;
         this.dateFin = dateFin;
@@ -34,6 +36,7 @@ public class PayrollFlatData {
         this.montantParJour = montantParJour;
         this.identification = identification;
         this.telephonePaiement = telephonePaiement;
+        this.methodePaiement = methodePaiement;
     }
 
 
@@ -79,5 +82,8 @@ public class PayrollFlatData {
     }
     public String getIdentification(){
         return identification;
+    }
+    public String getMethodePaiement(){
+        return methodePaiement;
     }
 }

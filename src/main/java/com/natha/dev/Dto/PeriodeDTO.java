@@ -15,6 +15,7 @@ import java.util.Objects;
 public class PeriodeDTO {
     private LocalDate dateDebut;
     private LocalDate dateFin;
+    private String methodePaiement;
 
     // 👇 Si w ap mete li nan HashMap, ou bezwen sa pou .equals/.hashCode mache
     @Override
@@ -22,11 +23,11 @@ public class PeriodeDTO {
         if (this == o) return true;
         if (!(o instanceof PeriodeDTO)) return false;
         PeriodeDTO that = (PeriodeDTO) o;
-        return dateDebut.equals(that.dateDebut) && dateFin.equals(that.dateFin);
+        return dateDebut.equals(that.dateDebut) && dateFin.equals(that.dateFin) && methodePaiement.equals(that.methodePaiement);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(dateDebut, dateFin);
+        return Objects.hash(dateDebut, dateFin, methodePaiement);
     }
 }

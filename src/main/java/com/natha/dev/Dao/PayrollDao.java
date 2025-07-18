@@ -1,6 +1,7 @@
 package com.natha.dev.Dao;
 
 import com.natha.dev.Dto.PayrollFlatData;
+import com.natha.dev.Dto.PeriodeMethodePaiementDTO;
 import com.natha.dev.Model.Payroll;
 import com.natha.dev.Model.ProjetBeneficiaire;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -137,11 +138,35 @@ public interface PayrollDao extends JpaRepository<Payroll, String> {
 
 
     @Query("""
-    SELECT new com.natha.dev.Dto.PayrollFlatData(pr.name, p.debutPeriode, p.finPeriode, b.nom, b.prenom, b.sexe, b.qualification, p.nbreJourTravail, p.montantPayer, b.identification, b.telephonePaiement)
-    FROM Payroll p
-    JOIN p.projetBeneficiaire pb
+    SELECT new com.natha.dev.Dto.PayrollFlatData(
+    pr.name, p.debutPeriode, p.finPeriode, 
+    b.nom, b.prenom, b.sexe, b.qualification, 
+    p.nbreJourTravail, p.montantPayer / p.nbreJourTravail, 
+    b.identification, b.telephonePaiement, p.methodePaiement
+    )
+    FROM Payroll p 
+    JOIN p.projetBeneficiaire pb 
     JOIN pb.beneficiaire b
     JOIN pb.projet pr
     WHERE pr.idProjet = :projetId""")
     List<PayrollFlatData> findPayrollDataByProjet(@Param("projetId") String projetId);
+
+    @Query("SELECT p FROM Payroll p WHERE p.projetBeneficiaire.projet.idProjet = :projetId")
+    List<Payroll> findByProjetId(@Param("projetId") String projetId);
+
+    @Query("""
+    SELECT new com.natha.dev.Dto.PeriodeMethodePaiementDTO(p.debutPeriode, p.finPeriode, 
+        (SELECT p2.methodePaiement 
+         FROM Payroll p2 
+         WHERE p2.projetBeneficiaire.projet.idProjet = :projetId 
+           AND p2.debutPeriode = p.debutPeriode 
+           AND p2.finPeriode = p.finPeriode 
+         GROUP BY p2.methodePaiement 
+         ORDER BY COUNT(p2.methodePaiement) DESC 
+         LIMIT 1)) 
+    FROM Payroll p 
+    WHERE p.projetBeneficiaire.projet.idProjet = :projetId 
+    GROUP BY p.debutPeriode, p.finPeriode
+    """)
+    List<PeriodeMethodePaiementDTO> findPeriodeAndMethodeByProjet(@Param("projetId") String projetId);
 }
