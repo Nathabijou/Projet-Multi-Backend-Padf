@@ -1,6 +1,9 @@
 package com.natha.dev.Controller;
 
+import com.natha.dev.Dto.AddBeneficiaireToFormationRequestDto;
+import com.natha.dev.Dto.BeneficiaireDto;
 import com.natha.dev.Dto.FormationDto;
+import com.natha.dev.Dto.ProjetBeneficiaireFormationDto;
 import com.natha.dev.IService.FormationIService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +20,7 @@ public class FormationController {
     private FormationIService service;
 
 
-    @PreAuthorize("hasAnyRole('ADMIN','SUPERADMIN','MANAGER','USER')")
+//    @PreAuthorize("hasAnyRole('ADMIN','SUPERADMIN','MANAGER','USER')")
     @PostMapping("/formation")
     public ResponseEntity<FormationDto> createFormation(@RequestBody FormationDto dto) {
         FormationDto saved = service.save(dto);
@@ -34,7 +37,7 @@ public class FormationController {
         return service.getById(id);
     }
 
-    @GetMapping
+    @GetMapping("/all")
     public List<FormationDto> getAll() {
         return service.getAll();
     }
@@ -42,5 +45,22 @@ public class FormationController {
     @DeleteMapping("/{id}")
     public void delete(@PathVariable String id) {
         service.deleteById(id);
+    }
+
+    @PostMapping("/add-beneficiaire")
+    public ResponseEntity<ProjetBeneficiaireFormationDto> addBeneficiaireToFormation(@RequestBody AddBeneficiaireToFormationRequestDto requestDto) {
+        ProjetBeneficiaireFormationDto result = service.addBeneficiaireToFormation(requestDto);
+        return ResponseEntity.ok(result);
+    }
+   // Recupere lis brnrficiaire nan yon formation
+    @GetMapping("/{id}/beneficiaires")
+    public ResponseEntity<List<BeneficiaireDto>> getBeneficiairesByFormation(@PathVariable String id) {
+        List<BeneficiaireDto> beneficiaires = service.getBeneficiairesByFormationId(id);
+        return ResponseEntity.ok(beneficiaires);
+    }
+    //Pecupere liste formation dans projet specifique
+    @GetMapping("/projet/{projetId}")
+    public List<FormationDto> getFormationsByProjetId(@PathVariable String projetId) {
+        return service.getFormationsByProjetId(projetId);
     }
 }

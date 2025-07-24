@@ -25,7 +25,6 @@ public class Formation {
     private LocalDate dateFin;
     private String typeFormation;
 
-
     @OneToMany(mappedBy = "formation", cascade = CascadeType.ALL)
     private List<ProjetBeneficiaireFormation> projetBeneficiaireFormations;
 

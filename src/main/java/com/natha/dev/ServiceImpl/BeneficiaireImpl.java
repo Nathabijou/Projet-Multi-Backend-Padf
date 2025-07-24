@@ -38,7 +38,7 @@ public class BeneficiaireImpl implements BeneficiaireIService {
     public void ajouterBeneficiaireDansFormation(String idBeneficiaire, String idProjet, String idFormation) {
         // 1. Récupérer ProjetBeneficiaire
         ProjetBeneficiaire projetBeneficiaire = projetBeneficiaireDao
-                .findByProjetIdProjetAndBeneficiaireIdBeneficiaire(idProjet, idBeneficiaire)
+                .findByProjetAndBeneficiaire(idProjet, idBeneficiaire)
                 .orElseThrow(() -> new RuntimeException("Bénéficiaire pa nan pwojè sa!"));
 
         // 2. Récupérer Formation
@@ -65,7 +65,7 @@ public class BeneficiaireImpl implements BeneficiaireIService {
     @Override
     public Optional<BeneficiaireDto> findBeneficiaireInProjet(String projetId, String beneficiaireId) {
         Optional<ProjetBeneficiaire> relation = projetBeneficiaireDao
-                .findByProjetIdProjetAndBeneficiaireIdBeneficiaire(projetId, beneficiaireId);
+                .findByProjetAndBeneficiaire(projetId, beneficiaireId);
 
         return relation.map(pb -> convertToDto(pb.getBeneficiaire()));
     }
@@ -73,7 +73,7 @@ public class BeneficiaireImpl implements BeneficiaireIService {
     public void transfererBeneficiaireDansProjet(String beneficiaireId, String ancienProjetId, String nouveauProjetId) {
         // Chèche relasyon benefisyè nan ansyen pwojè
         ProjetBeneficiaire relation = projetBeneficiaireDao
-                .findByProjetIdProjetAndBeneficiaireIdBeneficiaire(ancienProjetId, beneficiaireId)
+                .findByProjetAndBeneficiaire(ancienProjetId, beneficiaireId)
                 .orElseThrow(() -> new RuntimeException("Beneficiaire pa jwenn nan pwojè aktyèl la"));
 
         // Rekipere nouvo pwojè kote n ap transfere benefisyè a
@@ -90,7 +90,7 @@ public class BeneficiaireImpl implements BeneficiaireIService {
 
     public void deleteBeneficiaireFromProjet(String beneficiaireId, String projetId) {
         ProjetBeneficiaire relation = projetBeneficiaireDao
-                .findByProjetIdProjetAndBeneficiaireIdBeneficiaire(projetId, beneficiaireId)
+                .findByProjetAndBeneficiaire(projetId, beneficiaireId)
                 .orElseThrow(() -> new RuntimeException("Relasyon Beneficiaire-Pwojè pa jwenn"));
 
         projetBeneficiaireDao.delete(relation);
@@ -124,7 +124,7 @@ public class BeneficiaireImpl implements BeneficiaireIService {
     public BeneficiaireDto updateBeneficiaireDansProjet(String projetId, String beneficiaireId, BeneficiaireDto dto) {
         // 1. Verifye relasyon an egziste
         ProjetBeneficiaire relation = (ProjetBeneficiaire) projetBeneficiaireDao
-                .findByProjetIdProjetAndBeneficiaireIdBeneficiaire(projetId, beneficiaireId)
+                .findByProjetAndBeneficiaire(projetId, beneficiaireId)
                 .orElseThrow(() -> new RuntimeException("Relasyon Projet-Beneficiaire pa egziste."));
 
         // 2. Pran beneficyè a
@@ -195,4 +195,3 @@ public class BeneficiaireImpl implements BeneficiaireIService {
 
 
 }
-

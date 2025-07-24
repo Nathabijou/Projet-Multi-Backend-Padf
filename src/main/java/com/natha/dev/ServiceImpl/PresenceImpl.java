@@ -29,7 +29,7 @@ public class PresenceImpl implements PresenceIService {
     @Override
     public PresenceDto ajouterPresence(String projetId, String beneficiaireId, PresenceDto dto) {
         ProjetBeneficiaire pb = projetBeneficiaireDao
-                .findByProjetIdProjetAndBeneficiaireIdBeneficiaire(projetId, beneficiaireId)
+                .findByProjetAndBeneficiaire(projetId, beneficiaireId)
                 .orElseThrow(() -> new RuntimeException("Relation Projet-Bénéficiaire pa jwenn"));
 
         Presence presence = new Presence();
@@ -46,7 +46,7 @@ public class PresenceImpl implements PresenceIService {
     @Override
     public List<PresenceDto> getPresencesByProjetBeneficiaire(String projetId, String beneficiaireId) {
         ProjetBeneficiaire pb = projetBeneficiaireDao
-                .findByProjetIdProjetAndBeneficiaireIdBeneficiaire(projetId, beneficiaireId)
+                .findByProjetAndBeneficiaire(projetId, beneficiaireId)
                 .orElseThrow(() -> new RuntimeException("Relasyon pa egziste"));
 
         return presenceDao.findByProjetBeneficiaireIdProjetBeneficiaire(pb.getIdProjetBeneficiaire())
@@ -59,7 +59,7 @@ public class PresenceImpl implements PresenceIService {
     // Nouvo metòd pou Presence Formation
     public PresenceDto ajouterPresenceFormation(String projetId, String beneficiaireId, String idFormation, PresenceDto dto) {
         ProjetBeneficiaire pb = projetBeneficiaireDao
-                .findByProjetIdProjetAndBeneficiaireIdBeneficiaire(projetId, beneficiaireId)
+                .findByProjetAndBeneficiaire(projetId, beneficiaireId)
                 .orElseThrow(() -> new RuntimeException("Relation Projet-Bénéficiaire pa jwenn"));
 
         ProjetBeneficiaireFormation pbf = (ProjetBeneficiaireFormation) projetBeneficiaireFormationDao
@@ -82,7 +82,7 @@ public class PresenceImpl implements PresenceIService {
     // Metòd pou jwenn presence formation (egzanp)
     public List<PresenceDto> getPresencesByProjetBeneficiaireFormation(String projetId, String beneficiaireId, String idFormation) {
         ProjetBeneficiaire pb = projetBeneficiaireDao
-                .findByProjetIdProjetAndBeneficiaireIdBeneficiaire(projetId, beneficiaireId)
+                .findByProjetAndBeneficiaire(projetId, beneficiaireId)
                 .orElseThrow(() -> new RuntimeException("Relation Projet-Bénéficiaire pa jwenn"));
 
         ProjetBeneficiaireFormation pbf = (ProjetBeneficiaireFormation) projetBeneficiaireFormationDao
@@ -128,4 +128,3 @@ public class PresenceImpl implements PresenceIService {
 
 
 }
-

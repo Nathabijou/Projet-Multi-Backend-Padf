@@ -25,7 +25,7 @@ public class PayrollImpl implements PayrollIService {
     @Override
     public PayrollDto createPayroll(String projetId, String beneficiaireId, PayrollDto dto) {
         ProjetBeneficiaire pb = projetBeneficiaireDao
-                .findByProjetIdProjetAndBeneficiaireIdBeneficiaire(projetId, beneficiaireId)
+                .findByProjetAndBeneficiaire(projetId, beneficiaireId)
                 .orElseThrow(() -> new RuntimeException("Relasyon Beneficiaire-Projet pa jwenn"));
 
         Payroll payroll = new Payroll();
@@ -50,7 +50,7 @@ public class PayrollImpl implements PayrollIService {
     @Override
     public List<PayrollDto> getPayrollsByProjetBeneficiaire(String projetId, String beneficiaireId) {
         ProjetBeneficiaire pb = projetBeneficiaireDao
-                .findByProjetIdProjetAndBeneficiaireIdBeneficiaire(projetId, beneficiaireId)
+                .findByProjetAndBeneficiaire(projetId, beneficiaireId)
                 .orElseThrow(() -> new RuntimeException("Relasyon Beneficiaire-Projet pa jwenn"));
 
         return payrollDao.findByProjetBeneficiaire(pb)

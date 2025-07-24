@@ -29,14 +29,12 @@ public class Beneficiaire {
     private String domaineDeFormation;
     private String typeIdentification;
     private String identification;
-    private String lienNaissance;
     private String qualification;
 
     private String telephoneContact;
     private String telephonePaiement;
     private String operateurPaiement;
-
-
+    private String lienNaissance;
 
     @PrePersist
     public void generateId() {

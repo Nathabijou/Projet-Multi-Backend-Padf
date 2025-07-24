@@ -94,7 +94,7 @@ public class ProjetController {
     }
 
     //Enable Project (Yes Verify)
-    @PreAuthorize("hasAnyRole('ADMIN', 'SUPERADMIN')")
+//    @PreAuthorize("hasAnyRole('ADMIN', 'SUPERADMIN')")
     @PutMapping("/projets/projet/{idProjet}/activate")
     public ResponseEntity<String> activateProjet(@PathVariable String idProjet) {
         projetIService.setProjetActiveStatus(idProjet, true);
@@ -102,7 +102,7 @@ public class ProjetController {
     }
 
     //Disable Project (Yes Verify)
-    @PreAuthorize("hasAnyRole('ADMIN', 'SUPERADMIN')")
+//    @PreAuthorize("hasAnyRole('ADMIN', 'SUPERADMIN')")
     @PutMapping("/projets/projet/{idProjet}/deactivate")
     public ResponseEntity<String> deactivateProjet(@PathVariable String idProjet) {
         projetIService.setProjetActiveStatus(idProjet, false);
