@@ -1,0 +1,13 @@
+package com.natha.dev.Dto;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class AddBeneficiaireToProjetRequestDto {
+    private String idProjet;
+    private String idBeneficiaire;
+}
