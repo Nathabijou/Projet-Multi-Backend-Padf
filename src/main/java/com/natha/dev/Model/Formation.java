@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -24,6 +25,11 @@ public class Formation {
 
     private LocalDate dateFin;
     private String typeFormation;
+    private String nomFormateur;
+    private String createdBy;
+    private String modifyBy;
+    private LocalDateTime createdAt;
+    private LocalDateTime modifiedAt;
 
     @OneToMany(mappedBy = "formation", cascade = CascadeType.ALL)
     private List<ProjetBeneficiaireFormation> projetBeneficiaireFormations;

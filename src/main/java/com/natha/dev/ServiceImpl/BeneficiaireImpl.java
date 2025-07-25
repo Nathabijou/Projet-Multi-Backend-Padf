@@ -7,6 +7,7 @@ import com.natha.dev.Model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -23,6 +24,14 @@ public class BeneficiaireImpl implements BeneficiaireIService {
     @Autowired
     private FormationDao formationDao;
 
+
+    @Override
+    public List<BeneficiaireDto> findAllByTypeBeneficiaire(String typeBeneficiaire) {
+        List<Beneficiaire> beneficiaires = dao.findByTypeBeneficiaire(typeBeneficiaire);
+        return beneficiaires.stream()
+                .map(BeneficiaireDto::fromEntity)
+                .toList();
+    }
 
     @Override
     public Optional<BeneficiaireDto> findById(String beneficiaireId) {
@@ -165,7 +174,7 @@ public class BeneficiaireImpl implements BeneficiaireIService {
                 b.getIdBeneficiaire(), b.getNom(), b.getPrenom(), b.getSexe(), b.getDateNaissance(),
                 b.getDomaineDeFormation(), b.getTypeIdentification(), b.getIdentification(),
                 b.getLienNaissance(), b.getQualification(), b.getTelephoneContact(),
-                b.getTelephonePaiement(), b.getOperateurPaiement()
+                b.getTelephonePaiement(), b.getOperateurPaiement(), b.getTypeBeneficiaire()
         );
     }
 

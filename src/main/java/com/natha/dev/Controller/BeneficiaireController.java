@@ -8,12 +8,19 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
-@CrossOrigin("http://localhost:4200")
 public class BeneficiaireController {
 
     @Autowired
     private BeneficiaireIService beneficiaireIService;
+
+    @GetMapping("/beneficiaires/type/{typeBeneficiaire}")
+    public ResponseEntity<List<BeneficiaireDto>> getBeneficiairesByType(@PathVariable String typeBeneficiaire) {
+        List<BeneficiaireDto> beneficiaires = beneficiaireIService.findAllByTypeBeneficiaire(typeBeneficiaire);
+        return ResponseEntity.ok(beneficiaires);
+    }
 
     @GetMapping("/beneficiaires/beneficiaires/{beneficiaireId}")
     public ResponseEntity<BeneficiaireDto> getBeneficiaireById(@PathVariable String beneficiaireId) {

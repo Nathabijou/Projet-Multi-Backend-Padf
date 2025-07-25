@@ -35,6 +35,8 @@ public class Beneficiaire {
     private String telephonePaiement;
     private String operateurPaiement;
     private String lienNaissance;
+    private String typeBeneficiaire;
+
 
     @PrePersist
     public void generateId() {

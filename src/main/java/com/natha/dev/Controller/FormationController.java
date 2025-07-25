@@ -21,7 +21,7 @@ public class FormationController {
 
 
 //    @PreAuthorize("hasAnyRole('ADMIN','SUPERADMIN','MANAGER','USER')")
-    @PostMapping("/formation")
+    @PostMapping
     public ResponseEntity<FormationDto> createFormation(@RequestBody FormationDto dto) {
         FormationDto saved = service.save(dto);
         return ResponseEntity.ok(saved);
@@ -47,17 +47,28 @@ public class FormationController {
         service.deleteById(id);
     }
 
-    @PostMapping("/add-beneficiaire")
-    public ResponseEntity<ProjetBeneficiaireFormationDto> addBeneficiaireToFormation(@RequestBody AddBeneficiaireToFormationRequestDto requestDto) {
+    @PostMapping("/formations/{formationId}/projets/{projetId}/beneficiaires")
+    public ResponseEntity<ProjetBeneficiaireFormationDto> addBeneficiaireToFormation(
+            @PathVariable String formationId,
+            @PathVariable String projetId,
+            @RequestBody AddBeneficiaireToFormationRequestDto requestDto) {
+        // Asire ke formationId nan chemen an menm ak sa nan kò a
+        requestDto.setIdFormation(formationId);
+        requestDto.setIdProjet(projetId);
         ProjetBeneficiaireFormationDto result = service.addBeneficiaireToFormation(requestDto);
         return ResponseEntity.ok(result);
     }
-   // Recupere lis brnrficiaire nan yon formation
-    @GetMapping("/{id}/beneficiaires")
-    public ResponseEntity<List<BeneficiaireDto>> getBeneficiairesByFormation(@PathVariable String id) {
-        List<BeneficiaireDto> beneficiaires = service.getBeneficiairesByFormationId(id);
+   // Recupere lis beneficiaire nan yon formation pou yon pwojè espesifik
+    @PreAuthorize("permitAll()")
+    @GetMapping("/{formationId}/projet/{projetId}/beneficiaires")
+    public ResponseEntity<List<BeneficiaireDto>> getBeneficiairesByFormationIdAndProjetId(
+            @PathVariable String formationId,
+            @PathVariable String projetId) {
+        System.out.println("Recherche des bénéficiaires pour la formation: " + formationId + " et le projet: " + projetId);
+        List<BeneficiaireDto> beneficiaires = service.getBeneficiairesByFormationId(formationId, projetId);
         return ResponseEntity.ok(beneficiaires);
     }
+
     //Pecupere liste formation dans projet specifique
     @GetMapping("/projet/{projetId}")
     public List<FormationDto> getFormationsByProjetId(@PathVariable String projetId) {

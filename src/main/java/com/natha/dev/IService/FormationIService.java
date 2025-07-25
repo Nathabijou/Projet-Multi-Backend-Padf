@@ -17,7 +17,7 @@ public interface FormationIService {
 
     ProjetBeneficiaireFormationDto addBeneficiaireToFormation(AddBeneficiaireToFormationRequestDto requestDto);
     
-    List<BeneficiaireDto> getBeneficiairesByFormationId(String idFormation);
+    List<BeneficiaireDto> getBeneficiairesByFormationId(String idFormation, String projetId);
     
     List<FormationDto> getFormationsByProjetId(String projetId);
     

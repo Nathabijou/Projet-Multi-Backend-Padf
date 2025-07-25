@@ -26,6 +26,7 @@ public class BeneficiaireDto {
     private String telephoneContact;
     private String telephonePaiement;
     private String operateurPaiement;
+    private String typeBeneficiaire;
 
     public static BeneficiaireDto fromEntity(Beneficiaire b) {
         if (b == null) {
@@ -44,7 +45,8 @@ public class BeneficiaireDto {
                 b.getQualification(),
                 b.getTelephoneContact(),
                 b.getTelephonePaiement(),
-                b.getOperateurPaiement()
+                b.getOperateurPaiement(),
+                b.getTypeBeneficiaire()
         );
     }
 
