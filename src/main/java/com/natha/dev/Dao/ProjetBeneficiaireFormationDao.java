@@ -18,6 +18,8 @@ public interface ProjetBeneficiaireFormationDao extends JpaRepository<ProjetBene
     
     List<ProjetBeneficiaireFormation> findByFormation(Formation formation);
     
+    Optional<ProjetBeneficiaireFormation> findByProjetBeneficiaireAndFormation(ProjetBeneficiaire projetBeneficiaire, Formation formation);
+    
     @Query("SELECT DISTINCT p.formation FROM ProjetBeneficiaireFormation p WHERE p.projetBeneficiaire.projet.idProjet = :projetId")
     List<Formation> findFormationsByProjetId(@Param("projetId") String projetId);
 }

@@ -20,4 +20,6 @@ public interface FormationIService {
     List<BeneficiaireDto> getBeneficiairesByFormationId(String idFormation);
     
     List<FormationDto> getFormationsByProjetId(String projetId);
+    
+    void removeBeneficiaireFromFormation(String beneficiaireId, String formationId);
 }

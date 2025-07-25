@@ -145,6 +145,25 @@ public class FormationImpl implements FormationIService {
                 .collect(Collectors.toList());
     }
     
+    @Override
+    public void removeBeneficiaireFromFormation(String beneficiaireId, String formationId) {
+        // 1. Jwenn ProjetBeneficiaire ki koresponn ak benefisyè a
+        ProjetBeneficiaire projetBeneficiaire = projetBeneficiaireDao.findByBeneficiaireId(beneficiaireId)
+                .orElseThrow(() -> new RuntimeException("Benefisyè sa a pa jwenn nan okenn pwojè."));
+                
+        // 2. Jwenn fòmasyon an
+        Formation formation = dao.findById(formationId)
+                .orElseThrow(() -> new RuntimeException("Fòmasyon sa a pa jwenn."));
+                
+        // 3. Chèche relasyon an
+        ProjetBeneficiaireFormation relation = projetBeneficiaireFormationDao
+                .findByProjetBeneficiaireAndFormation(projetBeneficiaire, formation)
+                .orElseThrow(() -> new RuntimeException("Benefisyè sa a pa nan fòmasyon sa a."));
+                
+        // 4. Efase relasyon an
+        projetBeneficiaireFormationDao.delete(relation);
+    }
+    
     private BeneficiaireDto convertToBeneficiaireDto(Beneficiaire beneficiaire) {
         if (beneficiaire == null) {
             return null;

@@ -63,4 +63,12 @@ public class FormationController {
     public List<FormationDto> getFormationsByProjetId(@PathVariable String projetId) {
         return service.getFormationsByProjetId(projetId);
     }
+    
+    @DeleteMapping("/{formationId}/beneficiaires/{beneficiaireId}")
+    public ResponseEntity<Void> removeBeneficiaireFromFormation(
+            @PathVariable String formationId,
+            @PathVariable String beneficiaireId) {
+        service.removeBeneficiaireFromFormation(beneficiaireId, formationId);
+        return ResponseEntity.noContent().build();
+    }
 }

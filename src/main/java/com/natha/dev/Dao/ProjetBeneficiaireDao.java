@@ -41,6 +41,9 @@ WHERE pb.beneficiaire.sexe = :sexe
             @Param("sexe") String sexe
     );
 
+    @Query("SELECT pb FROM ProjetBeneficiaire pb WHERE pb.beneficiaire.idBeneficiaire = :beneficiaireId")
+    Optional<ProjetBeneficiaire> findByBeneficiaireId(@Param("beneficiaireId") String beneficiaireId);
+    
     @Query("""
 SELECT COUNT(pb) FROM ProjetBeneficiaire pb
 JOIN pb.projet.quartier.sectionCommunale.commune c
