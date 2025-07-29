@@ -51,6 +51,11 @@ public class Projet {
 
     private String createdBy;
     private String modifyBy;
+    private String NomRepresentant;
+    private String PositionRepresentant;
+    private String numeroIdentification;
+    private String modeExecution;
+
 
     @Column(nullable = false)
     private Boolean active = true;
