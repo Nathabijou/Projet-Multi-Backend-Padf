@@ -38,6 +38,9 @@ public class ProjetDto {
     private Double montantTotal;
     private String createdBy;
     private String modifyBy;
+    private String NomRepresentant;
+    private String PositionRepresentant;
+    private String numeroIdentification;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private Long composanteId;
@@ -45,5 +48,6 @@ public class ProjetDto {
     private String applicationCode;
     private String composanteNom;
     private String composanteCode;
+    private String modeExecution;
 
 }
