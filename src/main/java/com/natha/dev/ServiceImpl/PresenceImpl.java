@@ -79,21 +79,6 @@ public class PresenceImpl implements PresenceIService {
 
 
 
-    // Metòd pou jwenn presence formation (egzanp)
-    public List<PresenceDto> getPresencesByProjetBeneficiaireFormation(String projetId, String beneficiaireId, String idFormation) {
-        ProjetBeneficiaire pb = projetBeneficiaireDao
-                .findByProjetAndBeneficiaire(projetId, beneficiaireId)
-                .orElseThrow(() -> new RuntimeException("Relation Projet-Bénéficiaire pa jwenn"));
-
-        ProjetBeneficiaireFormation pbf = (ProjetBeneficiaireFormation) projetBeneficiaireFormationDao
-                .findByProjetBeneficiaireAndFormationIdFormation(pb, idFormation)
-                .orElseThrow(() -> new RuntimeException("Relation ProjetBeneficiaire-Formation pa jwenn"));
-
-        return presenceDao.findByProjetBeneficiaireFormationId(pbf.getId())
-                .stream()
-                .map(this::convertToDto)
-                .collect(Collectors.toList());
-    }
 
 
 

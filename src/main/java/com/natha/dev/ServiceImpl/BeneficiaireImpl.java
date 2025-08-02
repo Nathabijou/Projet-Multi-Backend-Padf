@@ -152,6 +152,10 @@ public class BeneficiaireImpl implements BeneficiaireIService {
         beneficiaire.setTelephoneContact(dto.getTelephoneContact());
         beneficiaire.setTelephonePaiement(dto.getTelephonePaiement());
         beneficiaire.setOperateurPaiement(dto.getOperateurPaiement());
+        beneficiaire.setTypeBeneficiaire(dto.getTypeBeneficiaire());
+        beneficiaire.setIsGraduate(dto.getIsGraduate());
+        beneficiaire.setFiliere(dto.getFiliere());
+        beneficiaire.setCommuneResidence(dto.getCommuneResidence());
 
         // 4. Sove li
         dao.save(beneficiaire);
@@ -171,7 +175,7 @@ public class BeneficiaireImpl implements BeneficiaireIService {
 
     public static BeneficiaireDto convertToDto(Beneficiaire b) {
         return new BeneficiaireDto(
-                b.getIdBeneficiaire(), b.getNom(), b.getPrenom(), b.getSexe(), b.getDateNaissance(),
+                b.getIdBeneficiaire(), b.getNom(), b.getPrenom(), b.getSexe(), b.getCommuneResidence(), b.getIsGraduate(), b.getFiliere(), b.getDateNaissance(),
                 b.getDomaineDeFormation(), b.getTypeIdentification(), b.getIdentification(),
                 b.getLienNaissance(), b.getQualification(), b.getTelephoneContact(),
                 b.getTelephonePaiement(), b.getOperateurPaiement(), b.getTypeBeneficiaire()
@@ -190,6 +194,9 @@ public class BeneficiaireImpl implements BeneficiaireIService {
         b.setNom(d.getNom());
         b.setPrenom(d.getPrenom());
         b.setSexe(d.getSexe());
+        b.setCommuneResidence(d.getCommuneResidence());
+        b.setIsGraduate(d.getIsGraduate());
+        b.setFiliere(d.getFiliere());
         b.setDateNaissance(d.getDateNaissance());
         b.setDomaineDeFormation(d.getDomaineDeFormation());
         b.setTypeIdentification(d.getTypeIdentification());

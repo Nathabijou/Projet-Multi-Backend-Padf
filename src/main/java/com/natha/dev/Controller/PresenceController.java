@@ -48,23 +48,7 @@ public class PresenceController {
         return ResponseEntity.ok("Presence supprime avèk siksè");
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN', 'SUPERADMIN','MANAGER','USER')")
-    @PostMapping("/projet/{projetId}/beneficiaire/{beneficiaireId}/formation/{formationId}")
-    public ResponseEntity<PresenceDto> ajouterPresenceFormation(
-            @PathVariable String projetId,
-            @PathVariable String beneficiaireId,
-            @PathVariable String formationId,
-            @RequestBody PresenceDto dto) {
-        return ResponseEntity.ok(presenceIService.ajouterPresenceFormation(projetId, beneficiaireId, formationId, dto));
-    }
 
-    // Liste presence pou yon beneficiaire nan yon formation nan yon projet
-    @PreAuthorize("hasAnyRole('ADMIN', 'SUPERADMIN','MANAGER','USER')")
-    @GetMapping("/projet/{projetId}/beneficiaire/{beneficiaireId}/formation/{formationId}")
-    public ResponseEntity<List<PresenceDto>> getPresencesByProjetBeneficiaireFormation(
-            @PathVariable String projetId,
-            @PathVariable String beneficiaireId,
-            @PathVariable String formationId) {
-        return ResponseEntity.ok(presenceIService.getPresencesByProjetBeneficiaireFormation(projetId, beneficiaireId, formationId));
-    }
+
+
 }
