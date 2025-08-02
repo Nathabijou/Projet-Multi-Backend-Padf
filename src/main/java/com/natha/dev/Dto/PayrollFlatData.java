@@ -20,11 +20,31 @@ public class PayrollFlatData {
     private String identification;
     private String telephonePaiement;
     private String methodePaiement;
+    private String statut; // eg: payé, en attente, rejeté
+    private String telephoneContact;
 
     public PayrollFlatData(String nomProjet, LocalDate dateDebut, LocalDate dateFin,
                            String nom, String prenom, String sexe, String qualification,
                            int nbJours, double montantParJour,
                            String identification, String telephonePaiement, String methodePaiement) {
+        this(nomProjet, dateDebut, dateFin, nom, prenom, sexe, qualification, nbJours, 
+             montantParJour, identification, telephonePaiement, methodePaiement, null, null);
+    }
+    
+    public PayrollFlatData(String nomProjet, LocalDate dateDebut, LocalDate dateFin,
+                           String nom, String prenom, String sexe, String qualification,
+                           int nbJours, double montantParJour,
+                           String identification, String telephonePaiement, String methodePaiement,
+                           String statut) {
+        this(nomProjet, dateDebut, dateFin, nom, prenom, sexe, qualification, nbJours,
+             montantParJour, identification, telephonePaiement, methodePaiement, statut, null);
+    }
+    
+    public PayrollFlatData(String nomProjet, LocalDate dateDebut, LocalDate dateFin,
+                           String nom, String prenom, String sexe, String qualification,
+                           int nbJours, double montantParJour,
+                           String identification, String telephonePaiement, String methodePaiement,
+                           String statut, String telephoneContact) {
         this.nomProjet = nomProjet;
         this.dateDebut = dateDebut;
         this.dateFin = dateFin;
@@ -37,6 +57,8 @@ public class PayrollFlatData {
         this.identification = identification;
         this.telephonePaiement = telephonePaiement;
         this.methodePaiement = methodePaiement;
+        this.statut = statut;
+        this.telephoneContact = telephoneContact;
     }
 
 
@@ -85,5 +107,13 @@ public class PayrollFlatData {
     }
     public String getMethodePaiement(){
         return methodePaiement;
+    }
+    
+    public String getStatut() {
+        return statut;
+    }
+    
+    public String getTelephoneContact() {
+        return telephoneContact;
     }
 }

@@ -63,6 +63,7 @@ public class PayrollMatrixServiceImpl {
             col.setNbJours(row.getNbJours());
             col.setMontantParJour(row.getMontantParJour());
             col.setTotal(row.getNbJours() * row.getMontantParJour());
+            col.setStatut(row.getStatut());
 
             benef.getPayrolls().set(pos, col);
         }
