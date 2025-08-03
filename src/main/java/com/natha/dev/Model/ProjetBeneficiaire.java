@@ -1,8 +1,12 @@
 package com.natha.dev.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "projet_beneficiaire")
@@ -26,6 +30,10 @@ public class ProjetBeneficiaire {
 
     @OneToMany(mappedBy = "projetBeneficiaire", cascade = CascadeType.ALL)
     private List<Payroll> payrolls;
+
+    @OneToMany(mappedBy = "projetBeneficiaire", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private Set<ProjetBeneficiaireEntreprise> projetBeneficiaireEntreprises = new HashSet<>();
 
 
 }

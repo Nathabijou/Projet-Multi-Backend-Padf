@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ProjetBeneficiaireDao extends JpaRepository<ProjetBeneficiaire, String> {
+    Optional<ProjetBeneficiaire> findById(String id);
+    
     List<ProjetBeneficiaire> findByProjetIdProjet(String projetId);
 
     @Query("SELECT pb FROM ProjetBeneficiaire pb WHERE pb.projet.idProjet = :projetId AND pb.beneficiaire.idBeneficiaire = :beneficiaireId")
