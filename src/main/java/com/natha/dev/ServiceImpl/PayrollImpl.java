@@ -37,6 +37,7 @@ public class PayrollImpl implements PayrollIService {
         payroll.setStatut(dto.getStatut());
         payroll.setDatePaiement(dto.getDatePaiement());
         payroll.setProjetBeneficiaire(pb);
+        payroll.setFraisTransport(dto.getFraisTransport());
 
         // Kalkile montantPayer otomatik
         double montantParJour = dto.getMontantParJour() != null ? dto.getMontantParJour() : 0.0;
@@ -79,6 +80,7 @@ public class PayrollImpl implements PayrollIService {
         payroll.setNbreJourTravail(dto.getNbrejourTravail());
         payroll.setStatut(dto.getStatut());
         payroll.setDatePaiement(dto.getDatePaiement());
+        payroll.setFraisTransport(dto.getFraisTransport());
 
         double montantParJour = dto.getMontantParJour() != null ? dto.getMontantParJour() : 0.0;
         payroll.setMontantPayer(payroll.getNbreJourTravail() * montantParJour);
@@ -104,7 +106,9 @@ public class PayrollImpl implements PayrollIService {
                 p.getStatut(),
                 p.getDatePaiement(),
                 p.getNbreJourTravail(),
+                p.getFraisTransport(),
                 montantParJour
+
         );
     }
 }
