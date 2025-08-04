@@ -35,5 +35,21 @@ public class ProjetBeneficiaire {
     @JsonIgnore
     private Set<ProjetBeneficiaireEntreprise> projetBeneficiaireEntreprises = new HashSet<>();
 
+    @OneToMany(mappedBy = "projetBeneficiaire", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private Set<ProjetBeneficiaireEvaluation> projetBeneficiaireEvaluations = new HashSet<>();
 
+    // Helper method to add an evaluation
+    public void addEvaluation(Evaluation evaluation) {
+        ProjetBeneficiaireEvaluation projetBeneficiaireEvaluation = 
+            new ProjetBeneficiaireEvaluation(this, evaluation);
+        projetBeneficiaireEvaluations.add(projetBeneficiaireEvaluation);
+    }
+
+    // Helper method to remove an evaluation
+    public void removeEvaluation(Evaluation evaluation) {
+        ProjetBeneficiaireEvaluation projetBeneficiaireEvaluation = 
+            new ProjetBeneficiaireEvaluation(this, evaluation);
+        projetBeneficiaireEvaluations.remove(projetBeneficiaireEvaluation);
+    }
 }
