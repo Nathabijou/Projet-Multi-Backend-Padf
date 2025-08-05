@@ -3,13 +3,13 @@ package com.natha.dev.Controller;
 import com.natha.dev.Model.Privilege;
 import com.natha.dev.ServiceImpl.PrivilegeImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/privileges")
-@CrossOrigin("http://localhost:4200")
 public class PrivilegeApi {
 
     @Autowired
@@ -37,5 +37,61 @@ public class PrivilegeApi {
     @PostMapping("/getOrCreate")
     public Privilege getOrCreatePrivilege(@RequestBody Privilege privilege) {
         return privilegeImpl.getOrCreatePrivilege(privilege.getPrivilegeName(), privilege.getPrivilegeDescription());
+    }
+
+    // API pou bay yon privilèj a yon itilizatè
+    @PostMapping("/assign-user-privilege")
+    public ResponseEntity<?> assignUserPrivilege(
+            @RequestParam String userName,
+            @RequestParam String componentName,
+            @RequestParam(required = false) String elementName,
+            @RequestParam String privilegeName) {
+        try {
+            return ResponseEntity.ok(privilegeImpl.assignUserPrivilege(userName, componentName, elementName, privilegeName));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    // API pou retire yon privilèj yon itilizatè
+    @DeleteMapping("/remove-user-privilege")
+    public ResponseEntity<?> removeUserPrivilege(
+            @RequestParam String userName,
+            @RequestParam String componentName,
+            @RequestParam(required = false) String elementName,
+            @RequestParam String privilegeName) {
+        try {
+            privilegeImpl.removeUserPrivilege(userName, componentName, elementName, privilegeName);
+            return ResponseEntity.ok("Privillege removed successfully");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    // API pou tcheke si yon itilizatè gen yon privilèj
+    @GetMapping("/check-user-privilege")
+    public ResponseEntity<?> checkUserPrivilege(
+            @RequestParam String userName,
+            @RequestParam String componentName,
+            @RequestParam(required = false) String elementName,
+            @RequestParam String privilegeName) {
+        try {
+            boolean hasPrivilege = privilegeImpl.checkUserPrivilege(userName, componentName, elementName, privilegeName);
+            return ResponseEntity.ok(hasPrivilege);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    // API pou jwenn tout privilèj yon itilizatè
+    @GetMapping("/get-user-privileges")
+    public ResponseEntity<?> getUserPrivileges(
+            @RequestParam String userName,
+            @RequestParam(required = false) String componentName) {
+        try {
+            return ResponseEntity.ok(privilegeImpl.getUserPrivileges(userName, componentName));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }
