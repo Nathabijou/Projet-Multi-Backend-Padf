@@ -9,9 +9,12 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ProjetBeneficiaireDao extends JpaRepository<ProjetBeneficiaire, String> {
+    Optional<ProjetBeneficiaire> findById(String id);
+    
     List<ProjetBeneficiaire> findByProjetIdProjet(String projetId);
 
-    Optional<ProjetBeneficiaire> findByProjetIdProjetAndBeneficiaireIdBeneficiaire(String projetId, String beneficiaireId);
+    @Query("SELECT pb FROM ProjetBeneficiaire pb WHERE pb.projet.idProjet = :projetId AND pb.beneficiaire.idBeneficiaire = :beneficiaireId")
+    Optional<ProjetBeneficiaire> findByProjetAndBeneficiaire(@Param("projetId") String projetId, @Param("beneficiaireId") String beneficiaireId);
 
     @Query("""
 SELECT COUNT(pb) FROM ProjetBeneficiaire pb
@@ -26,7 +29,7 @@ WHERE pb.beneficiaire.sexe = :sexe
   AND (:communeId IS NULL OR c.id = :communeId)
   AND (:sectionId IS NULL OR pb.projet.quartier.sectionCommunale.id = :sectionId)
   AND (:quartierId IS NULL OR pb.projet.quartier.id = :quartierId)
-  AND (:projetId IS NULL OR pb.projet.id = :projetId)
+  AND (:projetId IS NULL OR pb.projet.idProjet = :projetId)
 """)
     long countBySexe(
             @Param("composanteId") Long composanteId,
@@ -40,6 +43,9 @@ WHERE pb.beneficiaire.sexe = :sexe
             @Param("sexe") String sexe
     );
 
+    @Query("SELECT pb FROM ProjetBeneficiaire pb WHERE pb.beneficiaire.idBeneficiaire = :beneficiaireId")
+    Optional<ProjetBeneficiaire> findByBeneficiaireId(@Param("beneficiaireId") String beneficiaireId);
+    
     @Query("""
 SELECT COUNT(pb) FROM ProjetBeneficiaire pb
 JOIN pb.projet.quartier.sectionCommunale.commune c
@@ -53,7 +59,7 @@ WHERE pb.beneficiaire.qualification = :qualification
   AND (:communeId IS NULL OR c.id = :communeId)
   AND (:sectionId IS NULL OR pb.projet.quartier.sectionCommunale.id = :sectionId)
   AND (:quartierId IS NULL OR pb.projet.quartier.id = :quartierId)
-  AND (:projetId IS NULL OR pb.projet.id = :projetId)
+  AND (:projetId IS NULL OR pb.projet.idProjet = :projetId)
 """)
     long countByQualification(
             @Param("composanteId") Long composanteId,
@@ -79,7 +85,7 @@ WHERE pb.beneficiaire.qualification = :qualification
       AND (:communeId IS NULL OR c.id = :communeId)
       AND (:sectionId IS NULL OR pb.projet.quartier.sectionCommunale.id = :sectionId)
       AND (:quartierId IS NULL OR pb.projet.quartier.id = :quartierId)
-      AND (:projetId IS NULL OR pb.projet.id = :projetId)
+      AND (:projetId IS NULL OR pb.projet.idProjet = :projetId)
 """)
     long countBeneficiairesByFilters(
             @Param("composanteId") Long composanteId,
@@ -107,7 +113,7 @@ WHERE pb.beneficiaire.qualification = :qualification
       AND (:communeId IS NULL OR c.id = :communeId)
       AND (:sectionId IS NULL OR pb.projet.quartier.sectionCommunale.id = :sectionId)
       AND (:quartierId IS NULL OR pb.projet.quartier.id = :quartierId)
-      AND (:projetId IS NULL OR pb.projet.id = :projetId)
+      AND (:projetId IS NULL OR pb.projet.idProjet = :projetId)
 """)
     long countBySexeAndQualification(
             @Param("sexe") String sexe,

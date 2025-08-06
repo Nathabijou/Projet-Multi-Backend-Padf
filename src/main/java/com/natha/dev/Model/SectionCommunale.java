@@ -1,5 +1,6 @@
 package com.natha.dev.Model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -24,5 +25,6 @@ public class SectionCommunale {
     private List<Quartier> quartiers;
 
     @ManyToOne
+    @JsonBackReference
     private Commune commune;
 }

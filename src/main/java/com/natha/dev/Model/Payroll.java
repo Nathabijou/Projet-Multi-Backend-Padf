@@ -36,6 +36,7 @@ public class Payroll {
     private String statut; // eg: payé, en attente, rejeté
 
     private LocalDate datePaiement;
+    private Double fraisTransport;
 
     @ManyToOne
     @JoinColumn(name = "projet_beneficiaire_id", nullable = false)

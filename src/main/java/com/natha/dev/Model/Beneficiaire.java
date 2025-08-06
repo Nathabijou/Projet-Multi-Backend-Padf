@@ -24,18 +24,21 @@ public class Beneficiaire {
     private String nom;
     private String prenom;
     private String sexe;
+    private String communeResidence;
+    private String IsGraduate;
+    private String filiere;
 
     private LocalDate dateNaissance;
     private String domaineDeFormation;
     private String typeIdentification;
     private String identification;
-    private String lienNaissance;
     private String qualification;
 
     private String telephoneContact;
     private String telephonePaiement;
     private String operateurPaiement;
-
+    private String lienNaissance;
+    private String typeBeneficiaire;
 
 
     @PrePersist

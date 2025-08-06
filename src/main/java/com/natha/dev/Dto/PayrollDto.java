@@ -23,4 +23,5 @@ public class PayrollDto {
     private LocalDate datePaiement;
     private int nbrejourTravail;
     private Double montantParJour;
+    private Double fraisTransport;
 }

@@ -7,6 +7,7 @@ import com.natha.dev.Model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -25,6 +26,14 @@ public class BeneficiaireImpl implements BeneficiaireIService {
 
 
     @Override
+    public List<BeneficiaireDto> findAllByTypeBeneficiaire(String typeBeneficiaire) {
+        List<Beneficiaire> beneficiaires = dao.findByTypeBeneficiaire(typeBeneficiaire);
+        return beneficiaires.stream()
+                .map(BeneficiaireDto::fromEntity)
+                .toList();
+    }
+
+    @Override
     public Optional<BeneficiaireDto> findById(String beneficiaireId) {
         // Itilize dao a pou jwenn Beneficiaire nan bazdone
         Beneficiaire beneficiaire = dao.findById(beneficiaireId)
@@ -38,7 +47,7 @@ public class BeneficiaireImpl implements BeneficiaireIService {
     public void ajouterBeneficiaireDansFormation(String idBeneficiaire, String idProjet, String idFormation) {
         // 1. Récupérer ProjetBeneficiaire
         ProjetBeneficiaire projetBeneficiaire = projetBeneficiaireDao
-                .findByProjetIdProjetAndBeneficiaireIdBeneficiaire(idProjet, idBeneficiaire)
+                .findByProjetAndBeneficiaire(idProjet, idBeneficiaire)
                 .orElseThrow(() -> new RuntimeException("Bénéficiaire pa nan pwojè sa!"));
 
         // 2. Récupérer Formation
@@ -65,7 +74,7 @@ public class BeneficiaireImpl implements BeneficiaireIService {
     @Override
     public Optional<BeneficiaireDto> findBeneficiaireInProjet(String projetId, String beneficiaireId) {
         Optional<ProjetBeneficiaire> relation = projetBeneficiaireDao
-                .findByProjetIdProjetAndBeneficiaireIdBeneficiaire(projetId, beneficiaireId);
+                .findByProjetAndBeneficiaire(projetId, beneficiaireId);
 
         return relation.map(pb -> convertToDto(pb.getBeneficiaire()));
     }
@@ -73,7 +82,7 @@ public class BeneficiaireImpl implements BeneficiaireIService {
     public void transfererBeneficiaireDansProjet(String beneficiaireId, String ancienProjetId, String nouveauProjetId) {
         // Chèche relasyon benefisyè nan ansyen pwojè
         ProjetBeneficiaire relation = projetBeneficiaireDao
-                .findByProjetIdProjetAndBeneficiaireIdBeneficiaire(ancienProjetId, beneficiaireId)
+                .findByProjetAndBeneficiaire(ancienProjetId, beneficiaireId)
                 .orElseThrow(() -> new RuntimeException("Beneficiaire pa jwenn nan pwojè aktyèl la"));
 
         // Rekipere nouvo pwojè kote n ap transfere benefisyè a
@@ -90,7 +99,7 @@ public class BeneficiaireImpl implements BeneficiaireIService {
 
     public void deleteBeneficiaireFromProjet(String beneficiaireId, String projetId) {
         ProjetBeneficiaire relation = projetBeneficiaireDao
-                .findByProjetIdProjetAndBeneficiaireIdBeneficiaire(projetId, beneficiaireId)
+                .findByProjetAndBeneficiaire(projetId, beneficiaireId)
                 .orElseThrow(() -> new RuntimeException("Relasyon Beneficiaire-Pwojè pa jwenn"));
 
         projetBeneficiaireDao.delete(relation);
@@ -124,7 +133,7 @@ public class BeneficiaireImpl implements BeneficiaireIService {
     public BeneficiaireDto updateBeneficiaireDansProjet(String projetId, String beneficiaireId, BeneficiaireDto dto) {
         // 1. Verifye relasyon an egziste
         ProjetBeneficiaire relation = (ProjetBeneficiaire) projetBeneficiaireDao
-                .findByProjetIdProjetAndBeneficiaireIdBeneficiaire(projetId, beneficiaireId)
+                .findByProjetAndBeneficiaire(projetId, beneficiaireId)
                 .orElseThrow(() -> new RuntimeException("Relasyon Projet-Beneficiaire pa egziste."));
 
         // 2. Pran beneficyè a
@@ -143,6 +152,10 @@ public class BeneficiaireImpl implements BeneficiaireIService {
         beneficiaire.setTelephoneContact(dto.getTelephoneContact());
         beneficiaire.setTelephonePaiement(dto.getTelephonePaiement());
         beneficiaire.setOperateurPaiement(dto.getOperateurPaiement());
+        beneficiaire.setTypeBeneficiaire(dto.getTypeBeneficiaire());
+        beneficiaire.setIsGraduate(dto.getIsGraduate());
+        beneficiaire.setFiliere(dto.getFiliere());
+        beneficiaire.setCommuneResidence(dto.getCommuneResidence());
 
         // 4. Sove li
         dao.save(beneficiaire);
@@ -162,10 +175,10 @@ public class BeneficiaireImpl implements BeneficiaireIService {
 
     public static BeneficiaireDto convertToDto(Beneficiaire b) {
         return new BeneficiaireDto(
-                b.getIdBeneficiaire(), b.getNom(), b.getPrenom(), b.getSexe(), b.getDateNaissance(),
+                b.getIdBeneficiaire(), b.getNom(), b.getPrenom(), b.getSexe(), b.getCommuneResidence(), b.getIsGraduate(), b.getFiliere(), b.getDateNaissance(),
                 b.getDomaineDeFormation(), b.getTypeIdentification(), b.getIdentification(),
                 b.getLienNaissance(), b.getQualification(), b.getTelephoneContact(),
-                b.getTelephonePaiement(), b.getOperateurPaiement()
+                b.getTelephonePaiement(), b.getOperateurPaiement(), b.getTypeBeneficiaire()
         );
     }
 
@@ -181,6 +194,9 @@ public class BeneficiaireImpl implements BeneficiaireIService {
         b.setNom(d.getNom());
         b.setPrenom(d.getPrenom());
         b.setSexe(d.getSexe());
+        b.setCommuneResidence(d.getCommuneResidence());
+        b.setIsGraduate(d.getIsGraduate());
+        b.setFiliere(d.getFiliere());
         b.setDateNaissance(d.getDateNaissance());
         b.setDomaineDeFormation(d.getDomaineDeFormation());
         b.setTypeIdentification(d.getTypeIdentification());
@@ -195,4 +211,3 @@ public class BeneficiaireImpl implements BeneficiaireIService {
 
 
 }
-

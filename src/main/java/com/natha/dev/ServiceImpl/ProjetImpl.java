@@ -131,6 +131,10 @@ public class ProjetImpl implements ProjetIService {
         p.setMontantMainOeuvreNonQualifier(dto.getMontantMainOeuvreNonQualifier());
         p.setMontantTotal(dto.getMontantTotal());
         p.setModifyBy(dto.getModifyBy());
+        p.setNomRepresentant(dto.getNomRepresentant());
+        p.setPositionRepresentant(dto.getPositionRepresentant());
+        p.setNumeroIdentification(dto.getNumeroIdentification());
+        p.setModeExecution(dto.getModeExecution());
     }
 
 
@@ -223,6 +227,10 @@ public class ProjetImpl implements ProjetIService {
         p.setCreatedAt(dto.getCreatedAt());
         p.setUpdatedAt(dto.getUpdatedAt());
         p.setMontantFraisCashInCashOut(dto.getMontantFraisCashInCashOut());
+        p.setNomRepresentant(dto.getNomRepresentant());
+        p.setPositionRepresentant(dto.getPositionRepresentant());
+        p.setNumeroIdentification(dto.getNumeroIdentification());
+        p.setModeExecution(dto.getModeExecution());
 
         // Nou pa mete composante ak quartier la la pou evite doublon, metòd ki rele yo mete yo
         return p;
@@ -256,6 +264,10 @@ public class ProjetImpl implements ProjetIService {
         dto.setModifyBy(p.getModifyBy());
         dto.setCreatedAt(p.getCreatedAt());
         dto.setUpdatedAt(p.getUpdatedAt());
+        dto.setNomRepresentant(p.getNomRepresentant());
+        dto.setPositionRepresentant(p.getPositionRepresentant());
+        dto.setNumeroIdentification(p.getNumeroIdentification());
+        dto.setModeExecution(p.getModeExecution());
         dto.setMontantFraisCashInCashOut(p.getMontantFraisCashInCashOut());
         dto.setComposanteId(p.getComposante() != null ? p.getComposante().getId() : null);
         dto.setQuartierId(p.getQuartier() != null ? p.getQuartier().getId() : null);

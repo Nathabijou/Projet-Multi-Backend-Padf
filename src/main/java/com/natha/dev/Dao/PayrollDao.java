@@ -142,7 +142,9 @@ public interface PayrollDao extends JpaRepository<Payroll, String> {
     pr.name, p.debutPeriode, p.finPeriode, 
     b.nom, b.prenom, b.sexe, b.qualification, 
     p.nbreJourTravail, p.montantPayer, 
-    b.identification, b.telephonePaiement, p.methodePaiement
+    b.identification, b.telephonePaiement, p.methodePaiement,
+    p.statut,
+    b.telephoneContact
     )
     FROM Payroll p 
     JOIN p.projetBeneficiaire pb 

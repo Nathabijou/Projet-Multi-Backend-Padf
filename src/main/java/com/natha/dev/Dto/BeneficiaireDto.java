@@ -17,6 +17,9 @@ public class BeneficiaireDto {
     private String nom;
     private String prenom;
     private String sexe;
+    private String communeResidence;
+    private String IsGraduate;
+    private String filiere;
     private LocalDate dateNaissance;
     private String domaineDeFormation;
     private String typeIdentification;
@@ -26,6 +29,7 @@ public class BeneficiaireDto {
     private String telephoneContact;
     private String telephonePaiement;
     private String operateurPaiement;
+    private String typeBeneficiaire;
 
     public static BeneficiaireDto fromEntity(Beneficiaire b) {
         if (b == null) {
@@ -36,6 +40,9 @@ public class BeneficiaireDto {
                 b.getNom(),
                 b.getPrenom(),
                 b.getSexe(),
+                b.getCommuneResidence(),
+                b.getIsGraduate(),
+                b.getFiliere(),
                 b.getDateNaissance(),
                 b.getDomaineDeFormation(),
                 b.getTypeIdentification(),
@@ -44,7 +51,9 @@ public class BeneficiaireDto {
                 b.getQualification(),
                 b.getTelephoneContact(),
                 b.getTelephonePaiement(),
-                b.getOperateurPaiement()
+                b.getOperateurPaiement(),
+                b.getTypeBeneficiaire()
+
         );
     }
 

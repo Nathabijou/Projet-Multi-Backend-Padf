@@ -11,5 +11,4 @@ public class MultitenantBackEnd {
     public static void main(String[] args) {
         SpringApplication.run(MultitenantBackEnd.class, args);
     }
-
 }

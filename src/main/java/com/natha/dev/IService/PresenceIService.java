@@ -16,7 +16,6 @@ public interface PresenceIService {
 
     PresenceDto ajouterPresenceFormation(String projetId, String beneficiaireId, String formationId, PresenceDto dto);
 
-    List<PresenceDto> getPresencesByProjetBeneficiaireFormation(String projetId, String beneficiaireId, String formationId);
 
 
 }

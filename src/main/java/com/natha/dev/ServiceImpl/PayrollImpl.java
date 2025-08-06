@@ -25,7 +25,7 @@ public class PayrollImpl implements PayrollIService {
     @Override
     public PayrollDto createPayroll(String projetId, String beneficiaireId, PayrollDto dto) {
         ProjetBeneficiaire pb = projetBeneficiaireDao
-                .findByProjetIdProjetAndBeneficiaireIdBeneficiaire(projetId, beneficiaireId)
+                .findByProjetAndBeneficiaire(projetId, beneficiaireId)
                 .orElseThrow(() -> new RuntimeException("Relasyon Beneficiaire-Projet pa jwenn"));
 
         Payroll payroll = new Payroll();
@@ -37,6 +37,7 @@ public class PayrollImpl implements PayrollIService {
         payroll.setStatut(dto.getStatut());
         payroll.setDatePaiement(dto.getDatePaiement());
         payroll.setProjetBeneficiaire(pb);
+        payroll.setFraisTransport(dto.getFraisTransport());
 
         // Kalkile montantPayer otomatik
         double montantParJour = dto.getMontantParJour() != null ? dto.getMontantParJour() : 0.0;
@@ -50,7 +51,7 @@ public class PayrollImpl implements PayrollIService {
     @Override
     public List<PayrollDto> getPayrollsByProjetBeneficiaire(String projetId, String beneficiaireId) {
         ProjetBeneficiaire pb = projetBeneficiaireDao
-                .findByProjetIdProjetAndBeneficiaireIdBeneficiaire(projetId, beneficiaireId)
+                .findByProjetAndBeneficiaire(projetId, beneficiaireId)
                 .orElseThrow(() -> new RuntimeException("Relasyon Beneficiaire-Projet pa jwenn"));
 
         return payrollDao.findByProjetBeneficiaire(pb)
@@ -79,6 +80,7 @@ public class PayrollImpl implements PayrollIService {
         payroll.setNbreJourTravail(dto.getNbrejourTravail());
         payroll.setStatut(dto.getStatut());
         payroll.setDatePaiement(dto.getDatePaiement());
+        payroll.setFraisTransport(dto.getFraisTransport());
 
         double montantParJour = dto.getMontantParJour() != null ? dto.getMontantParJour() : 0.0;
         payroll.setMontantPayer(payroll.getNbreJourTravail() * montantParJour);
@@ -104,7 +106,9 @@ public class PayrollImpl implements PayrollIService {
                 p.getStatut(),
                 p.getDatePaiement(),
                 p.getNbreJourTravail(),
+                p.getFraisTransport(),
                 montantParJour
+
         );
     }
 }

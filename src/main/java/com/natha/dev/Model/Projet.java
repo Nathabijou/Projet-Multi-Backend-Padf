@@ -1,5 +1,6 @@
 package com.natha.dev.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -15,6 +16,7 @@ import java.util.Random;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonIgnoreProperties({"composante.projets", "hibernateLazyInitializer", "handler"})
 public class Projet {
 
     @Id
@@ -51,6 +53,11 @@ public class Projet {
 
     private String createdBy;
     private String modifyBy;
+    private String NomRepresentant;
+    private String PositionRepresentant;
+    private String numeroIdentification;
+    private String modeExecution;
+
 
     @Column(nullable = false)
     private Boolean active = true;
