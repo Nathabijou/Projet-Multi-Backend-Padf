@@ -5,6 +5,7 @@ import com.natha.dev.ServiceImpl.RoleService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,12 +18,12 @@ public class RoleController {
 
     @Autowired
     private RoleService roleService;
-
+    @PreAuthorize("hasAnyRole('Admin', 'Manager')")
     @PostMapping("/createNewRole")
     public Role createNewRole(@RequestBody String roleName) {
         return roleService.createNewRoleWithPrivileges(roleName);
     }
-
+    @PreAuthorize("hasAnyRole('Admin', 'Manager')")
     @GetMapping("/roles")
     public ResponseEntity<List<Role>> getAllRoles() {
         List<Role> roles = roleService.getAllRoles();

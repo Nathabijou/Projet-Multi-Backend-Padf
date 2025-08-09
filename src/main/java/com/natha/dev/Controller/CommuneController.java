@@ -13,27 +13,27 @@ import java.util.List;
 public class CommuneController {
     @Autowired
     private CommuneIService communeIService;
-    //@PreAuthorize("hasAnyRole('ADMIN', 'SUPERADMIN')")
+    @PreAuthorize("hasAnyRole('Admin', 'Manager', 'User')")
     @GetMapping("/commune")
     List<CommuneDto> communeList(){
         return communeIService.findAll();
     }
-    //@PreAuthorize("hasAnyRole('ADMIN', 'SUPERADMIN')")
+    @PreAuthorize("hasAnyRole('Admin', 'Manager', 'User')")
     @PostMapping("/communes/create")
     public CommuneDto create(@RequestBody CommuneDto dto) {
         return communeIService.save(dto);
     }
-    //@PreAuthorize("hasAnyRole('ADMIN', 'SUPERADMIN','MANAGER')")
+    @PreAuthorize("hasAnyRole('Admin', 'Manager', 'User')")
     @GetMapping("/communes/arrondissement/{id}")
     public List<CommuneDto> getByArrondissementId(@PathVariable Long id) {
         return communeIService.getByArrondissementId(id);
     }
-    //@PreAuthorize("hasAnyRole('ADMIN', 'SUPERADMIN')")
+    @PreAuthorize("hasAnyRole('Admin', 'Manager', 'User')")
     @GetMapping("/communes/all")
     public List<CommuneDto> all() {
         return communeIService.getAll();
     }
-    //@PreAuthorize("hasAnyRole('ADMIN', 'SUPERADMIN')")
+    @PreAuthorize("hasAnyRole('Admin', 'Manager', 'User')")
     @DeleteMapping("/communes/{id}")
     public void delete(@PathVariable Long id) {
         communeIService.delete(id);

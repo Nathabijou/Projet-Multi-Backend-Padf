@@ -14,16 +14,13 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@CrossOrigin("http://localhost:4200")
 public class ApplicationInstanceController {
 
     @Autowired
     private ApplicationInstanceIService applicationInstanceService;
 
-
-
-
     //create app single
+    @PreAuthorize("hasAnyRole('Admin')")
     @PostMapping("/create-standalone")
     //@PreAuthorize("hasAnyRole('ADMIN', 'SUPERADMIN')")
     public ResponseEntity<ApplicationInstanceDto> createStandaloneApp(@RequestBody ApplicationInstanceDto dto) {
@@ -33,13 +30,14 @@ public class ApplicationInstanceController {
 
 
     //recuperer list user nan yon app
-    //@PreAuthorize("hasAnyRole('ADMIN', 'SUPERADMIN')")
+    @PreAuthorize("hasAnyRole('Admin')")
     @GetMapping("/applications/{idApp}/users")
     public ResponseEntity<List<Users>> getUsersByApplication(@PathVariable String idApp) {
         List<Users> users = applicationInstanceService.getUsersByApplication(idApp);
         return ResponseEntity.ok(users);
     }
 // ajouter user nan yon app
+    @PreAuthorize("hasAnyRole('Admin')")
     @PostMapping("/application/{appId}/addUser/{userName}")
     public ResponseEntity<ApplicationInstanceDto> addUserToApplication(
             @PathVariable String appId,
@@ -48,7 +46,24 @@ public class ApplicationInstanceController {
         ApplicationInstanceDto updatedApp = applicationInstanceService.addUserToApplication(userName, appId);
         return ResponseEntity.ok(updatedApp);
     }
+    
+    /**
+     * Retire yon itilizatè nan yon aplikasyon
+     * @param appId ID aplikasyon an
+     * @param userName non itilizatè a pou w vle retire
+     * @return Aplikasyon an ak lis itilizatè ki mete ajou
+     */
+    @PreAuthorize("hasAnyRole('Admin')")
+    @DeleteMapping("/application/{appId}/removeUser/{userName}")
+    public ResponseEntity<ApplicationInstanceDto> removeUserFromApplication(
+            @PathVariable String appId,
+            @PathVariable String userName) {
+            
+        ApplicationInstanceDto updatedApp = applicationInstanceService.removeUserFromApplication(userName, appId);
+        return ResponseEntity.ok(updatedApp);
+    }
     //Get List App from user
+    @PreAuthorize("hasAnyRole('Admin')")
     @GetMapping("/users/{userName}/applications")
     public ResponseEntity<List<ApplicationInstanceDto>> getApplicationsByUser(@PathVariable String userName) {
 //        JwtUtil.planMaintenance(LocalDate.of(2025, 7, 6));
@@ -59,7 +74,7 @@ public class ApplicationInstanceController {
 
 
     // 🔍 Get tout aplikasyon yo
-    //@PreAuthorize("hasAnyRole('ADMIN', 'SUPERADMIN')")
+    @PreAuthorize("hasAnyRole('Admin')")
     @GetMapping("/allApplicationInstance")
     public List<ApplicationInstanceDto> getAll() {
 
@@ -80,7 +95,7 @@ public class ApplicationInstanceController {
 
 
     // 🔍 Get All App ( Verify)
-    //@PreAuthorize("hasAnyRole('ADMIN', 'SUPERADMIN')")
+    @PreAuthorize("hasAnyRole('Admin')")
     @GetMapping("/applications/{id}")
     public ResponseEntity<ApplicationInstanceDto> getById(@PathVariable String id) {
         return applicationInstanceService.findById(id)
@@ -92,7 +107,7 @@ public class ApplicationInstanceController {
 
 
     // ✏️ Modifye aplikasyon ki egziste
-    @PreAuthorize("hasAnyRole('ADMIN', 'SUPERADMIN')")
+    @PreAuthorize("hasAnyRole('Admin')")
     @PutMapping("/Application/{idApp}")
     public ResponseEntity<ApplicationInstanceDto> update(@PathVariable String idApp, @RequestBody ApplicationInstanceDto dto) {
         dto.setIdApp(idApp);
@@ -101,7 +116,7 @@ public class ApplicationInstanceController {
     }
 
     //Update Application With Org (Yes Verify)
-    @PreAuthorize("hasAnyRole('ADMIN', 'SUPERADMIN')")
+    @PreAuthorize("hasAnyRole('Admin')")
     @PutMapping("/organization/{orgId}/application/{idApp}")
     public ResponseEntity<ApplicationInstanceDto> updateAppInOrg(
             @PathVariable String orgId,
@@ -115,7 +130,7 @@ public class ApplicationInstanceController {
 
 
     // ❌ Delete App with Org
-    @PreAuthorize("hasAnyRole('SUPERADMIN')")
+    @PreAuthorize("hasAnyRole('Admin')")
     @DeleteMapping("/Application/{idApp}")
     public ResponseEntity<Void> delete(@PathVariable String idApp) {
         applicationInstanceService.deleteById(idApp);
@@ -123,7 +138,7 @@ public class ApplicationInstanceController {
     }
 
     // 🚫 Dezaktive aplikasyon (sipoze gen 'active' nan DTO)
-    @PreAuthorize("hasAnyRole('SUPERADMIN')")
+    @PreAuthorize("hasAnyRole('Admin')")
     @PutMapping("/deactivate/{idApp}")
     public ResponseEntity<ApplicationInstanceDto> deactivateApplication(@PathVariable String idApp) {
         Optional<ApplicationInstanceDto> optApp = applicationInstanceService.findById(idApp);
@@ -136,7 +151,7 @@ public class ApplicationInstanceController {
     }
 
     // 🚀 Aktive aplikasyon
-    @PreAuthorize("hasAnyRole('SUPERADMIN')")
+    @PreAuthorize("hasAnyRole('Admin')")
     @PutMapping("/activate/{idApp}")
     public ResponseEntity<ApplicationInstanceDto> activateApplication(@PathVariable String idApp) {
         Optional<ApplicationInstanceDto> optApp = applicationInstanceService.findById(idApp);

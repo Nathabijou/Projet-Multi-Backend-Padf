@@ -17,7 +17,7 @@ public class PayrollController {
     @Autowired
     private PayrollIService payrollIService;
 
-    //@PreAuthorize("hasAnyRole('ADMIN', 'SUPERADMIN','MANAGER','USER')")
+    @PreAuthorize("hasAnyRole('Admin', 'Manager', 'User')")
     @PostMapping("/projets/{projetId}/beneficiaires/{beneficiaireId}")
     public ResponseEntity<PayrollDto> createPayroll(
             @PathVariable String projetId,
@@ -26,7 +26,7 @@ public class PayrollController {
         PayrollDto result = payrollIService.createPayroll(projetId, beneficiaireId, dto);
         return ResponseEntity.ok(result);
     }
-    //@PreAuthorize("hasAnyRole('ADMIN', 'SUPERADMIN','MANAGER','USER')")
+    @PreAuthorize("hasAnyRole('Admin', 'Manager', 'User')")
     @GetMapping("/projets/{projetId}/beneficiaire/{beneficiaireId}")
     public ResponseEntity<List<PayrollDto>> getAllPayrolls(
             @PathVariable String projetId,
@@ -36,18 +36,18 @@ public class PayrollController {
         );
     }
 
-    //@PreAuthorize("hasAnyRole('ADMIN', 'SUPERADMIN','MANAGER','USER')")
+    @PreAuthorize("hasAnyRole('Admin', 'Manager', 'User')")
     @GetMapping("/projet/{projetId}")
     public ResponseEntity<List<PayrollDto>> getPayrollsByProjet(@PathVariable String projetId) {
         return ResponseEntity.ok(payrollIService.getPayrollsByProjet(projetId));
     }
-
+    @PreAuthorize("hasAnyRole('Admin', 'Manager', 'User')")
     @GetMapping("/methode-paiement-par-periode/{projetId}")
     public ResponseEntity<List<PeriodeMethodePaiementDTO>> getMethodePaiementParPeriode(@PathVariable String projetId) {
         return ResponseEntity.ok(payrollIService.getMethodePaiementParPeriode(projetId));
     }
 
-    //@PreAuthorize("hasAnyRole('ADMIN', 'SUPERADMIN','MANAGER','USER')")
+    @PreAuthorize("hasAnyRole('Admin', 'Manager', 'User')")
     @PutMapping("/payrolls/{payrollId}")
     public ResponseEntity<PayrollDto> updatePayroll(
             @PathVariable String payrollId,

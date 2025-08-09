@@ -18,7 +18,7 @@ public class ProjetController {
     private ProjetIService projetIService;
 
     //Create Project with component and Quatier (Yes Verify)
-    //@PreAuthorize("hasAnyRole('ADMIN', 'SUPERADMIN','MANAGER','USER')")
+    @PreAuthorize("hasAnyRole('Admin', 'Manager', 'User')")
     @PostMapping("/projets/composante/{composanteId}/quartier/{quartierId}")
     public ResponseEntity<ProjetDto> createProjet(
             @PathVariable Long composanteId,
@@ -29,13 +29,13 @@ public class ProjetController {
     }
 
     //Get List Project with component  (Yes Verify)
-    //@PreAuthorize("hasAnyRole('ADMIN', 'SUPERADMIN','MANAGER','USER')")
+    @PreAuthorize("hasAnyRole('Admin', 'Manager', 'User','Moderant')")
     @GetMapping("/projets/composante/{composanteId}")
     public List<ProjetDto> getProjetsByComposante(@PathVariable Long composanteId) {
         return projetIService.findByComposante(composanteId);
     }
     // Get List project with component and Quartier (Yes Verify)
-    //@PreAuthorize("hasAnyRole('ADMIN', 'SUPERADMIN','MANAGER','USER')")
+    @PreAuthorize("hasAnyRole('Admin', 'Manager', 'User','Moderant')")
     @GetMapping("/projets/composante/{composanteId}/quartier/{quartierId}")
     public List<ProjetDto> getProjetsByComposanteAndQuartier(
             @PathVariable Long composanteId,
@@ -45,7 +45,7 @@ public class ProjetController {
 
 
     //Modify Project with component (Yes Verify)
-    //@PreAuthorize("hasAnyRole('ADMIN','SUPERADMIN','MANAGER')")
+    @PreAuthorize("hasAnyRole('Admin', 'Manager', 'User')")
     @PutMapping("/projets/composante/{composanteId}/projet/{idProjet}")
     public ResponseEntity<ProjetDto> updateByComposante(
             @PathVariable Long composanteId,
@@ -57,7 +57,7 @@ public class ProjetController {
     }
 
     // 2) Update project with Component and Quartier
-    //@PreAuthorize("hasAnyRole('ADMIN','SUPERADMIN','MANAGER')")
+    @PreAuthorize("hasAnyRole('Admin', 'Manager')")
     @PutMapping("/projets/composante/{composanteId}/quartier/{quartierId}/projet/{idProjet}")
     public ResponseEntity<ProjetDto> updateByComposanteAndQuartier(
             @PathVariable Long composanteId,
@@ -71,13 +71,13 @@ public class ProjetController {
 
 
     //Get All project in the App (Yes Verify)
-    //@PreAuthorize("hasAnyRole('ADMIN', 'SUPERADMIN','MANAGER','USER')")
+    @PreAuthorize("hasAnyRole('Admin', 'Manager', 'User','Moderant')")
     @GetMapping("/projets/All")
     public ResponseEntity<List<ProjetDto>> getAllProjets() {
         return ResponseEntity.ok(projetIService.findAll());
     }
 
-    //Get Project With Id (Yes Verify)
+    @PreAuthorize("hasAnyRole('Admin', 'Manager', 'User','Moderant')")
     @GetMapping("/projets/{idProjet}")
     public ResponseEntity<ProjetDto> getProjetById(@PathVariable String idProjet) {
         return projetIService.findById(idProjet)
@@ -86,7 +86,7 @@ public class ProjetController {
     }
 
     //Delete Project With Id (Yes Verify)
-    @PreAuthorize("hasAnyRole('ADMIN', 'SUPERADMIN')")
+    @PreAuthorize("hasAnyRole('Admin', 'Manager')")
     @DeleteMapping("/projets/{idProjet}")
     public ResponseEntity<Void> deleteProjet(@PathVariable String idProjet) {
         projetIService.deleteById(idProjet);
@@ -94,7 +94,7 @@ public class ProjetController {
     }
 
     //Enable Project (Yes Verify)
-//    @PreAuthorize("hasAnyRole('ADMIN', 'SUPERADMIN')")
+    @PreAuthorize("hasAnyRole('Admin', 'Manager', 'User')")
     @PutMapping("/projets/projet/{idProjet}/activate")
     public ResponseEntity<String> activateProjet(@PathVariable String idProjet) {
         projetIService.setProjetActiveStatus(idProjet, true);
@@ -102,7 +102,7 @@ public class ProjetController {
     }
 
     //Disable Project (Yes Verify)
-//    @PreAuthorize("hasAnyRole('ADMIN', 'SUPERADMIN')")
+    @PreAuthorize("hasAnyRole('Admin', 'Manager', 'User')")
     @PutMapping("/projets/projet/{idProjet}/deactivate")
     public ResponseEntity<String> deactivateProjet(@PathVariable String idProjet) {
         projetIService.setProjetActiveStatus(idProjet, false);
@@ -116,7 +116,7 @@ public class ProjetController {
 
 
     //Get Beneficiars with project
-   // @PreAuthorize("hasAnyRole('ADMIN', 'SUPERADMIN','MANAGER','USER')")
+    @PreAuthorize("hasAnyRole('Admin', 'Manager', 'User','Moderant')")
     @GetMapping("/projets/projets/{idProjet}/beneficiaires")
     public ResponseEntity<List<BeneficiaireDto>> getBeneficiairesByProjet(
             @PathVariable String idProjet) {

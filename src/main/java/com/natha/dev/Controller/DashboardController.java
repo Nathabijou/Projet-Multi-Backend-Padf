@@ -6,6 +6,7 @@ import com.natha.dev.Dto.KpiResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -17,6 +18,7 @@ public class DashboardController {
     @Autowired
     private DashboardIService dashboardIService;
 
+    @PreAuthorize("hasAnyRole('Admin', 'Manager', 'User')")
     @GetMapping("/dashboard")
     public ResponseEntity<KpiResponse> getDashboard(@ModelAttribute DashboardFilter filter, Principal principal) {
         String username = principal.getName();

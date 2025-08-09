@@ -4,6 +4,7 @@ import com.natha.dev.Model.Privilege;
 import com.natha.dev.ServiceImpl.PrivilegeImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,30 +17,35 @@ public class PrivilegeApi {
     private PrivilegeImpl privilegeImpl;
 
     // API pou kreye privilèj
+    @PreAuthorize("hasAnyRole('Admin')")
     @PostMapping("/create")
     public Privilege createNewPrivilege(@RequestBody Privilege privilege) {
         return privilegeImpl.createNewPrivilege(privilege);
     }
 
     // API pou lis tout privilèj
+    @PreAuthorize("hasAnyRole('Admin', 'Manager')")
     @GetMapping("/all")
     public List<Privilege> getAllPrivileges() {
         return privilegeImpl.getAllPrivileges();
     }
 
     // API pou efase yon privilèj
+    @PreAuthorize("hasAnyRole('Admin', 'Manager')")
     @DeleteMapping("/delete/{name}")
     public void deletePrivilege(@PathVariable String name) {
         privilegeImpl.deletePrivilege(name);
     }
 
     // API pou tcheke/kreye otomatikman
+    @PreAuthorize("hasAnyRole('Admin', 'Manager')")
     @PostMapping("/getOrCreate")
     public Privilege getOrCreatePrivilege(@RequestBody Privilege privilege) {
         return privilegeImpl.getOrCreatePrivilege(privilege.getPrivilegeName(), privilege.getPrivilegeDescription());
     }
 
     // API pou bay yon privilèj a yon itilizatè
+    @PreAuthorize("hasAnyRole('Admin', 'Manager')")
     @PostMapping("/assign-user-privilege")
     public ResponseEntity<?> assignUserPrivilege(
             @RequestParam String userName,
@@ -54,6 +60,7 @@ public class PrivilegeApi {
     }
 
     // API pou retire yon privilèj yon itilizatè
+    @PreAuthorize("hasAnyRole('Admin', 'Manager')")
     @DeleteMapping("/remove-user-privilege")
     public ResponseEntity<?> removeUserPrivilege(
             @RequestParam String userName,
@@ -69,6 +76,7 @@ public class PrivilegeApi {
     }
 
     // API pou tcheke si yon itilizatè gen yon privilèj
+    @PreAuthorize("hasAnyRole('Admin', 'Manager')")
     @GetMapping("/check-user-privilege")
     public ResponseEntity<?> checkUserPrivilege(
             @RequestParam String userName,
@@ -84,6 +92,7 @@ public class PrivilegeApi {
     }
 
     // API pou jwenn tout privilèj yon itilizatè
+    @PreAuthorize("hasAnyRole('Admin', 'Manager')")
     @GetMapping("/get-user-privileges")
     public ResponseEntity<?> getUserPrivileges(
             @RequestParam String userName,

@@ -75,6 +75,33 @@ public class ApplicationInstanceServiceImpl implements ApplicationInstanceIServi
 
         return new ArrayList<>(app.getUsers()); // Si ou pa vle Set
     }
+    
+    @Override
+    public ApplicationInstanceDto removeUserFromApplication(String userName, String appId) {
+        // Jwenn itilizatè a
+        Users user = userDao.findById(userName)
+                .orElseThrow(() -> new RuntimeException("Itilizatè pa jwenn"));
+                
+        // Jwenn aplikasyon an
+        ApplicationInstance app = applicationInstanceDao.findById(appId)
+                .orElseThrow(() -> new RuntimeException("Aplikasyon pa jwenn"));
+                
+        // Retire relasyon an nan bò itilizatè a
+        if (user.getApplicationInstances() != null) {
+            user.getApplicationInstances().removeIf(appInstance -> appInstance.getIdApp().equals(appId));
+        }
+        
+        // Retire relasyon an nan bò aplikasyon an
+        if (app.getUsers() != null) {
+            app.getUsers().removeIf(u -> u.getUserName().equals(userName));
+        }
+        
+        // Sove chanjman yo
+        userDao.save(user);
+        ApplicationInstance updatedApp = applicationInstanceDao.save(app);
+        
+        return convertToDto(updatedApp);
+    }
 
 
     @Override
