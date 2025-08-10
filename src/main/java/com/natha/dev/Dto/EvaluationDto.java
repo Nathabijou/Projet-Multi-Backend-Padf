@@ -17,6 +17,8 @@ public class EvaluationDto {
     private Long evaluationId;  // Pou estoke ID evalyasyon an
     private Double noteMaconnerie;
     private Double noteSalle;
+    private Double notePratique;
+    private Double noteTheorique;
     @NotNull(message = "Mwayèn an obligatwa")
     @Min(value = 0, message = "Mwayèn an pa ka pi piti pase 0")
     @Max(value = 100, message = "Mwayèn an pa ka pi gran pase 100")
