@@ -14,22 +14,22 @@ public class SectionCommunaleController {
 
     @Autowired
     private SectionCommunaleIService service;
-    //@PreAuthorize("hasAnyRole('ADMIN', 'SUPERADMIN')")
+    @PreAuthorize("hasAnyRole('Admin', 'Manager')")
     @PostMapping("/sections/create")
     public SectionCommunaleDto create(@RequestBody SectionCommunaleDto dto) {
         return service.save(dto);
     }
-    //@PreAuthorize("hasAnyRole('ADMIN', 'SUPERADMIN','MANAGER')")
+    @PreAuthorize("hasAnyRole('Admin', 'Manager', 'User','Moderant')")
     @GetMapping("/sections/commune/{id}")
     public List<SectionCommunaleDto> getByCommune(@PathVariable Long id) {
         return service.getByCommune(id);
     }
-    //@PreAuthorize("hasAnyRole('ADMIN', 'SUPERADMIN')")
+    @PreAuthorize("hasAnyRole('Admin', 'Manager', 'User')")
     @GetMapping("/sections/all")
     public List<SectionCommunaleDto> all() {
         return service.getAll();
     }
-    //@PreAuthorize("hasAnyRole('SUPERADMIN')")
+    @PreAuthorize("hasAnyRole('Admin', 'Manager')")
     @DeleteMapping("/sections/{id}")
     public void delete(@PathVariable Long id) {
         service.delete(id);

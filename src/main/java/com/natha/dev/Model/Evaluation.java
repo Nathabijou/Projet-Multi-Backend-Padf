@@ -31,6 +31,15 @@ public class Evaluation {
     @Column(name = "note_salle")
     private Double noteSalle;
 
+    @Column(name = "note_pratique")
+    private Double notePratique;
+
+    @Column(name = "note_theorique")
+    private Double noteTheorique;
+
+    @Column(columnDefinition = "TEXT")
+    private String commentaire;
+
     @Column(length = 100)
     private String mention;
 
@@ -47,4 +56,18 @@ public class Evaluation {
 
     @OneToMany(mappedBy = "evaluation", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProjetBeneficiaireEvaluation> projetBeneficiaires = new ArrayList<>();
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "module_beneficiaire_id")
+    private ModuleBeneficiaire moduleBeneficiaire;
+    
+    @PrePersist
+    @PreUpdate
+    public void calculerMention() {
+        if (noteTheorique != null && notePratique != null) {
+            this.moyenne = (noteTheorique + notePratique) / 2.0;
+            this.isPass = (noteTheorique >= 60 && notePratique >= 60);
+            this.mention = this.isPass ? "Admis" : "Échec";
+        }
+    }
 }

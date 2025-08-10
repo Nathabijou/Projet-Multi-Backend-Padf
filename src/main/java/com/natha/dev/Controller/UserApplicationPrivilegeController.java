@@ -11,27 +11,26 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping("/userAppPriv")
 public class UserApplicationPrivilegeController {
 
     @Autowired
     private UserApplicationPrivilegeIService service;
 
-    @PreAuthorize("hasAnyRole('ADMIN', 'SUPERADMIN')")
+    @PreAuthorize("hasAnyRole('Admin', 'Manager')")
     @PostMapping("/assign")
     public ResponseEntity<UserApplicationPrivilegeDto> assignPrivilege(@RequestBody UserApplicationPrivilegeDto dto) {
         UserApplicationPrivilegeDto saved = service.save(dto);
         return ResponseEntity.ok(saved);
     }
     //(Yes Ok)
-    @PreAuthorize("hasAnyRole('ADMIN', 'SUPERADMIN')")
+    @PreAuthorize("hasAnyRole('Admin', 'Manager')")
     @GetMapping("/all")
     public List<UserApplicationPrivilegeDto> getAll() {
         return service.findAll();
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN', 'SUPERADMIN')")
+    @PreAuthorize("hasAnyRole('Admin', 'Manager')")
     @GetMapping("/{userName}/{applicationId}/{privilegeName}")
     public ResponseEntity<UserApplicationPrivilegeDto> getById(
             @PathVariable String userName,
@@ -42,7 +41,7 @@ public class UserApplicationPrivilegeController {
         return opt.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN', 'SUPERADMIN')")
+    @PreAuthorize("hasAnyRole('Admin')")
     @DeleteMapping("/{userName}/{applicationId}/{privilegeName}")
     public ResponseEntity<Void> delete(
             @PathVariable String userName,

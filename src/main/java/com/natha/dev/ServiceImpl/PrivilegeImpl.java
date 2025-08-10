@@ -6,6 +6,7 @@ import com.natha.dev.IService.PrivilegeIService;
 import com.natha.dev.Model.Privilege;
 import com.natha.dev.Model.UserApplicationPrivilege;
 import com.natha.dev.Model.UserPrivilege;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -69,6 +70,7 @@ public class PrivilegeImpl implements PrivilegeIService {
     }
     
     @Override
+    @Transactional
     public void removeUserPrivilege(String userName, String componentName, String elementName, String privilegeName) {
         userPrivilegeDao.deleteByUserNameAndComponentNameAndElementNameAndPrivilegeName(
             userName, componentName, elementName, privilegeName);

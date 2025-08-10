@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,21 +17,21 @@ import java.util.List;
 public class ProjetBeneficiaireEvaluationController {
 
     private final ProjetBeneficiaireEvaluationService evaluationService;
-
+    @PreAuthorize("hasAnyRole('Admin', 'Manager', 'User','Moderant')")
     @GetMapping("/api/projet-beneficiaire-evaluations/projet/{projetId}")
     public ResponseEntity<List<BeneficiaireEvaluationDto>> getBeneficiaireEvaluationsByProjetId(
             @PathVariable String projetId) {
         List<BeneficiaireEvaluationDto> evaluations = evaluationService.getBeneficiaireEvaluationsByProjetId(projetId);
         return ResponseEntity.ok(evaluations);
     }
-    
+    @PreAuthorize("hasAnyRole('Admin', 'Manager', 'User','Moderant')")
     @GetMapping("/api/projet-beneficiaire-evaluations/projet-beneficiaire/{projetBeneficiaireId}")
     public ResponseEntity<List<EvaluationDto>> getEvaluationsByProjetBeneficiaire(
             @PathVariable String projetBeneficiaireId) {
         List<EvaluationDto> evaluations = evaluationService.getEvaluationsByProjetBeneficiaire(projetBeneficiaireId);
         return ResponseEntity.ok(evaluations);
     }
-
+    @PreAuthorize("hasAnyRole('Admin', 'Manager', 'User','Moderant')")
     @PostMapping("/api/projet-beneficiaire-evaluations/projet-beneficiaire/{projetBeneficiaireId}")
     public ResponseEntity<EvaluationDto> createEvaluation(
             @PathVariable String projetBeneficiaireId,

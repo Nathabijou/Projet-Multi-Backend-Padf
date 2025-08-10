@@ -24,8 +24,14 @@ public interface ApplicationInstanceIService {
     ApplicationInstanceDto createStandaloneApp(ApplicationInstanceDto dto);
 
     List<ApplicationInstanceDto> getApplicationsByUser(String userName);
-
-
+    
+    /**
+     * Retire yon itilizatè nan yon aplikasyon
+     * @param userName non itilizatè a pou w vle retire
+     * @param appId ID aplikasyon an
+     * @return Aplikasyon an ak lis itilizatè ki mete ajou
+     */
+    ApplicationInstanceDto removeUserFromApplication(String userName, String appId);
 
 
 }

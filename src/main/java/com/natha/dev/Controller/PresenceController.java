@@ -16,7 +16,7 @@ public class PresenceController {
     @Autowired
     private PresenceIService presenceIService;
 
-    @PreAuthorize("hasAnyRole('ADMIN', 'SUPERADMIN','MANAGER','USER')")
+    @PreAuthorize("hasAnyRole('Admin', 'Manager', 'User')")
     @PostMapping("/presencesss/{projetId}/{beneficiaireId}")
     public ResponseEntity<PresenceDto> ajouterPresence(
             @PathVariable String projetId,
@@ -25,7 +25,7 @@ public class PresenceController {
         return ResponseEntity.ok(presenceIService.ajouterPresence(projetId, beneficiaireId, dto));
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN', 'SUPERADMIN','MANAGER','USER')")
+    @PreAuthorize("hasAnyRole('Admin', 'Manager', 'User')")
     @GetMapping("/presencess/{projetId}/{beneficiaireId}")
     public ResponseEntity<List<PresenceDto>> getPresences(
             @PathVariable String projetId,
@@ -33,7 +33,7 @@ public class PresenceController {
         return ResponseEntity.ok(presenceIService.getPresencesByProjetBeneficiaire(projetId, beneficiaireId));
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN', 'SUPERADMIN','MANAGER','USER')")
+    @PreAuthorize("hasAnyRole('Admin', 'Manager', 'User')")
     @PutMapping("/presences/{idPresence}")
     public ResponseEntity<PresenceDto> modifierPresence(
             @PathVariable String idPresence,
@@ -41,7 +41,7 @@ public class PresenceController {
         return ResponseEntity.ok(presenceIService.modifierPresence(idPresence, dto));
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN', 'SUPERADMIN','MANAGER','USER')")
+    @PreAuthorize("hasAnyRole('Admin', 'Manager', 'User')")
     @DeleteMapping("/presence/{idPresence}")
     public ResponseEntity<String> supprimerPresence(@PathVariable String idPresence) {
         presenceIService.supprimerPresence(idPresence);

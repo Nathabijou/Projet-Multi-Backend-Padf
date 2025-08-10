@@ -24,19 +24,20 @@ public class ComposanteController {
     @Autowired
     public UserDao userDao;
 
+    @PreAuthorize("hasAnyRole('Admin', 'Manager')")
     @GetMapping("/users/{userName}/composantes")
     public ResponseEntity<List<ComposanteDto>> getComposantesByUserName(@PathVariable String userName) {
         List<ComposanteDto> composantes = composanteIService.getComposantesByUserName(userName);
         return ResponseEntity.ok(composantes);
     }
 
-
+    @PreAuthorize("hasAnyRole('Admin', 'Manager', 'User')")
     @GetMapping("/composantess/{composanteId}/users")
     public ResponseEntity<List<UsersDto>> getUsersByComposante(@PathVariable Long composanteId) {
         List<UsersDto> users = composanteIService.getUsersByComposanteId(composanteId);
         return ResponseEntity.ok(users);
     }
-
+    @PreAuthorize("hasAnyRole('Admin')")
     @DeleteMapping("/composante/{composanteId}/users/{userName}")
     public ResponseEntity<?> removeUserFromComposante(
             @PathVariable Long composanteId,
@@ -47,6 +48,7 @@ public class ComposanteController {
 
 
     //Adduser to component (Yes Verify)
+    @PreAuthorize("hasAnyRole('Admin')")
     @PostMapping("/composantes/{composanteId}/users/{userName}")
     public ResponseEntity<?> assignUserToComposante(
             @PathVariable Long composanteId,
@@ -56,7 +58,7 @@ public class ComposanteController {
     }
 
     // cheche li composantant nan yon application pou yon user
-    //@PreAuthorize("hasAnyRole('ADMIN', 'SUPERADMIN','MANAGER','USER')")
+    @PreAuthorize("hasAnyRole('Admin', 'Manager')")
     @GetMapping("/composantes/by-application-and-user/{applicationId}/{username}")
     public List<ComposanteDto> getByApplicationAndUser(
             @PathVariable String applicationId,
@@ -65,7 +67,7 @@ public class ComposanteController {
         return composanteIService.findByApplicationAndUser(applicationId, username);
     }
 
-
+    @PreAuthorize("hasAnyRole('Admin', 'Manager', 'User')")
     @GetMapping("/{id}/users")
     public ResponseEntity<List<Users>> getUsersForComposante(@PathVariable Long id) {
         return ResponseEntity.ok(composanteIService.findUsersByComposante(id));
@@ -73,7 +75,7 @@ public class ComposanteController {
 
 
     // create composante with Application ID (Yes Verify)
-   // @PreAuthorize("hasAnyRole('ADMIN', 'SUPERADMIN')")
+    @PreAuthorize("hasAnyRole('Admin', 'Manager')")
     @PostMapping("/composantes/create/{applicationId}")
     public ResponseEntity<ComposanteDto> create(
             @PathVariable String applicationId,
@@ -83,7 +85,7 @@ public class ComposanteController {
     }
 
     // Find composante with Application ID (Yes Verify)
-    //@PreAuthorize("hasAnyRole('ADMIN', 'SUPERADMIN','MANAGER','USER')")
+    @PreAuthorize("hasAnyRole('Admin', 'Manager', 'User')")
     @GetMapping("/composantes/by-application/{applicationId}")
     public List<ComposanteDto> getByApp(@PathVariable String applicationId) {
         return composanteIService.findByApplication(applicationId);
@@ -92,14 +94,14 @@ public class ComposanteController {
 
 
     // get All Component  (yes verify)
-    //@PreAuthorize("hasAnyRole('SUPERADMIN')")
+    @PreAuthorize("hasAnyRole('Admin', 'Manager')")
     @GetMapping("/composantes/all")
     public List<ComposanteDto> getAllComposantes() {
         return composanteIService.findAll();  // Ou ajoute method findAll() nan service si poko genyen
     }
 
     // Modify Component with App  (yes verify)
-    @PreAuthorize("hasAnyRole('ADMIN', 'SUPERADMIN')")
+    @PreAuthorize("hasAnyRole('Admin')")
     @PutMapping("/composantes/{applicationId}/{composanteId}")
     public ResponseEntity<ComposanteDto> updateComposanteOfApp(
             @PathVariable String applicationId,
@@ -112,7 +114,7 @@ public class ComposanteController {
 
 
     // Metòd update
-    //@PreAuthorize("hasAnyRole('SUPERADMIN')")
+    @PreAuthorize("hasAnyRole('Admin')")
     @PutMapping("/composantes/{id}")
     public ResponseEntity<ComposanteDto> updateComposante(
             @PathVariable Long id,
@@ -122,7 +124,7 @@ public class ComposanteController {
     }
 
     // delete component with App (Yes Verify)
-    @PreAuthorize("hasAnyRole('ADMIN', 'SUPERADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @DeleteMapping("/composantes/{applicationId}/{composanteId}")
     public ResponseEntity<Void> deleteComposanteOfApp(
             @PathVariable String applicationId,

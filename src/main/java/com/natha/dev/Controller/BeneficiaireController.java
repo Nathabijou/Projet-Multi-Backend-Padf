@@ -15,13 +15,13 @@ public class BeneficiaireController {
 
     @Autowired
     private BeneficiaireIService beneficiaireIService;
-
+    @PreAuthorize("hasAnyRole('Admin', 'Manager', 'User','Moderant')")
     @GetMapping("/beneficiaires/type/{typeBeneficiaire}")
     public ResponseEntity<List<BeneficiaireDto>> getBeneficiairesByType(@PathVariable String typeBeneficiaire) {
         List<BeneficiaireDto> beneficiaires = beneficiaireIService.findAllByTypeBeneficiaire(typeBeneficiaire);
         return ResponseEntity.ok(beneficiaires);
     }
-
+    @PreAuthorize("hasAnyRole('Admin', 'Manager', 'User','Moderant')")
     @GetMapping("/beneficiaires/beneficiaires/{beneficiaireId}")
     public ResponseEntity<BeneficiaireDto> getBeneficiaireById(@PathVariable String beneficiaireId) {
         return beneficiaireIService.findById(beneficiaireId)
@@ -29,14 +29,14 @@ public class BeneficiaireController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    //Get All Beneficiaire (Yes Verify)
+    @PreAuthorize("hasAnyRole('Admin', 'Manager', 'User')")
     @PostMapping("/beneficiaires/create")
     public ResponseEntity<BeneficiaireDto> create(@RequestBody BeneficiaireDto dto) {
         return ResponseEntity.ok(beneficiaireIService.save(dto));
     }
 
      //Add Beneficiaire to project (Yes Verify)
-    //@PreAuthorize("hasAnyRole('ADMIN', 'SUPERADMIN','MANAGER','USER')")
+     @PreAuthorize("hasAnyRole('Admin', 'Manager', 'User','Moderant')")
     @PostMapping("/beneficiaires/projets/{idProjet}/beneficiaires")
     public ResponseEntity<BeneficiaireDto> createBeneficiaireInProjet(
             @RequestBody BeneficiaireDto beneficiaireDto,
@@ -47,7 +47,7 @@ public class BeneficiaireController {
     }
 
     //Modify benerifiaire with project (yes Verify)
-    //@PreAuthorize("hasAnyRole('ADMIN', 'SUPERADMIN','MANAGER','USER')")
+    @PreAuthorize("hasAnyRole('Admin', 'Manager', 'User')")
     @PutMapping("/beneficiaires/projets/{projetId}/beneficiaires/{beneficiaireId}")
     public ResponseEntity<BeneficiaireDto> updateBeneficiaireDansProjet(
             @PathVariable String projetId,
@@ -58,7 +58,7 @@ public class BeneficiaireController {
     }
 
     //get beneficiaire with id (yes verify)
-    //@PreAuthorize("hasAnyRole('ADMIN', 'SUPERADMIN','MANAGER','USER')")
+    @PreAuthorize("hasAnyRole('Admin', 'Manager', 'User','Moderant')")
     @GetMapping("/beneficiaires/projets/{projetId}/beneficiaires/{beneficiaireId}")
     public ResponseEntity<BeneficiaireDto> getBeneficiaireInProjet(
             @PathVariable String projetId,
@@ -68,7 +68,7 @@ public class BeneficiaireController {
                 .orElse(ResponseEntity.notFound().build());
     }
     //Transfer Beneficiares with anoter project
-    //@PreAuthorize("hasAnyRole('ADMIN', 'SUPERADMIN','MANAGER','USER')")
+    @PreAuthorize("hasAnyRole('Admin', 'Manager', 'User','Moderant')")
     @PutMapping("/beneficiaires/beneficiaires/{beneficiaireId}/transfer/{ancienProjetId}/{nouveauProjetId}")
     public ResponseEntity<String> transfererBeneficiaire(
             @PathVariable String beneficiaireId,
@@ -77,7 +77,7 @@ public class BeneficiaireController {
         beneficiaireIService.transfererBeneficiaireDansProjet(beneficiaireId, ancienProjetId, nouveauProjetId);
         return ResponseEntity.ok("Beneficiaire transfere soti nan pwojè " + ancienProjetId + " pou ale nan pwojè " + nouveauProjetId);
     }
-    //@PreAuthorize("hasAnyRole('ADMIN', 'SUPERADMIN')")
+    @PreAuthorize("hasAnyRole('Admin')")
     @DeleteMapping("/beneficiaires/projets/{projetId}/beneficiaires/{beneficiaireId}")
     public ResponseEntity<String> deleteBeneficiaireFromProjet(
             @PathVariable String projetId,
@@ -87,7 +87,7 @@ public class BeneficiaireController {
     }
 
     //Transferer un beneficiaire dans formation
-    //@PreAuthorize("hasAnyRole('ADMIN', 'SUPERADMIN','MANAGER')")
+    @PreAuthorize("hasAnyRole('Admin', 'Manager', 'User','Moderant')")
     @PostMapping("/beneficiaires/beneficiaires/{idBeneficiaire}/formation/{idProjet}/{idFormation}")
     public ResponseEntity<?> ajouterBeneficiaireDansFormation(
             @PathVariable String idBeneficiaire,

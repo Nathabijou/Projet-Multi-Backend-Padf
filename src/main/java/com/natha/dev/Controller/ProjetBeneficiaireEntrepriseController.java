@@ -7,6 +7,7 @@ import com.natha.dev.Model.Beneficiaire;
 import com.natha.dev.Model.Entreprise;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,14 +21,14 @@ public class ProjetBeneficiaireEntrepriseController {
     public ProjetBeneficiaireEntrepriseController(ProjetBeneficiaireEntrepriseIService service) {
         this.service = service;
     }
-
+    @PreAuthorize("hasAnyRole('Admin', 'Manager', 'User','Moderant')")
     @GetMapping("/api/projet-beneficiaire-entreprises/projet-beneficiaire/{projetBeneficiaireId}")
     public ResponseEntity<List<ProjetBeneficiaireEntrepriseDto>> getEntreprisesByProjetBeneficiaire(
             @PathVariable String projetBeneficiaireId) {
         List<ProjetBeneficiaireEntrepriseDto> entreprises = service.findEntreprisesByProjetBeneficiaireId(projetBeneficiaireId);
         return ResponseEntity.ok(entreprises);
     }
-
+    @PreAuthorize("hasAnyRole('Admin', 'Manager', 'User','Moderant')")
     @GetMapping("/api/projet-beneficiaire-entreprises/entreprise/{entrepriseId}")
     public ResponseEntity<List<ProjetBeneficiaireEntrepriseDto>> getProjetBeneficiairesByEntreprise(
             @PathVariable Long entrepriseId) {
@@ -40,6 +41,7 @@ public class ProjetBeneficiaireEntrepriseController {
      * @param projetId ID pwojè a
      * @return Lis antrepriz ki nan pwojè a
      */
+    @PreAuthorize("hasAnyRole('Admin', 'Manager', 'User','Moderant')")
     @GetMapping("/api/projet-beneficiaire-entreprises/projet/{projetId}/entreprises")
     public ResponseEntity<List<Entreprise>> getEntreprisesByProjet(
             @PathVariable String projetId) {
@@ -53,6 +55,7 @@ public class ProjetBeneficiaireEntrepriseController {
      * @param entrepriseId ID antrepriz la
      * @return antite ki fèk kreye a
      */
+    @PreAuthorize("hasAnyRole('Admin', 'Manager', 'User','Moderant')")
     @PostMapping("/api/projet-beneficiaire-entreprises/projet-beneficiaire/{projetBeneficiaireId}/entreprise/{entrepriseId}")
     public ResponseEntity<ProjetBeneficiaireEntrepriseDto> addEntrepriseToProjetBeneficiaire(
             @PathVariable String projetBeneficiaireId,
@@ -66,6 +69,7 @@ public class ProjetBeneficiaireEntrepriseController {
      * @param entrepriseId ID antrepriz la
      * @return Lis benefisyè ki nan antrepriz la
      */
+    @PreAuthorize("hasAnyRole('Admin', 'Manager', 'User','Moderant')")
     @GetMapping("/api/projet-beneficiaire-entreprises/entreprise/{entrepriseId}/beneficiaires")
     public ResponseEntity<List<BeneficiaireSimpleDto>> getBeneficiairesByEntrepriseId(
             @PathVariable Long entrepriseId) {

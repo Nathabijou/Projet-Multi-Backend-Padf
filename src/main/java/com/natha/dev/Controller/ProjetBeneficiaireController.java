@@ -6,6 +6,7 @@ import com.natha.dev.IService.ProjetBeneficiaireIService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,13 +21,13 @@ public class ProjetBeneficiaireController {
     public ProjetBeneficiaireController(ProjetBeneficiaireIService projetBeneficiaireIService) {
         this.projetBeneficiaireIService = projetBeneficiaireIService;
     }
-
+    @PreAuthorize("hasAnyRole('Admin', 'Manager', 'User','Moderant')")
     @PostMapping("/add")
     public ResponseEntity<ProjetBeneficiaireDto> addBeneficiaireToProjet(@RequestBody AddBeneficiaireToProjetRequestDto requestDto) {
         ProjetBeneficiaireDto nouvelleRelation = projetBeneficiaireIService.addBeneficiaireToProjet(requestDto);
         return new ResponseEntity<>(nouvelleRelation, HttpStatus.CREATED);
     }
-
+    @PreAuthorize("hasAnyRole('Admin', 'Manager', 'User','Moderant')")
     @GetMapping("/projet/{projetId}/beneficiaires")
     public ResponseEntity<List<ProjetBeneficiaireDto>> getBeneficiairesByProjet(@PathVariable String projetId) {
         List<ProjetBeneficiaireDto> list = projetBeneficiaireIService.findByProjetId(projetId);

@@ -39,4 +39,12 @@ public interface ProjetBeneficiaireFormationDao extends JpaRepository<ProjetBene
             @Param("formationId") String formationId,
             @Param("projetId") String projetId
     );
+    
+    /**
+     * Compte le nombre d'entrées pour un projet bénéficiaire donné
+     * @param projetBeneficiaireId l'ID du projet bénéficiaire
+     * @return le nombre d'entrées correspondantes
+     */
+    @Query("SELECT COUNT(p) FROM ProjetBeneficiaireFormation p WHERE p.projetBeneficiaire.id = :projetBeneficiaireId")
+    long countByProjetBeneficiaireId(@Param("projetBeneficiaireId") String projetBeneficiaireId);
 }

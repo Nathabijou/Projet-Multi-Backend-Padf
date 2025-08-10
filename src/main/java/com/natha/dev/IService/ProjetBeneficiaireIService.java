@@ -1,7 +1,7 @@
 package com.natha.dev.IService;
 
-import com.natha.dev.Dto.ProjetBeneficiaireDto;
-import com.natha.dev.Dto.AddBeneficiaireToProjetRequestDto;
+import com.natha.dev.Dto.*;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -22,4 +22,8 @@ public interface ProjetBeneficiaireIService {
     List<ProjetBeneficiaireDto> findByProjetId(String projetId);
 
     ProjetBeneficiaireDto addBeneficiaireToProjet(AddBeneficiaireToProjetRequestDto requestDto);
+    
+    List<FormationDto> findFormationsByProjetId(String projetId);
+    
+    ProjetBeneficiaireFormationDto addFormationToProjet(AddFormationToProjetRequestDto requestDto);
 }
