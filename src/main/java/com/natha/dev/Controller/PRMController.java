@@ -23,6 +23,7 @@ public class PRMController {
     }
 
     // Endpoint pou kreye yon nouvo PRMRequis
+
     @PostMapping("/requis")
     public ResponseEntity<PRMRequis> createRequis(@RequestBody PRMRequis prmRequis) {
         PRMRequis savedRequis = prmService.saveRequis(prmRequis);
