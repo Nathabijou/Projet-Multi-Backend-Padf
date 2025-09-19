@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 public class ProjetDto {
     private String idProjet;
     private String name;
+    private String lot;
     private String description;
     private String address;
     private String domaineDeFormation;

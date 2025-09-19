@@ -29,6 +29,7 @@ public class Projet {
 
     private String name;
     private String description;
+    private String lot;
     private String address;
     private String domaineDeFormation;
     private String numeroDePatente;

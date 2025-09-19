@@ -135,6 +135,7 @@ public class ProjetImpl implements ProjetIService {
         p.setPositionRepresentant(dto.getPositionRepresentant());
         p.setNumeroIdentification(dto.getNumeroIdentification());
         p.setModeExecution(dto.getModeExecution());
+        p.setLot(dto.getLot());
     }
 
 
@@ -231,6 +232,7 @@ public class ProjetImpl implements ProjetIService {
         p.setPositionRepresentant(dto.getPositionRepresentant());
         p.setNumeroIdentification(dto.getNumeroIdentification());
         p.setModeExecution(dto.getModeExecution());
+        p.setLot(dto.getLot());
 
         // Nou pa mete composante ak quartier la la pou evite doublon, metòd ki rele yo mete yo
         return p;
@@ -268,6 +270,7 @@ public class ProjetImpl implements ProjetIService {
         dto.setPositionRepresentant(p.getPositionRepresentant());
         dto.setNumeroIdentification(p.getNumeroIdentification());
         dto.setModeExecution(p.getModeExecution());
+        dto.setLot(p.getLot());
         dto.setMontantFraisCashInCashOut(p.getMontantFraisCashInCashOut());
         dto.setComposanteId(p.getComposante() != null ? p.getComposante().getId() : null);
         dto.setQuartierId(p.getQuartier() != null ? p.getQuartier().getId() : null);
