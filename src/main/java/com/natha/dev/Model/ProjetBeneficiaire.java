@@ -39,6 +39,10 @@ public class ProjetBeneficiaire {
     @JsonIgnore
     private Set<ProjetBeneficiaireEvaluation> projetBeneficiaireEvaluations = new HashSet<>();
 
+    @OneToMany(mappedBy = "projetBeneficiaire", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private Set<ProjetBeneficiaireFormation> projetBeneficiaireFormations = new HashSet<>();
+
     // Helper method to add an evaluation
     public void addEvaluation(Evaluation evaluation) {
         ProjetBeneficiaireEvaluation projetBeneficiaireEvaluation = 
@@ -51,5 +55,13 @@ public class ProjetBeneficiaire {
         ProjetBeneficiaireEvaluation projetBeneficiaireEvaluation = 
             new ProjetBeneficiaireEvaluation(this, evaluation);
         projetBeneficiaireEvaluations.remove(projetBeneficiaireEvaluation);
+    }
+    
+    // Helper method to add a formation
+    public void addFormation(Formation formation) {
+        ProjetBeneficiaireFormation projetBeneficiaireFormation = new ProjetBeneficiaireFormation();
+        projetBeneficiaireFormation.setProjetBeneficiaire(this);
+        projetBeneficiaireFormation.setFormation(formation);
+        projetBeneficiaireFormations.add(projetBeneficiaireFormation);
     }
 }

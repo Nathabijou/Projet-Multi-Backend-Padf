@@ -9,21 +9,21 @@ import java.util.List;
 
 @Repository
 public interface ChapitreDao extends JpaRepository<Chapitre, String> {
-    
+
     /**
      * Jwenn lis tout chapit ki nan yon fòmasyon
      * @param formation Fòmasyon pou chèche chapit yo
      * @return Lis chapit yo nan lòd yo
      */
     List<Chapitre> findByFormationOrderByOrdre(Formation formation);
-    
+
     /**
      * Jwenn lis tout chapit ki nan yon fòmasyon (pa ID fòmasyon an)
      * @param formationId ID fòmasyon an
      * @return Lis chapit yo nan lòd yo
      */
     List<Chapitre> findByFormationIdFormationOrderByOrdre(String formationId);
-    
+
     /**
      * Tcheke si yon chapit ekziste deja nan yon fòmasyon ak menm tit la
      * @param formation Fòmasyon an

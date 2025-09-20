@@ -16,14 +16,14 @@ public interface ProjetBeneficiaireIService {
     void deleteById(String idProjetBeneficiaire);
 
     // Metòd pou kreye yon relasyon ant yon projet ak beneficiaire (pase ID yo)
-   ProjetBeneficiaireDto creerRelationProjetBeneficiaire(String projetId, String beneficiaireId);
+    ProjetBeneficiaireDto creerRelationProjetBeneficiaire(String projetId, String beneficiaireId);
 
 
     List<ProjetBeneficiaireDto> findByProjetId(String projetId);
 
     ProjetBeneficiaireDto addBeneficiaireToProjet(AddBeneficiaireToProjetRequestDto requestDto);
-    
+
     List<FormationDto> findFormationsByProjetId(String projetId);
-    
+
     ProjetBeneficiaireFormationDto addFormationToProjet(AddFormationToProjetRequestDto requestDto);
 }

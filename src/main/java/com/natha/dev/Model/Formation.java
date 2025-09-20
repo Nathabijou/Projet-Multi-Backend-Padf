@@ -5,6 +5,7 @@ import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -33,6 +34,9 @@ public class Formation {
 
     @OneToMany(mappedBy = "formation", cascade = CascadeType.ALL)
     private List<ProjetBeneficiaireFormation> projetBeneficiaireFormations;
+
+    @OneToMany(mappedBy = "formation", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Chapitre> chapitres = new ArrayList<>();
 
 
 }

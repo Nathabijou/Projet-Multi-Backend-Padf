@@ -29,4 +29,6 @@ public class ProjetBeneficiaireFormation {
 
     @OneToMany(mappedBy = "projetBeneficiaireFormation", cascade = CascadeType.ALL)
     private List<Presence> presences;
+    
+    private Double noteFinale;
 }
