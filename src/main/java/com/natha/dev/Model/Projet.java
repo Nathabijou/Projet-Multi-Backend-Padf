@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 
 @Entity
 @Getter
@@ -97,16 +98,44 @@ public class Projet {
     private Quartier quartier;
 
 
-    @OneToMany(mappedBy = "projet")
-    private List<ProjetBeneficiaire> projetBeneficiaires;
 
-    @OneToMany(mappedBy = "projet", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
+    @OneToMany(mappedBy = "projet", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @JsonManagedReference("projet-photos")
     private List<Photo> photos = new ArrayList<>();
 
-    @OneToMany(mappedBy = "projet", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
-    private List<Documentaire> documentaires = new ArrayList<>();
+    @OneToMany(mappedBy = "projet", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @JsonManagedReference("projet-beneficiaires")
+    private List<ProjetBeneficiaire> projetBeneficiaires = new ArrayList<>();
 
+    @OneToMany(mappedBy = "projet", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @JsonManagedReference("projet-etat-avancement")
+    private List<EtatAvancement> etatsAvancement = new ArrayList<>();
 
+    @Transient
+    private Double pourcentageAvancementTotal = 0.0;
+
+    public void addEtatAvancement(EtatAvancement etatAvancement) {
+        etatsAvancement.add(etatAvancement);
+        etatAvancement.setProjet(this);
+    }
+
+    public void removeEtatAvancement(EtatAvancement etatAvancement) {
+        etatsAvancement.remove(etatAvancement);
+        etatAvancement.setProjet(null);
+    }
+
+    public Double calculerPourcentageAvancementTotal() {
+        if (etatsAvancement == null || etatsAvancement.isEmpty()) {
+            this.pourcentageAvancementTotal = 0.0;
+            return this.pourcentageAvancementTotal;
+        }
+
+        double totalPondere = etatsAvancement.stream()
+            .filter(e -> e != null)
+            .mapToDouble(e -> (e.getPourcentageTotal() * e.calculerPourcentageRealise()) / 100.0)
+            .sum();
+
+        this.pourcentageAvancementTotal = Math.min(100.0, Math.max(0.0, totalPondere)); // Ensure between 0 and 100
+        return this.pourcentageAvancementTotal;
+    }
 }
