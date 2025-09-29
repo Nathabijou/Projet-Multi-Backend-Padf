@@ -88,7 +88,6 @@ public class EtatAvancementServiceImpl implements IEtatAvancementService {
 
     @Override
     public void deleteEtatAvancement(String id) {
-        Long etatId = Long.parseLong(id);
         // Delete all sous-etats first
         List<SousEtatAvancementDto> sousEtats = sousEtatAvancementService.getSousEtatsAvancementByEtatAvancementId(id);
         for (SousEtatAvancementDto sousEtat : sousEtats) {
@@ -96,13 +95,12 @@ public class EtatAvancementServiceImpl implements IEtatAvancementService {
         }
         
         // Then delete the etat
-        etatAvancementDao.deleteById(String.valueOf(etatId));
+        etatAvancementDao.deleteById(id);
     }
 
     @Override
     public EtatAvancementDto getEtatAvancementById(String id) {
-        Long etatId = Long.parseLong(id);
-        EtatAvancement etatAvancement = etatAvancementDao.findById(String.valueOf(etatId))
+        EtatAvancement etatAvancement = etatAvancementDao.findById(id)
             .orElseThrow(() -> new RuntimeException("État d'avancement non trouvé avec l'ID: " + id));
             
         EtatAvancementDto dto = modelMapper.map(etatAvancement, EtatAvancementDto.class);
@@ -138,7 +136,33 @@ public class EtatAvancementServiceImpl implements IEtatAvancementService {
     @Override
     public List<EtatAvancementDto> getEtatsAvancementByProjetId(String projetId) {
         return etatAvancementDao.findByProjetId(projetId).stream()
-            .map(etat -> getEtatAvancementById(etat.getId()))
+            .map(etat -> {
+                // Création manuelle du DTO
+                EtatAvancementDto dto = new EtatAvancementDto();
+                dto.setId(etat.getId());
+                dto.setNom(etat.getNom());
+                dto.setDescription(etat.getDescription());
+                dto.setPourcentageTotal(etat.getPourcentageTotal());
+                
+                // Définir l'ID du projet s'il existe
+                if (etat.getProjet() != null) {
+                    dto.setProjetId(etat.getProjet().getIdProjet());
+                }
+                
+                // Récupérer les sous-états d'avancement
+                List<SousEtatAvancementDto> sousEtats = sousEtatAvancementService
+                    .getSousEtatsAvancementByEtatAvancementId(etat.getId());
+                dto.setSousEtats(sousEtats);
+                
+                // Calculer le pourcentage réalisé
+                double pourcentageRealise = sousEtats.stream()
+                    .filter(se -> se.getPourcentageRealise() != null && se.getPoids() != null)
+                    .mapToDouble(se -> (se.getPourcentageRealise() * se.getPoids()) / 100.0)
+                    .sum();
+                dto.setPourcentageRealise(pourcentageRealise);
+                
+                return dto;
+            })
             .collect(Collectors.toList());
     }
 

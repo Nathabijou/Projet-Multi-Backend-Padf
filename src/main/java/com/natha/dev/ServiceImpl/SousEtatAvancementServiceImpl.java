@@ -37,45 +37,60 @@ public class SousEtatAvancementServiceImpl implements ISousEtatAvancementService
 
     @Override
     public SousEtatAvancementDto createSousEtatAvancement(SousEtatAvancementDto sousEtatAvancementDto) {
-        SousEtatAvancement sousEtatAvancement = modelMapper.map(sousEtatAvancementDto, SousEtatAvancement.class);
+        // Création manuelle de l'entité à partir du DTO
+        SousEtatAvancement sousEtatAvancement = new SousEtatAvancement();
         
-        // Set the EtatAvancement from the DTO
+        // Mappage des champs du DTO vers l'entité
+        sousEtatAvancement.setId(UUID.randomUUID().toString());
+        sousEtatAvancement.setNom(sousEtatAvancementDto.getLibelle());
+        sousEtatAvancement.setDescription(sousEtatAvancementDto.getDescription());
+        sousEtatAvancement.setPourcentageRealise(sousEtatAvancementDto.getPourcentageRealise());
+        sousEtatAvancement.setPoids(sousEtatAvancementDto.getPoids());
+        
+        // Gestion de la relation avec EtatAvancement
         if (sousEtatAvancementDto.getEtatAvancementId() != null) {
             EtatAvancement etatAvancement = etatAvancementDao.findById(sousEtatAvancementDto.getEtatAvancementId())
                 .orElseThrow(() -> new RuntimeException("État d'avancement non trouvé avec l'ID: " + sousEtatAvancementDto.getEtatAvancementId()));
             sousEtatAvancement.setEtatAvancement(etatAvancement);
         }
         
-        // Generate ID if not provided
-        if (sousEtatAvancement.getId() == null) {
-            sousEtatAvancement.setId(UUID.randomUUID().toString());
-        }
-        
-        // Save the SousEtatAvancement
+        // Sauvegarde du SousEtatAvancement
         SousEtatAvancement savedSousEtat = sousEtatAvancementDao.save(sousEtatAvancement);
         
-        // Save Photos if any
+        // Sauvegarde des photos si elles existent
         if (sousEtatAvancementDto.getPhotos() != null && !sousEtatAvancementDto.getPhotos().isEmpty()) {
             for (PhotoSousEtatDto photoDto : sousEtatAvancementDto.getPhotos()) {
                 photoSousEtatService.createPhotoSousEtat(photoDto, savedSousEtat.getId());
             }
         }
         
-        return modelMapper.map(savedSousEtat, SousEtatAvancementDto.class);
+        // Création manuelle du DTO de réponse
+        SousEtatAvancementDto responseDto = new SousEtatAvancementDto();
+        responseDto.setId(savedSousEtat.getId());
+        responseDto.setLibelle(savedSousEtat.getNom());
+        responseDto.setDescription(savedSousEtat.getDescription());
+        responseDto.setPourcentageRealise(savedSousEtat.getPourcentageRealise());
+        responseDto.setPoids(savedSousEtat.getPoids());
+        if (savedSousEtat.getEtatAvancement() != null) {
+            responseDto.setEtatAvancementId(savedSousEtat.getEtatAvancement().getId());
+        }
+        
+        return responseDto;
     }
 
     @Override
     public SousEtatAvancementDto updateSousEtatAvancement(String id, SousEtatAvancementDto sousEtatAvancementDto) {
+        // Récupération de l'entité existante
         SousEtatAvancement existingSousEtat = sousEtatAvancementDao.findById(id)
             .orElseThrow(() -> new RuntimeException("Sous-état d'avancement non trouvé avec l'ID: " + id));
         
-        // Update fields
+        // Mise à jour des champs
         existingSousEtat.setNom(sousEtatAvancementDto.getLibelle());
+        existingSousEtat.setDescription(sousEtatAvancementDto.getDescription());
         existingSousEtat.setPourcentageRealise(sousEtatAvancementDto.getPourcentageRealise());
         existingSousEtat.setPoids(sousEtatAvancementDto.getPoids());
-        existingSousEtat.setDescription(sousEtatAvancementDto.getDescription());
         
-        // Update EtatAvancement if changed
+        // Mise à jour de la relation avec EtatAvancement si nécessaire
         if (sousEtatAvancementDto.getEtatAvancementId() != null && 
             (existingSousEtat.getEtatAvancement() == null || 
              !existingSousEtat.getEtatAvancement().getId().equals(sousEtatAvancementDto.getEtatAvancementId()))) {
@@ -84,11 +99,21 @@ public class SousEtatAvancementServiceImpl implements ISousEtatAvancementService
             existingSousEtat.setEtatAvancement(etatAvancement);
         }
         
+        // Sauvegarde des modifications
         SousEtatAvancement updatedSousEtat = sousEtatAvancementDao.save(existingSousEtat);
         
-        // Update photos if needed (this is a simplified version, you might want to handle individual photo updates)
+        // Création manuelle du DTO de réponse
+        SousEtatAvancementDto responseDto = new SousEtatAvancementDto();
+        responseDto.setId(updatedSousEtat.getId());
+        responseDto.setLibelle(updatedSousEtat.getNom());
+        responseDto.setDescription(updatedSousEtat.getDescription());
+        responseDto.setPourcentageRealise(updatedSousEtat.getPourcentageRealise());
+        responseDto.setPoids(updatedSousEtat.getPoids());
+        if (updatedSousEtat.getEtatAvancement() != null) {
+            responseDto.setEtatAvancementId(updatedSousEtat.getEtatAvancement().getId());
+        }
         
-        return modelMapper.map(updatedSousEtat, SousEtatAvancementDto.class);
+        return responseDto;
     }
 
     @Override
@@ -101,20 +126,32 @@ public class SousEtatAvancementServiceImpl implements ISousEtatAvancementService
     }
 
     @Override
+    @Transactional(readOnly = true)
     public SousEtatAvancementDto getSousEtatAvancementById(String id) {
+        // Fetch the entity with required associations
         SousEtatAvancement sousEtatAvancement = sousEtatAvancementDao.findById(id)
             .orElseThrow(() -> new RuntimeException("Sous-état d'avancement non trouvé avec l'ID: " + id));
+        
+        // Force initialization of lazy collections within the transaction
+        if (sousEtatAvancement.getPhotos() != null) {
+            sousEtatAvancement.getPhotos().size(); // This forces Hibernate to load the collection
+        }
             
+        // Map to DTO using ModelMapper with explicit mapping
         SousEtatAvancementDto dto = modelMapper.map(sousEtatAvancement, SousEtatAvancementDto.class);
         
-        // Set the etatAvancementId
+        // Set etatAvancementId if available
         if (sousEtatAvancement.getEtatAvancement() != null) {
             dto.setEtatAvancementId(sousEtatAvancement.getEtatAvancement().getId());
         }
         
-        // Get and set photos
-        List<PhotoSousEtatDto> photos = photoSousEtatService.getPhotosBySousEtatAvancementId(id);
-        dto.setPhotos(photos);
+        // Map photos if available
+        if (sousEtatAvancement.getPhotos() != null && !sousEtatAvancement.getPhotos().isEmpty()) {
+            List<PhotoSousEtatDto> photoDtos = sousEtatAvancement.getPhotos().stream()
+                .map(photo -> modelMapper.map(photo, PhotoSousEtatDto.class))
+                .collect(Collectors.toList());
+            dto.setPhotos(photoDtos);
+        }
         
         return dto;
     }
@@ -122,7 +159,26 @@ public class SousEtatAvancementServiceImpl implements ISousEtatAvancementService
     @Override
     public List<SousEtatAvancementDto> getSousEtatsAvancementByEtatAvancementId(String etatAvancementId) {
         return sousEtatAvancementDao.findByEtatAvancementId(etatAvancementId).stream()
-            .map(sousEtat -> getSousEtatAvancementById(sousEtat.getId()))
+            .map(sousEtat -> {
+                // Création manuelle du DTO
+                SousEtatAvancementDto dto = new SousEtatAvancementDto();
+                dto.setId(sousEtat.getId());
+                dto.setLibelle(sousEtat.getNom());
+                dto.setDescription(sousEtat.getDescription());
+                dto.setPourcentageRealise(sousEtat.getPourcentageRealise());
+                dto.setPoids(sousEtat.getPoids());
+                
+                // Définir l'ID de l'état d'avancement
+                if (sousEtat.getEtatAvancement() != null) {
+                    dto.setEtatAvancementId(sousEtat.getEtatAvancement().getId());
+                }
+                
+                // Récupérer les photos
+                List<PhotoSousEtatDto> photos = photoSousEtatService.getPhotosBySousEtatAvancementId(sousEtat.getId());
+                dto.setPhotos(photos);
+                
+                return dto;
+            })
             .collect(Collectors.toList());
     }
 
