@@ -15,6 +15,7 @@ public class ProcessusConsultatif {
     private String nom;
     private Date date;
     private Date createDate;
+    private String createBy;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "commune_id")
