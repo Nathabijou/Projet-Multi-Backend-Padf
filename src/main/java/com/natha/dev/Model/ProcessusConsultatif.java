@@ -2,7 +2,10 @@ package com.natha.dev.Model;
 
 import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
+
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -22,6 +25,11 @@ public class ProcessusConsultatif {
     @JsonBackReference("commune-processus")
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Commune commune;
+    
+    @OneToMany(mappedBy = "processusConsultatif", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference("processus-rencontre")
+    @JsonIgnoreProperties({"processusConsultatif", "hibernateLazyInitializer", "handler"})
+    private List<Rencontre> rencontres = new ArrayList<>();
     
     // Constructors
     public ProcessusConsultatif() {
