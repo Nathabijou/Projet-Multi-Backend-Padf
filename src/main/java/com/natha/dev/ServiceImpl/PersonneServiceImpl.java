@@ -116,6 +116,7 @@ public class PersonneServiceImpl implements IPersonneService {
         entity.setInstitution(dto.getInstitution());
         entity.setTypePersonne(dto.getTypePersonne());
         entity.setIdentification(dto.getIdentification());
+        entity.setTitre(dto.getTitre());
 
         // Handle rencontres if needed
         if (dto.getRencontreIds() != null && !dto.getRencontreIds().isEmpty()) {

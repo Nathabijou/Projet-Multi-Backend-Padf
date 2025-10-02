@@ -19,6 +19,7 @@ public class PersonneDto {
     private String institution;
     private String typePersonne;
     private String identification;
+    private String titre;
     private Set<Long> rencontreIds;
 
     // Getters and Setters
@@ -54,6 +55,9 @@ public class PersonneDto {
     
     public String getIdentification() { return identification; }
     public void setIdentification(String identification) { this.identification = identification; }
+    
+    public String getTitre() { return titre; }
+    public void setTitre(String titre) { this.titre = titre; }
     
     public Set<Long> getRencontreIds() { return rencontreIds; }
     public void setRencontreIds(Set<Long> rencontreIds) { this.rencontreIds = rencontreIds; }

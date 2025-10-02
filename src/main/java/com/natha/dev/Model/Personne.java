@@ -27,6 +27,7 @@ public class Personne {
     private String institution;
     private String typePersonne;
     private String identification;
+    private String titre;
     
     @ManyToMany(mappedBy = "participants")
     @JsonIgnore
@@ -37,7 +38,7 @@ public class Personne {
     }
     
     public Personne(String nom, String prenom, String sexe, String adresse, Date dateNaissance, 
-                   String email, String telephone, String institution, String typePersonne, String identification) {
+                   String email, String telephone, String institution, String typePersonne, String identification, String titre) {
         this.nom = nom;
         this.prenom = prenom;
         this.sexe = sexe;
@@ -48,6 +49,7 @@ public class Personne {
         this.institution = institution;
         this.typePersonne = typePersonne;
         this.identification = identification;
+        this.titre = titre;
     }
     
     // Getters and Setters
@@ -84,8 +86,18 @@ public class Personne {
     public String getIdentification() { return identification; }
     public void setIdentification(String identification) { this.identification = identification; }
     
+    public String getTitre() {
+        return titre;
+    }
+
+    public void setTitre(String titre) {
+        this.titre = titre;
+    }
+    
     public Set<Rencontre> getRencontres() { return rencontres; }
-    public void setRencontres(Set<Rencontre> rencontres) { this.rencontres = rencontres; }
+    public void setRencontres(Set<Rencontre> rencontres) {
+        this.rencontres = rencontres;
+    }
     
     // Equals and HashCode
     @Override
