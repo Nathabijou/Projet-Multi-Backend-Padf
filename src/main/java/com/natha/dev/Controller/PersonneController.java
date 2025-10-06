@@ -56,4 +56,5 @@ public class PersonneController {
         personneService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
 }

@@ -1,10 +1,12 @@
 package com.natha.dev.ServiceImpl;
 
+import com.natha.dev.Dao.IPersonneDao;
 import com.natha.dev.Dao.IProcessusConsultatifDao;
 import com.natha.dev.Dao.IRencontreDao;
 import com.natha.dev.Dao.ISectionCommunaleDao;
 import com.natha.dev.Dto.RencontreDto;
 import com.natha.dev.IService.IRencontreService;
+import com.natha.dev.Model.Personne;
 import com.natha.dev.Model.ProcessusConsultatif;
 import com.natha.dev.Model.Rencontre;
 import jakarta.persistence.EntityNotFoundException;
@@ -31,6 +33,9 @@ public class RencontreServiceImpl implements IRencontreService {
     
     @Autowired
     private ISectionCommunaleDao sectionCommunaleDao;
+    
+    @Autowired
+    private IPersonneDao personneDao;
 
     @Override
     public List<Rencontre> findAll() {
@@ -109,8 +114,34 @@ public class RencontreServiceImpl implements IRencontreService {
 
     @Override
     public void delete(Long id) {
-        Rencontre rencontre = findById(id);
-        rencontreDao.delete(rencontre);
+        rencontreDao.deleteById(id);
+    }
+    
+    @Override
+    public Rencontre addParticipantToRencontre(Long rencontreId, Long personneId) {
+        Rencontre rencontre = findById(rencontreId);
+        Personne personne = personneDao.findById(personneId)
+            .orElseThrow(() -> new EntityNotFoundException("Personne not found with id: " + personneId));
+            
+        if (rencontre.getParticipants() == null) {
+            rencontre.setParticipants(new HashSet<>());
+        }
+        
+        rencontre.getParticipants().add(personne);
+        return rencontreDao.save(rencontre);
+    }
+    
+    @Override
+    public Rencontre removeParticipantFromRencontre(Long rencontreId, Long personneId) {
+        Rencontre rencontre = findById(rencontreId);
+        Personne personne = personneDao.findById(personneId)
+            .orElseThrow(() -> new EntityNotFoundException("Personne not found with id: " + personneId));
+            
+        if (rencontre.getParticipants() != null) {
+            rencontre.getParticipants().removeIf(p -> p.getId().equals(personneId));
+        }
+        
+        return rencontreDao.save(rencontre);
     }
 
     private void mapDtoToEntity(RencontreDto dto, Rencontre entity) {

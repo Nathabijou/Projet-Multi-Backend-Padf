@@ -9,6 +9,9 @@ public interface IRencontreService {
     List<Rencontre> findAll();
     Rencontre findById(Long id);
     List<Rencontre> findByProcessusConsultatifId(Long processusConsultatifId);
+    
+    Rencontre addParticipantToRencontre(Long rencontreId, Long personneId);
+    Rencontre removeParticipantFromRencontre(Long rencontreId, Long personneId);
     Rencontre save(RencontreDto rencontreDto);
     Rencontre update(Long id, RencontreDto rencontreDto);
     void delete(Long id);

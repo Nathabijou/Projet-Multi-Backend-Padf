@@ -48,4 +48,24 @@ public class RencontreController {
         rencontreService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+    
+    @PostMapping("/{rencontreId}/participants/{personneId}")
+    public ResponseEntity<Rencontre> addParticipantToRencontre(
+            @PathVariable Long rencontreId,
+            @PathVariable Long personneId) {
+        return new ResponseEntity<>(
+            rencontreService.addParticipantToRencontre(rencontreId, personneId),
+            HttpStatus.OK
+        );
+    }
+    
+    @DeleteMapping("/{rencontreId}/participants/{personneId}")
+    public ResponseEntity<Rencontre> removeParticipantFromRencontre(
+            @PathVariable Long rencontreId,
+            @PathVariable Long personneId) {
+        return new ResponseEntity<>(
+            rencontreService.removeParticipantFromRencontre(rencontreId, personneId),
+            HttpStatus.OK
+        );
+    }
 }
