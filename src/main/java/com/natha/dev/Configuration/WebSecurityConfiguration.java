@@ -62,6 +62,8 @@ public class WebSecurityConfiguration {
                                 "/verify-otp",
                                 "/newPasswordRegister",
                                 "/forgetpassword-admin",
+                                "/site",
+                                "/site/**",
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**"
                         ).permitAll()
