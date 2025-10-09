@@ -2,6 +2,11 @@ package com.natha.dev.Dto;
 
 import lombok.Data;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 @Data
 public class KpiResponse {
 
@@ -35,6 +40,9 @@ public class KpiResponse {
     private double totalGarconMonCashMontant;
     private double totalGarconLajanCashMontant;
 
+    // --- Dashboard: Project Counts ---
+    private long totalProjets;
+
     // --- Payroll: Detailed Amounts (Montant) by Combination ---
     // Fille
     private double totalFilleQualifierMonCashMontant;
@@ -47,5 +55,22 @@ public class KpiResponse {
     private double totalGarconQualifierLajanCashMontant;
     private double totalGarconNonQualifierMonCashMontant;
     private double totalGarconNonQualifierLajanCashMontant;
+
+    // --- Formation Statistics ---
+    private long totalProjetsAvecFormation;
+    private long totalFormations;
+    private long totalModules;
+    private long totalChapitres;
+    private long totalBeneficiairesFormation;
+    private long totalFemmesFormation;
+    private long totalHommesFormation;
+    private long totalFemmesQualifieesFormation;
+    private long totalFemmesNonQualifieesFormation;
+    private long totalHommesQualifiesFormation;
+    private long totalHommesNonQualifiesFormation;
+
+    // --- Module Statistics ---
+    private Map<String, Object> beneficiairesByModule = new HashMap<>();
+    private List<ModuleStatsDto> moduleStats = new ArrayList<>();
 
 }

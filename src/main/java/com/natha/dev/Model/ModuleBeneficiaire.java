@@ -38,6 +38,7 @@ public class ModuleBeneficiaire {
     
     @OneToOne(mappedBy = "moduleBeneficiaire", cascade = CascadeType.ALL, orphanRemoval = true)
     private Evaluation evaluation;
+
     
     @PrePersist
     protected void onCreate() {

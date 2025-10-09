@@ -1,13 +1,16 @@
 package com.natha.dev.Model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -27,4 +30,8 @@ public class SectionCommunale {
     @ManyToOne
     @JsonBackReference
     private Commune commune;
+
+    @ManyToMany(mappedBy = "sectionsCommunales", fetch = FetchType.LAZY)
+    @JsonIgnore
+    private Set<Rencontre> rencontres = new HashSet<>();
 }
