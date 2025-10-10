@@ -1,0 +1,32 @@
+# Maven
+target/
+pom.xml.versionsBackup
+
+# IDE
+.idea/
+*.iml
+*.iws
+*.ipr
+.settings/
+.project
+.classpath
+
+# Version control
+.git/
+.gitignore
+
+# Logs
+*.log
+logs/
+
+# Environment files
+.env
+*.env
+
+# Other
+.DS_Store
+*.md
+
+# Local configuration
+application-*.properties
+!application-prod.properties
