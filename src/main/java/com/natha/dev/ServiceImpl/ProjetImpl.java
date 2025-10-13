@@ -274,9 +274,9 @@ public class ProjetImpl implements ProjetIService {
         dto.setMontantFraisCashInCashOut(p.getMontantFraisCashInCashOut());
         dto.setComposanteId(p.getComposante() != null ? p.getComposante().getId() : null);
         dto.setQuartierId(p.getQuartier() != null ? p.getQuartier().getId() : null);
-
-        dto.setComposanteId(p.getComposante() != null ? p.getComposante().getId() : null);
-        dto.setQuartierId(p.getQuartier() != null ? p.getQuartier().getId() : null);
+        
+        // Set section communale name
+        dto.setSectionCommunaleName(p.getSectionCommunaleName());
 
         if (p.getComposante() != null) {
             dto.setComposanteId(p.getComposante().getId());

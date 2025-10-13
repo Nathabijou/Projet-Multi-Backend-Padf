@@ -138,4 +138,14 @@ public class Projet {
         this.pourcentageAvancementTotal = Math.min(100.0, Math.max(0.0, totalPondere)); // Ensure between 0 and 100
         return this.pourcentageAvancementTotal;
     }
+    
+    /**
+     * Get the section communale name through the quartier relationship
+     * @return the name of the section communale or null if not available
+     */
+    public String getSectionCommunaleName() {
+        return this.quartier != null && this.quartier.getSectionCommunale() != null 
+               ? this.quartier.getSectionCommunale().getName() 
+               : null;
+    }
 }
