@@ -13,8 +13,12 @@ COPY --from=deps /root/.m2 /root/.m2
 COPY pom.xml .
 # Kopye kòd sous la
 COPY src/ src/
+# Enstale depandans yo
+RUN mvn dependency:resolve
+# Konpile kòd la
+RUN mvn compile
 # Konstwi aplikasyon an
-RUN mvn clean package -DskipTests
+RUN mvn package -DskipTests
 
 # Etap 3: Kreye imaj final la
 FROM eclipse-temurin:17-jre-jammy
