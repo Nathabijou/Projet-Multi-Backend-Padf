@@ -1,0 +1,22 @@
+# Use a lightweight JDK 17 image
+FROM eclipse-temurin:17-jre-jammy
+
+# Set working directory
+WORKDIR /app
+
+# Copy the JAR file from your local machine
+# First, build the JAR locally
+# Run this command in your project directory:
+# ./mvnw clean package -DskipTests
+# Then the JAR will be in target/*.jar
+COPY target/*.jar app.jar
+
+# Run as non-root user
+RUN useradd -m myuser && chown -R myuser:myuser /app
+USER myuser
+
+# Expose port
+EXPOSE 8080
+
+# Run the application
+ENTRYPOINT ["java", "-jar", "app.jar"]
