@@ -2,7 +2,7 @@
 FROM maven:3.9.3-amazoncorretto-17
 
 # Kreye yon itilizatè ki pa root
-RUN useradd -m myuser
+RUN adduser --disabled-password --gecos '' myuser
 WORKDIR /home/myuser/app
 
 # Kopye fichye yo
