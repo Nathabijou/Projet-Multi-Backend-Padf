@@ -1,16 +1,14 @@
-# Etap senp: Konstwi epi kouri aplikasyon an
-FROM maven:3.9.3-amazoncorretto-17
-
-# Kreye direktè travay la
+# Etap 1: Konstwi aplikasyon an
+FROM maven:3.9.3-amazoncorretto-17 AS build
 WORKDIR /app
-
-# Kopye fichye yo
-COPY pom.xml .
-COPY src/ src/
-
-# Enstale depandans yo ak konstwi aplikasyon an
+COPY . .
 RUN mvn clean package -DskipTests
+
+# Etap 2: Kreye imaj final la
+FROM eclipse-temurin:17-jre-jammy
+WORKDIR /app
+COPY --from=build /app/target/*.jar app.jar
 
 # Kouri aplikasyon an
 EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "target/*.jar", "--spring.profiles.active=prod"]
+ENTRYPOINT ["java", "-jar", "app.jar", "--spring.profiles.active=prod"]
