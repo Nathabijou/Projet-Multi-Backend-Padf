@@ -1,21 +1,16 @@
 # Etap senp: Konstwi epi kouri aplikasyon an
 FROM maven:3.9.3-amazoncorretto-17
 
-# Kreye yon itilizatè ki pa root
-RUN adduser --disabled-password --gecos '' myuser
-WORKDIR /home/myuser/app
+# Kreye direktè travay la
+WORKDIR /app
 
 # Kopye fichye yo
-COPY --chown=myuser:myuser pom.xml .
-COPY --chown=myuser:myuser src/ src/
+COPY pom.xml .
+COPY src/ src/
 
-# Enstale depandans yo
-RUN mvn dependency:go-offline -B
-
-# Konstwi aplikasyon an
+# Enstale depandans yo ak konstwi aplikasyon an
 RUN mvn clean package -DskipTests
 
 # Kouri aplikasyon an
-USER myuser
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "target/*.jar", "--spring.profiles.active=prod"]
