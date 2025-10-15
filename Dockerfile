@@ -1,28 +1,26 @@
-# Stage 1: Build the application
+# Etap 1: Konstwi aplikasyon an
 FROM maven:3.9.3-amazoncorretto-17 AS build
 WORKDIR /app
 
-# First copy only the POM file to leverage Docker cache
+# Kopye premye fichye POM la pou itilize kach
 COPY pom.xml .
-# Download dependencies
+
+# Enstale tout depandans yo
 RUN mvn dependency:go-offline -B
 
-# Copy source code
+# Kopye tout kòd sous la
 COPY src/ /app/src/
 
-# Build the application
+# Konstwi aplikasyon an
 RUN mvn clean package -DskipTests
 
-# Stage 2: Create the runtime image
+# Etap 2: Kreye imaj final la
 FROM eclipse-temurin:17-jre-jammy
-
 WORKDIR /app
 
-# Create a non-root user
+# Kreye yon itilizatè ki pa root
 RUN useradd -m myuser \
     && chown -R myuser:myuser /app
-
-# Switch to non-root user
 USER myuser
 
 # Copy the JAR file from the build stage
