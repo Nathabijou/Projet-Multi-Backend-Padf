@@ -21,88 +21,54 @@ import java.util.ArrayList;
 @Builder
 @JsonIgnoreProperties({"composante.projets", "hibernateLazyInitializer", "handler"})
 public class Projet {
-    // Constructeur par défaut explicite pour éviter les problèmes avec Lombok
-    public Projet() {
-        // Initialisation des champs avec des valeurs par défaut
-        this.name = "";
-        this.description = "";
-        this.lot = "";
-        this.address = "";
-        this.domaineDeFormation = "";
-        this.numeroDePatente = "";
-        this.numeroDeReconnaissanceLegale = "";
-        this.sourceDesNumeroDeReconnaissance = "";
-        this.rangDePriorisation = "";
-        this.type = "";
-        this.statut = "";
-        this.phase = "";
-        this.code = "";
-        this.montantMainOeuvreQualifier = 0.0;
-        this.montantMainOeuvreNonQualifier = 0.0;
-        this.montantAssurance = 0.0;
-        this.montantMateriaux = 0.0;
-        this.montantTotal = 0.0;
-        this.montantFraisCashInCashOut = 0.0;
-        this.nomRepresentant = "";
-        this.positionRepresentant = "";
-        this.numeroIdentification = "";
-        this.modeExecution = "";
-        this.active = true;
-        
+    // Initialisation des champs avec des valeurs par défaut
+    {
         // Initialisation des listes pour éviter les NullPointerException
         this.photos = new ArrayList<>();
         this.projetBeneficiaires = new ArrayList<>();
         this.etatsAvancement = new ArrayList<>();
     }
-
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(length = 36, columnDefinition = "varchar(36)") // match SQL Server
-    private String idProjet;
+    private String idProjet = "";
 
+    private String name = "";
+    private String description = "";
+    private String lot = "";
+    private String address = "";
+    private String domaineDeFormation = "";
+    private String numeroDePatente = "";
+    private String numeroDeReconnaissanceLegale = "";
+    private String sourceDesNumeroDeReconnaissance = "";
+    private String rangDePriorisation = "";
+    private String type = "";
+    private String statut = ""; // planifié, en cours, terminé
+    private String phase = "";
+    private String code = "";
 
-    private String name;
-    private String description;
-    private String lot;
-    private String address;
-    private String domaineDeFormation;
-    private String numeroDePatente;
-    private String numeroDeReconnaissanceLegale;
-    private String sourceDesNumeroDeReconnaissance;
-    private String rangDePriorisation;
-    private String type;
-    private String statut; // planifié, en cours, terminé
-    private String phase;
-    private String code;
+    private LocalDate dateDebut = null;
+    private LocalDate dateFin = null;
 
-    private LocalDate dateDebut;
-    private LocalDate dateFin;
+    private Double latitude = 0.0;
+    private Double longitude = 0.0;
 
-    private Double latitude;
-    private Double longitude;
+    private Double montantMainOeuvreQualifier = 0.0;
+    private Double montantMainOeuvreNonQualifier = 0.0;
+    private Double montantAssurance = 0.0;
+    private Double montantMateriaux = 0.0;
+    private Double montantTotal = 0.0;
+    private Double montantFraisCashInCashOut = 0.0;
 
-    private Double montantMainOeuvreQualifier;
-    private Double montantMainOeuvreNonQualifier;
-    private Double montantAssurance;
-    private Double montantMateriaux;
-    private Double montantFraisCashInCashOut;
-    private Double montantTotal;
+    private String nomRepresentant = "";
+    private String positionRepresentant = "";
+    private String numeroIdentification = "";
+    private String modeExecution = "";
+    
+    private String createdBy = "";
+    private String modifyBy = "";
 
-    private String createdBy;
-    private String modifyBy;
-    private String NomRepresentant;
-    private String PositionRepresentant;
-    private String numeroIdentification;
-    private String modeExecution;
-
-
-    @Column(nullable = false)
     private Boolean active = true;
-
-//    @PrePersist
-//    private void ensureId() {
-//        if (this.idProjet == null || this.idProjet.isBlank()) {
-//            this.idProjet = generateRandomId(15);
 //        }
 //    }
 
