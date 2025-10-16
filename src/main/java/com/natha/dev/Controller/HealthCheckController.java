@@ -7,13 +7,24 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class HealthCheckController {
 
-    @GetMapping("/healthz")
-    public ResponseEntity<String> healthz() {
-        return ResponseEntity.ok("OK");
+    @GetMapping(
+        value = "/healthz",
+        produces = "text/plain"
+    )
+    public String healthz() {
+        return "OK";
     }
     
-    @GetMapping("/actuator/health")
-    public ResponseEntity<String> health() {
-        return ResponseEntity.ok("{\"status\":\"UP\"}");
+    @GetMapping(
+        value = "/actuator/health",
+        produces = "application/json"
+    )
+    public String health() {
+        return "{\"status\":\"UP\"}";
+    }
+    
+    @GetMapping("/")
+    public String root() {
+        return "Service is running";
     }
 }
