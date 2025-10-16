@@ -9,6 +9,7 @@ WORKDIR /app
 
 # Kopye premye fichye yo ki bezwen pou konstriksyon an
 COPY pom.xml .
+
 # Enstale tout dependans yo
 RUN mvn dependency:go-offline
 
@@ -34,7 +35,7 @@ RUN addgroup --system javauser && adduser --system --group javauser
 WORKDIR /app
 
 # Kopye fichye JAR la soti nan etap konstriksyon an
-# Nou itilize non fichye a eksplisitman
+# Itilize non fichye a eksplisitman dapre konfigirasyon pom.xml
 COPY --from=builder /app/target/app.jar app.jar
 
 # Fè itilizatè a posede dosye yo
@@ -51,4 +52,4 @@ HEALTHCHECK --interval=30s --timeout=30s --start-period=60s --retries=3 \
   CMD curl -f http://localhost:${PORT:-8080}/healthz || exit 1
 
 # Kòmand pou kòmanse aplikasyon an
-ENTRYPOINT ["sh", "-c", "java -XX:+UseContainerSupport -XX:MaxRAMPercentage=75.0 -jar /app/app.jar --server.port=${PORT:-8080} --spring.profiles.active=prod"]
+ENTRYPOINT ["java", "-jar", "app.jar", "--server.port=${PORT:-8080}", "--spring.profiles.active=prod"]

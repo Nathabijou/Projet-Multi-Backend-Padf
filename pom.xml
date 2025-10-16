@@ -217,6 +217,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
                     <mainClass>com.natha.dev.DevNathaApplication</mainClass>
+                    <layout>JAR</layout>
                 </configuration>
                 <executions>
                     <execution>
