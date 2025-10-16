@@ -12,11 +12,8 @@ RUN mvn dependency:go-offline
 # Copy source code
 COPY src/ src/
 
-# Build the application
-RUN mvn clean package -DskipTests
-
-# Move the JAR file to a known name
-RUN mv $(find /build/target -name '*.jar' -type f | head -n 1) /build/target/app.jar
+# Build the application and specify the final JAR name
+RUN mvn clean package -DskipTests -DfinalName=app
 
 # Final stage
 FROM eclipse-temurin:17-jre-jammy
@@ -32,7 +29,7 @@ RUN addgroup --system javauser && adduser --system --group javauser
 WORKDIR /app
 
 # Copy the JAR file from the build stage
-COPY --from=builder /build/target/app.jar app.jar
+COPY --from=builder /build/target/app.jar /app/app.jar
 
 # Set file permissions
 RUN chown -R javauser:javauser /app
