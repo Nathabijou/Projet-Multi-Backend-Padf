@@ -4,13 +4,23 @@ FROM maven:3.9.3-eclipse-temurin-17 AS builder
 # Set working directory
 WORKDIR /app
 
-# Copy Maven settings
+# Copy Maven settings and config
 COPY mvn-settings.xml /root/.m2/settings.xml
+COPY .mvn /app/.mvn
 
 # Copy only the POM file first to leverage Docker cache
 COPY pom.xml .
 
-# Download dependencies with parallel downloads and optimized settings
+# Install Lombok and other annotation processors first
+RUN mvn -B dependency:go-offline \
+    -Dmaven.repo.local=/root/.m2/repository \
+    -Dmaven.artifact.threads=20 \
+    -Dmaven.test.skip=true \
+    -Dmaven.compile.fork=true \
+    -T 1C \
+    process-test-classes
+
+# Download all dependencies
 RUN mvn -B dependency:go-offline \
     -Dmaven.repo.local=/root/.m2/repository \
     -Dmaven.artifact.threads=20 \
@@ -31,7 +41,11 @@ RUN mvn -B clean package \
     -Dmaven.javadoc.skip=true \
     -Dmaven.source.skip=true \
     -Dmaven.artifact.threads=20 \
-    -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn
+    -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn \
+    -Dorg.gradle.daemon=false \
+    -Dorg.gradle.parallel=true \
+    -Dorg.gradle.caching=true \
+    -Dorg.gradle.configureondemand=true
 
 # Stage 2: Runtime
 FROM eclipse-temurin:17-jre-jammy

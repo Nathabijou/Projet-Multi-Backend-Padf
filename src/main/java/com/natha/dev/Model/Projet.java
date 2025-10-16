@@ -11,13 +11,49 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.ArrayList;
 
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @JsonIgnoreProperties({"composante.projets", "hibernateLazyInitializer", "handler"})
 public class Projet {
+    // Constructeur par défaut explicite pour éviter les problèmes avec Lombok
+    public Projet() {
+        // Initialisation des champs avec des valeurs par défaut
+        this.name = "";
+        this.description = "";
+        this.lot = "";
+        this.address = "";
+        this.domaineDeFormation = "";
+        this.numeroDePatente = "";
+        this.numeroDeReconnaissanceLegale = "";
+        this.sourceDesNumeroDeReconnaissance = "";
+        this.rangDePriorisation = "";
+        this.type = "";
+        this.statut = "";
+        this.phase = "";
+        this.code = "";
+        this.montantMainOeuvreQualifier = 0.0;
+        this.montantMainOeuvreNonQualifier = 0.0;
+        this.montantAssurance = 0.0;
+        this.montantMateriaux = 0.0;
+        this.montantTotal = 0.0;
+        this.montantFraisCashInCashOut = 0.0;
+        this.nomRepresentant = "";
+        this.positionRepresentant = "";
+        this.numeroIdentification = "";
+        this.modeExecution = "";
+        this.active = true;
+        
+        // Initialisation des listes pour éviter les NullPointerException
+        this.photos = new ArrayList<>();
+        this.projetBeneficiaires = new ArrayList<>();
+        this.etatsAvancement = new ArrayList<>();
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
