@@ -200,6 +200,7 @@
 
     <build>
         <finalName>app</finalName>
+        <sourceDirectory>src/main/java</sourceDirectory>
         <defaultGoal>spring-boot:run</defaultGoal>
         <resources>
             <resource>
