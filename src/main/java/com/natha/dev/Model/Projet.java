@@ -4,20 +4,19 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
+import java.util.Objects;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Entity
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
 @JsonIgnoreProperties({"composante.projets", "hibernateLazyInitializer", "handler"})
 public class Projet {
@@ -127,12 +126,19 @@ public class Projet {
     public Double calculerPourcentageAvancementTotal() {
         if (etatsAvancement == null || etatsAvancement.isEmpty()) {
             this.pourcentageAvancementTotal = 0.0;
-            return this.pourcentageAvancementTotal;
+            return 0.0;
         }
-
+        
         double totalPondere = etatsAvancement.stream()
-            .filter(e -> e != null)
-            .mapToDouble(e -> (e.getPourcentageTotal() * e.calculerPourcentageRealise()) / 100.0)
+            .filter(Objects::nonNull)
+            .mapToDouble(e -> {
+                Double pourcentageTotal = e.getPourcentageTotal();
+                Double pourcentageRealise = e.calculerPourcentageRealise();
+                if (pourcentageTotal == null || pourcentageRealise == null) {
+                    return 0.0;
+                }
+                return (pourcentageTotal * pourcentageRealise) / 100.0;
+            })
             .sum();
 
         this.pourcentageAvancementTotal = Math.min(100.0, Math.max(0.0, totalPondere)); // Ensure between 0 and 100
