@@ -10,7 +10,7 @@ COPY mvn-settings.xml /root/.m2/settings.xml
 COPY pom.xml .
 
 # Download dependencies with parallel downloads and optimized settings
-RUN --mount=type=cache,target=/root/.m2 \
+RUN --mount=type=cache,id=m2-cache,target=/root/.m2 \
     mvn -B dependency:go-offline \
     -Dmaven.artifact.threads=20 \
     -Dmaven.test.skip=true \
@@ -21,7 +21,7 @@ RUN --mount=type=cache,target=/root/.m2 \
 COPY src/ src/
 
 # Build the application with optimized Maven settings
-RUN --mount=type=cache,target=/root/.m2 \
+RUN --mount=type=cache,id=m2-cache,target=/root/.m2 \
     mvn -B clean package \
     -DskipTests \
     -T 1C \
