@@ -205,6 +205,11 @@
             <resource>
                 <directory>src/main/resources</directory>
                 <filtering>true</filtering>
+                <excludes>
+                    <exclude>**/*.backup</exclude>
+                    <exclude>**/*.bak</exclude>
+                    <exclude>**/*~</exclude>
+                </excludes>
             </resource>
         </resources>
         <plugins>
@@ -217,6 +222,11 @@
                     <nonFilteredFileExtensions>
                         <nonFilteredFileExtension>properties</nonFilteredFileExtension>
                     </nonFilteredFileExtensions>
+                    <useDefaultDelimiters>false</useDefaultDelimiters>
+                    <delimiters>
+                        <delimiter>@</delimiter>
+                    </delimiters>
+                    <escapeString>\</escapeString>
                 </configuration>
             </plugin>
             <plugin>
