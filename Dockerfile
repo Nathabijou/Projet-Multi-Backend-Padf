@@ -9,9 +9,13 @@ WORKDIR /app
 
 # Kopye premye fichye yo ki bezwen pou konstriksyon an
 COPY pom.xml .
+# Enstale tout dependans yo
+RUN mvn dependency:go-offline
+
+# Kopye kòd sous la
 COPY src/ src/
 
-# Enstale tout dependans yo epi konstwi aplikasyon an
+# Konstwi aplikasyon an
 RUN mvn clean package -DskipTests
 
 # ---
@@ -30,7 +34,8 @@ RUN addgroup --system javauser && adduser --system --group javauser
 WORKDIR /app
 
 # Kopye fichye JAR la soti nan etap konstriksyon an
-COPY --from=builder /app/target/*.jar ./app.jar
+# Nou itilize non fichye a eksplisitman
+COPY --from=builder /app/target/app.jar app.jar
 
 # Fè itilizatè a posede dosye yo
 RUN chown -R javauser:javauser /app
