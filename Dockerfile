@@ -19,6 +19,9 @@ COPY src/ src/
 # Konstwi aplikasyon an
 RUN mvn clean package -DskipTests
 
+# Rename the JAR file to a known name
+RUN cp /app/target/*.jar /app/target/app.jar
+
 # ---
 # Etap 2: Ekzekisyon
 FROM eclipse-temurin:17-jre-jammy
@@ -35,8 +38,7 @@ RUN addgroup --system javauser && adduser --system --group javauser
 WORKDIR /app
 
 # Kopye fichye JAR la soti nan etap konstriksyon an
-# Itilize non fichye a dapre konfigirasyon pom.xml
-COPY --from=builder /app/target/dev-${VERSION:-0.0.1-SNAPSHOT}.jar app.jar
+COPY --from=builder /app/target/app.jar app.jar
 
 # Fè itilizatè a posede dosye yo
 RUN chown -R javauser:javauser /app
