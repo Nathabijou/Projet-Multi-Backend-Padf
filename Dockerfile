@@ -1,11 +1,8 @@
 # Stage 1: Build
-FROM maven:3.9.3-amazoncorretto-17 AS builder
+FROM maven:3.9.3-eclipse-temurin-17 AS builder
 
 # Set working directory
 WORKDIR /app
-
-# Create Maven cache directory
-RUN mkdir -p /root/.m2/repository
 
 # Copy Maven settings
 COPY mvn-settings.xml /root/.m2/settings.xml

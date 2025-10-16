@@ -1,6 +1,7 @@
 # Maven
 target/
 pom.xml.versionsBackup
+!target/*.jar
 
 # IDE
 .idea/
@@ -8,16 +9,53 @@ pom.xml.versionsBackup
 *.iws
 *.ipr
 .settings/
-.project
-.classpath
+.vscode/
 
-# Version control
+# Git
 .git/
 .gitignore
 
 # Logs
 *.log
 logs/
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Environment files
+.env
+*.env
+
+# Node modules
+node_modules/
+
+# Build files
+build/
+
+# Temp files
+*.tmp
+*.bak
+*.swp
+*~
+.project
+.classpath
+
+# Other Dockerfiles (we only need the main one)
+Dockerfile.fast
+Dockerfile.optimized
+Dockerfile.simple
+
+# Maven wrapper (not needed in the image)
+.mvn/
+mvnw*
+
+# Other
+*.md
+.idea/
+*.log
+*.log.*
+!mvn-settings.xml  # Keep this file, it's needed for the build
 
 # Environment files
 .env
