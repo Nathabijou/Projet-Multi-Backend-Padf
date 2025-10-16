@@ -18,17 +18,18 @@ RUN mvn clean package -DskipTests
 # Etap 2: Ekzekisyon
 FROM eclipse-temurin:17-jre-jammy
 
-# Enstale curl pou health check
-RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
+# Enstale curl ak iproute2 pou health check
+RUN apt-get update && \
+    apt-get install -y curl iproute2 && \
+    rm -rf /var/lib/apt/lists/*
 
-# Kreye yon itilizateur ki pa root
+# Kreye yon itilizatè ki pa root
 RUN addgroup --system javauser && adduser --system --group javauser
 
 # Kreye yon direktè pou aplikasyon an
 WORKDIR /app
 
 # Kopye fichye JAR la soti nan etap konstriksyon an
-# Nou pral chache non fichye a ak yon non espesifik
 COPY --from=builder /app/target/*.jar ./app.jar
 
 # Fè itilizatè a posede dosye yo
@@ -42,7 +43,7 @@ EXPOSE 8080
 
 # Health check ak curl
 HEALTHCHECK --interval=30s --timeout=30s --start-period=60s --retries=3 \
-  CMD curl -f http://localhost:${PORT:-8080}/actuator/health || exit 1
+  CMD curl -f http://localhost:${PORT:-8080}/healthz || exit 1
 
 # Kòmand pou kòmanse aplikasyon an
 ENTRYPOINT ["sh", "-c", "java -XX:+UseContainerSupport -XX:MaxRAMPercentage=75.0 -jar /app/app.jar --server.port=${PORT:-8080} --spring.profiles.active=prod"]
