@@ -6,7 +6,16 @@ WORKDIR /app
 
 # Copy Maven settings and config
 COPY mvn-settings.xml /root/.m2/settings.xml
-COPY .mvn /app/.mvn
+
+# Create .mvn directory and copy jvm.config if it exists
+RUN mkdir -p /app/.mvn && \
+    if [ -f .mvn/jvm.config ]; then \
+        cp .mvn/jvm.config /app/.mvn/; \
+    else \
+        echo "-Djdk.module.illegalAccess=permit" > /app/.mvn/jvm.config; \
+        echo "-Djdk.reflect.useDirectMethodHandle=false" >> /app/.mvn/jvm.config; \
+        echo "-Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn" >> /app/.mvn/jvm.config; \
+    fi
 
 # Copy only the POM file first to leverage Docker cache
 COPY pom.xml .
