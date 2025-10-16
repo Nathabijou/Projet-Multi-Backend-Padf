@@ -1,7 +1,11 @@
+# Stage 1: Build
 FROM maven:3.9.3-amazoncorretto-17 AS builder
 
 # Set working directory
 WORKDIR /app
+
+# Create Maven cache directory
+RUN mkdir -p /root/.m2/repository
 
 # Copy Maven settings
 COPY mvn-settings.xml /root/.m2/settings.xml
@@ -10,8 +14,8 @@ COPY mvn-settings.xml /root/.m2/settings.xml
 COPY pom.xml .
 
 # Download dependencies with parallel downloads and optimized settings
-RUN --mount=type=cache,id=railway-m2-cache,target=/root/.m2 \
-    mvn -B dependency:go-offline \
+RUN mvn -B dependency:go-offline \
+    -Dmaven.repo.local=/root/.m2/repository \
     -Dmaven.artifact.threads=20 \
     -Dmaven.test.skip=true \
     -Dmaven.compile.fork=true \
@@ -21,8 +25,8 @@ RUN --mount=type=cache,id=railway-m2-cache,target=/root/.m2 \
 COPY src/ src/
 
 # Build the application with optimized Maven settings
-RUN --mount=type=cache,id=railway-m2-cache,target=/root/.m2 \
-    mvn -B clean package \
+RUN mvn -B clean package \
+    -Dmaven.repo.local=/root/.m2/repository \
     -DskipTests \
     -T 1C \
     -Dmaven.test.skip=true \
