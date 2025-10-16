@@ -1,55 +1,51 @@
-# Etap 1: Konstriksyon
-FROM maven:3.9.3-eclipse-temurin-17 AS builder
+# Build stage
+FROM maven:3.9.3-eclipse-temurin-17 as builder
 
-# Mete kèk enfòmasyon sou konstriksyon an
-LABEL maintainer="Dev Team"
+WORKDIR /build
 
-# Kreye direktè travay la
-WORKDIR /app
-
-# Kopye premye fichye yo ki bezwen pou konstriksyon an
+# First copy only the POM file to leverage Docker cache
 COPY pom.xml .
 
-# Enstale tout dependans yo
+# Download all dependencies
 RUN mvn dependency:go-offline
 
-# Kopye kòd sous la
+# Copy source code
 COPY src/ src/
 
-# Konstwi aplikasyon an
+# Build the application
 RUN mvn clean package -DskipTests
 
-# ---
-# Etap 2: Ekzekisyon
+# Move the JAR file to a known name
+RUN mv $(find /build/target -name '*.jar' -type f | head -n 1) /build/target/app.jar
+
+# Final stage
 FROM eclipse-temurin:17-jre-jammy
 
-# Enstale curl ak iproute2 pou health check
+# Install curl for health checks
 RUN apt-get update && \
     apt-get install -y curl iproute2 && \
     rm -rf /var/lib/apt/lists/*
 
-# Kreye yon itilizatè ki pa root
+# Create a non-root user
 RUN addgroup --system javauser && adduser --system --group javauser
 
-# Kreye yon direktè pou aplikasyon an
 WORKDIR /app
 
-# Kopye fichye JAR la soti nan etap konstriksyon an
-# Itilize non fichye a dapre konfigirasyon pom.xml
-COPY --from=builder /app/target/dev-${VERSION:-0.0.1-SNAPSHOT}.jar app.jar
+# Copy the JAR file from the build stage
+COPY --from=builder /build/target/app.jar app.jar
 
-# Fè itilizatè a posede dosye yo
+# Set file permissions
 RUN chown -R javauser:javauser /app
 
-# Chanje pou itilizatè ki pa root
+# Switch to non-root user
 USER javauser
 
-# Ekspoze pò 8080 (default)
+# Expose the port the app runs on
 EXPOSE 8080
 
-# Health check ak curl
+# Health check
 HEALTHCHECK --interval=30s --timeout=30s --start-period=60s --retries=3 \
   CMD curl -f http://localhost:${PORT:-8080}/healthz || exit 1
 
-# Kòmand pou kòmanse aplikasyon an
+# The application's entry point
 ENTRYPOINT ["java", "-jar", "app.jar", "--server.port=${PORT:-8080}", "--spring.profiles.active=prod"]
