@@ -60,4 +60,14 @@ public class EtatAvancement {
         this.pourcentageRealise = totalRealise;
         return totalRealise;
     }
+    
+    // Ajout de la méthode setProjet manquante
+    public void setProjet(Projet projet) {
+        this.projet = projet;
+    }
+    
+    // Ajout de la méthode getPourcentageTotal manquante
+    public Double getPourcentageTotal() {
+        return this.pourcentageTotal;
+    }
 }

@@ -50,5 +50,6 @@ public class ProjetDto {
     private String composanteNom;
     private String composanteCode;
     private String modeExecution;
+    private String sectionCommunaleName;  // Name of the section communale
 
 }

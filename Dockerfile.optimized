@@ -1,0 +1,44 @@
+# Stage 1: Build
+FROM maven:3.9.3-amazoncorretto-17 AS builder
+
+# Set working directory
+WORKDIR /app
+
+# Copy only the POM file first to leverage Docker cache
+COPY pom.xml .
+
+# Download dependencies in offline mode (uses local .m2 cache)
+RUN --mount=type=cache,target=/root/.m2 \
+    mvn dependency:go-offline -B
+
+# Copy source code
+COPY src ./src
+
+# Build the application with optimized Maven settings
+RUN --mount=type=cache,target=/root/.m2 \
+    mvn clean package -DskipTests \
+    -T 1C \
+    -Dmaven.test.skip=true \
+    -Dmaven.compile.fork=true \
+    -Dmaven.javadoc.skip=true \
+    -Dcheckstyle.skip=true \
+    -Dspotbugs.skip=true \
+    -Dpmd.skip=true
+
+# Stage 2: Runtime
+FROM amazoncorretto:17-alpine
+
+WORKDIR /app
+
+# Create non-root user
+RUN addgroup -S spring && adduser -S spring -G spring
+USER spring:spring
+
+# Copy the JAR file
+COPY --from=builder --chown=spring:spring /app/target/*.jar app.jar
+
+# Expose port
+EXPOSE 8080
+
+# Run the application
+ENTRYPOINT ["java", "-jar", "app.jar"]

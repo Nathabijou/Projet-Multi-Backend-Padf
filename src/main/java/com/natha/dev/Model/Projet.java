@@ -9,67 +9,66 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.*;
+import java.util.stream.Collectors;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import java.util.UUID;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @JsonIgnoreProperties({"composante.projets", "hibernateLazyInitializer", "handler"})
 public class Projet {
-
+    // Initialisation des champs avec des valeurs par défaut
+    {
+        // Initialisation des listes pour éviter les NullPointerException
+        this.photos = new ArrayList<>();
+        this.projetBeneficiaires = new ArrayList<>();
+        this.etatsAvancement = new ArrayList<>();
+    }
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(length = 36, columnDefinition = "varchar(36)") // match SQL Server
-    private String idProjet;
+    private String idProjet = "";
 
+    private String name = "";
+    private String description = "";
+    private String lot = "";
+    private String address = "";
+    private String domaineDeFormation = "";
+    private String numeroDePatente = "";
+    private String numeroDeReconnaissanceLegale = "";
+    private String sourceDesNumeroDeReconnaissance = "";
+    private String rangDePriorisation = "";
+    private String type = "";
+    private String statut = ""; // planifié, en cours, terminé
+    private String phase = "";
+    private String code = "";
 
-    private String name;
-    private String description;
-    private String lot;
-    private String address;
-    private String domaineDeFormation;
-    private String numeroDePatente;
-    private String numeroDeReconnaissanceLegale;
-    private String sourceDesNumeroDeReconnaissance;
-    private String rangDePriorisation;
-    private String type;
-    private String statut; // planifié, en cours, terminé
-    private String phase;
-    private String code;
+    private LocalDate dateDebut = null;
+    private LocalDate dateFin = null;
 
-    private LocalDate dateDebut;
-    private LocalDate dateFin;
+    private Double latitude = 0.0;
+    private Double longitude = 0.0;
 
-    private Double latitude;
-    private Double longitude;
+    private Double montantMainOeuvreQualifier = 0.0;
+    private Double montantMainOeuvreNonQualifier = 0.0;
+    private Double montantAssurance = 0.0;
+    private Double montantMateriaux = 0.0;
+    private Double montantTotal = 0.0;
+    private Double montantFraisCashInCashOut = 0.0;
 
-    private Double montantMainOeuvreQualifier;
-    private Double montantMainOeuvreNonQualifier;
-    private Double montantAssurance;
-    private Double montantMateriaux;
-    private Double montantFraisCashInCashOut;
-    private Double montantTotal;
+    private String nomRepresentant = "";
+    private String positionRepresentant = "";
+    private String numeroIdentification = "";
+    private String modeExecution = "";
+    
+    private String createdBy = "";
+    private String modifyBy = "";
 
-    private String createdBy;
-    private String modifyBy;
-    private String NomRepresentant;
-    private String PositionRepresentant;
-    private String numeroIdentification;
-    private String modeExecution;
-
-
-    @Column(nullable = false)
     private Boolean active = true;
-
-//    @PrePersist
-//    private void ensureId() {
-//        if (this.idProjet == null || this.idProjet.isBlank()) {
-//            this.idProjet = generateRandomId(15);
 //        }
 //    }
 
@@ -127,15 +126,32 @@ public class Projet {
     public Double calculerPourcentageAvancementTotal() {
         if (etatsAvancement == null || etatsAvancement.isEmpty()) {
             this.pourcentageAvancementTotal = 0.0;
-            return this.pourcentageAvancementTotal;
+            return 0.0;
         }
-
+        
         double totalPondere = etatsAvancement.stream()
-            .filter(e -> e != null)
-            .mapToDouble(e -> (e.getPourcentageTotal() * e.calculerPourcentageRealise()) / 100.0)
+            .filter(Objects::nonNull)
+            .mapToDouble(e -> {
+                Double pourcentageTotal = e.getPourcentageTotal();
+                Double pourcentageRealise = e.calculerPourcentageRealise();
+                if (pourcentageTotal == null || pourcentageRealise == null) {
+                    return 0.0;
+                }
+                return (pourcentageTotal * pourcentageRealise) / 100.0;
+            })
             .sum();
 
         this.pourcentageAvancementTotal = Math.min(100.0, Math.max(0.0, totalPondere)); // Ensure between 0 and 100
         return this.pourcentageAvancementTotal;
+    }
+    
+    /**
+     * Get the section communale name through the quartier relationship
+     * @return the name of the section communale or null if not available
+     */
+    public String getSectionCommunaleName() {
+        return this.quartier != null && this.quartier.getSectionCommunale() != null 
+               ? this.quartier.getSectionCommunale().getName() 
+               : null;
     }
 }
