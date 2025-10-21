@@ -65,7 +65,10 @@ public class WebSecurityConfiguration {
                                 "/site",
                                 "/site/**",
                                 "/swagger-ui/**",
-                                "/v3/api-docs/**"
+                                "/v3/api-docs/**",
+                                "/healthz",
+                                "/actuator/health",
+                                "/"
                         ).permitAll()
                         .requestMatchers("/privileges/**").authenticated()
                         .anyRequest().authenticated()
