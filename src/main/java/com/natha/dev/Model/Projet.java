@@ -27,6 +27,7 @@ public class Projet {
         this.photos = new ArrayList<>();
         this.projetBeneficiaires = new ArrayList<>();
         this.etatsAvancement = new ArrayList<>();
+        this.progressions = new ArrayList<>();
     }
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -110,6 +111,10 @@ public class Projet {
     @JsonManagedReference("projet-etat-avancement")
     private List<EtatAvancement> etatsAvancement = new ArrayList<>();
 
+    @OneToMany(mappedBy = "projet", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @JsonManagedReference("projet-progression")
+    private List<Progression> progressions = new ArrayList<>();
+
     @Transient
     private Double pourcentageAvancementTotal = 0.0;
 
@@ -121,6 +126,16 @@ public class Projet {
     public void removeEtatAvancement(EtatAvancement etatAvancement) {
         etatsAvancement.remove(etatAvancement);
         etatAvancement.setProjet(null);
+    }
+
+    public void addProgression(Progression progression) {
+        progressions.add(progression);
+        progression.setProjet(this);
+    }
+
+    public void removeProgression(Progression progression) {
+        progressions.remove(progression);
+        progression.setProjet(null);
     }
 
     public Double calculerPourcentageAvancementTotal() {

@@ -28,6 +28,7 @@ public class JwtUtil {
         return claimsResolver.apply(claims);
     }
 
+    //All claimsFrom Toekn
     private Claims getAllClaimsFromToken(String token) {
         return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody();
     }
@@ -74,7 +75,7 @@ public class JwtUtil {
                 .parseClaimsJws(token)
                 .getBody();
     }
-
+//public static void planMaintenamce
 //    public static void planMaintenance(LocalDate inputDate) {
 //        LocalDate today = LocalDate.now();
 //

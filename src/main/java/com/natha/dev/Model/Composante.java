@@ -59,6 +59,7 @@ public class Composante {
     private List<Projet> projets;
 
 
+
     @PreUpdate
     protected void onUpdate() {
         updatedAt = LocalDateTime.now();
