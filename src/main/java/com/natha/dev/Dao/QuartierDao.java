@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface QuartierDao extends JpaRepository<Quartier, Long> {
     List<Quartier> findBySectionCommunaleId(Long sectionCommunaleId);
+
+    List<Quartier> findAll();
 }

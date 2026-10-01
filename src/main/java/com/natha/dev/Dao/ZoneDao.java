@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface ZoneDao extends JpaRepository<Zone, Long> {
     List<Zone> findByComposanteId(Long composanteId);
+    List<Zone> findAll();
 }

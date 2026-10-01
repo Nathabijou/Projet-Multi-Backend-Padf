@@ -52,6 +52,8 @@ public interface FormationDao extends JpaRepository<Formation, String>, Formatio
     JOIN pbf.formation f
     JOIN pbf.projetBeneficiaire pb
     JOIN pb.projet p
+    LEFT JOIN p.composanteProjets cp
+    LEFT JOIN cp.composante comp
     LEFT JOIN p.quartier q
     LEFT JOIN q.sectionCommunale sc
     LEFT JOIN sc.commune comm
@@ -59,7 +61,7 @@ public interface FormationDao extends JpaRepository<Formation, String>, Formatio
     LEFT JOIN a.departement d
     LEFT JOIN d.zoneDepartements zd
     LEFT JOIN zd.zone z
-    WHERE (:composanteId IS NULL OR p.composante.id = :composanteId)
+    WHERE (:composanteId IS NULL OR comp.id = :composanteId)
     AND (:zoneId IS NULL OR z.id = :zoneId)
     AND (:departementId IS NULL OR d.id = :departementId)
     AND (:arrondissementId IS NULL OR a.id = :arrondissementId)
@@ -88,6 +90,8 @@ public interface FormationDao extends JpaRepository<Formation, String>, Formatio
     JOIN pbf.projetBeneficiaire pb
     JOIN pb.beneficiaire b
     JOIN pb.projet p
+    LEFT JOIN p.composanteProjets cp
+    LEFT JOIN cp.composante comp
     LEFT JOIN p.quartier q
     LEFT JOIN q.sectionCommunale sc
     LEFT JOIN sc.commune comm
@@ -95,7 +99,7 @@ public interface FormationDao extends JpaRepository<Formation, String>, Formatio
     LEFT JOIN a.departement d
     LEFT JOIN d.zoneDepartements zd
     LEFT JOIN zd.zone z
-    WHERE (:composanteId IS NULL OR p.composante.id = :composanteId)
+    WHERE (:composanteId IS NULL OR comp.id = :composanteId)
     AND (:zoneId IS NULL OR z.id = :zoneId)
     AND (:departementId IS NULL OR d.id = :departementId)
     AND (:arrondissementId IS NULL OR a.id = :arrondissementId)
@@ -125,6 +129,8 @@ public interface FormationDao extends JpaRepository<Formation, String>, Formatio
     JOIN ProjetBeneficiaireFormation pbf ON pbf.formation = f
     JOIN pbf.projetBeneficiaire pb
     JOIN pb.projet p
+    LEFT JOIN p.composanteProjets cp
+    LEFT JOIN cp.composante comp
     LEFT JOIN p.quartier q
     LEFT JOIN q.sectionCommunale sc
     LEFT JOIN sc.commune comm
@@ -132,7 +138,7 @@ public interface FormationDao extends JpaRepository<Formation, String>, Formatio
     LEFT JOIN a.departement d
     LEFT JOIN d.zoneDepartements zd
     LEFT JOIN zd.zone z
-    WHERE (:composanteId IS NULL OR p.composante.id = :composanteId)
+    WHERE (:composanteId IS NULL OR comp.id = :composanteId)
     AND (:zoneId IS NULL OR z.id = :zoneId)
     AND (:departementId IS NULL OR d.id = :departementId)
     AND (:arrondissementId IS NULL OR a.id = :arrondissementId)
@@ -166,6 +172,8 @@ public interface FormationDao extends JpaRepository<Formation, String>, Formatio
     JOIN f.projetBeneficiaireFormations pbf
     JOIN pbf.projetBeneficiaire pb
     JOIN pb.projet p
+    LEFT JOIN p.composanteProjets cp
+    LEFT JOIN cp.composante comp
     LEFT JOIN p.quartier q
     LEFT JOIN q.sectionCommunale sc
     LEFT JOIN sc.commune comm
@@ -173,7 +181,7 @@ public interface FormationDao extends JpaRepository<Formation, String>, Formatio
     LEFT JOIN a.departement d
     LEFT JOIN d.zoneDepartements zd
     LEFT JOIN zd.zone z
-    WHERE (:composanteId IS NULL OR p.composante.id = :composanteId)
+    WHERE (:composanteId IS NULL OR comp.id = :composanteId)
     AND (:zoneId IS NULL OR z.id = :zoneId)
     AND (:departementId IS NULL OR d.id = :departementId)
     AND (:arrondissementId IS NULL OR a.id = :arrondissementId)
@@ -288,6 +296,8 @@ public interface FormationDao extends JpaRepository<Formation, String>, Formatio
     JOIN pbf.projetBeneficiaire pb
     JOIN pb.beneficiaire b
     JOIN pb.projet p
+    LEFT JOIN p.composanteProjets cp
+    LEFT JOIN cp.composante comp
     LEFT JOIN p.quartier q
     LEFT JOIN q.sectionCommunale sc
     LEFT JOIN sc.commune comm
@@ -295,7 +305,7 @@ public interface FormationDao extends JpaRepository<Formation, String>, Formatio
     LEFT JOIN a.departement d
     LEFT JOIN d.zoneDepartements zd
     LEFT JOIN zd.zone z
-    WHERE (:composanteId IS NULL OR p.composante.id = :composanteId)
+    WHERE (:composanteId IS NULL OR comp.id = :composanteId)
     AND (:zoneId IS NULL OR z.id = :zoneId)
     AND (:departementId IS NULL OR d.id = :departementId)
     AND (:arrondissementId IS NULL OR a.id = :arrondissementId)
@@ -321,6 +331,8 @@ public interface FormationDao extends JpaRepository<Formation, String>, Formatio
     FROM ProjetBeneficiaireFormation pbf
     JOIN pbf.projetBeneficiaire pb
     JOIN pb.projet p
+    LEFT JOIN p.composanteProjets cp
+    LEFT JOIN cp.composante comp
     LEFT JOIN p.quartier q
     LEFT JOIN q.sectionCommunale sc
     LEFT JOIN sc.commune comm
@@ -328,7 +340,7 @@ public interface FormationDao extends JpaRepository<Formation, String>, Formatio
     LEFT JOIN a.departement d
     LEFT JOIN d.zoneDepartements zd
     LEFT JOIN zd.zone z
-    WHERE (:composanteId IS NULL OR p.composante.id = :composanteId)
+    WHERE (:composanteId IS NULL OR comp.id = :composanteId)
     AND (:zoneId IS NULL OR z.id = :zoneId)
     AND (:departementId IS NULL OR d.id = :departementId)
     AND (:arrondissementId IS NULL OR a.id = :arrondissementId)
@@ -352,6 +364,8 @@ public interface FormationDao extends JpaRepository<Formation, String>, Formatio
     SELECT COUNT(DISTINCT pb.beneficiaire.id) 
     FROM ProjetBeneficiaire pb
     JOIN pb.projet p
+    LEFT JOIN p.composanteProjets cp
+    LEFT JOIN cp.composante comp
     LEFT JOIN p.quartier q
     LEFT JOIN q.sectionCommunale sc
     LEFT JOIN sc.commune comm
@@ -363,7 +377,7 @@ public interface FormationDao extends JpaRepository<Formation, String>, Formatio
         SELECT 1 FROM ProjetBeneficiaireFormation pbf 
         WHERE pbf.projetBeneficiaire.id = pb.id
     )
-    AND (:composanteId IS NULL OR p.composante.id = :composanteId)
+    AND (:composanteId IS NULL OR comp.id = :composanteId)
     AND (:zoneId IS NULL OR z.id = :zoneId)
     AND (:departementId IS NULL OR d.id = :departementId)
     AND (:arrondissementId IS NULL OR a.id = :arrondissementId)
@@ -388,6 +402,8 @@ public interface FormationDao extends JpaRepository<Formation, String>, Formatio
     FROM ProjetBeneficiaire pb
     JOIN pb.projet p
     JOIN pb.beneficiaire b
+    LEFT JOIN p.composanteProjets cp
+    LEFT JOIN cp.composante comp
     LEFT JOIN p.quartier q
     LEFT JOIN q.sectionCommunale sc
     LEFT JOIN sc.commune comm
@@ -400,7 +416,7 @@ public interface FormationDao extends JpaRepository<Formation, String>, Formatio
         SELECT 1 FROM ProjetBeneficiaireFormation pbf 
         WHERE pbf.projetBeneficiaire.id = pb.id
     )
-    AND (:composanteId IS NULL OR p.composante.id = :composanteId)
+    AND (:composanteId IS NULL OR comp.id = :composanteId)
     AND (:zoneId IS NULL OR z.id = :zoneId)
     AND (:departementId IS NULL OR d.id = :departementId)
     AND (:arrondissementId IS NULL OR a.id = :arrondissementId)
@@ -426,6 +442,8 @@ public interface FormationDao extends JpaRepository<Formation, String>, Formatio
     FROM ProjetBeneficiaire pb
     JOIN pb.projet p
     JOIN pb.beneficiaire b
+    LEFT JOIN p.composanteProjets cp
+    LEFT JOIN cp.composante comp
     LEFT JOIN p.quartier q
     LEFT JOIN q.sectionCommunale sc
     LEFT JOIN sc.commune comm
@@ -443,7 +461,7 @@ public interface FormationDao extends JpaRepository<Formation, String>, Formatio
             (:isQualified = FALSE AND (pbf.noteFinale IS NULL OR pbf.noteFinale < 70.0))
         )
     )
-    AND (:composanteId IS NULL OR p.composante.id = :composanteId)
+    AND (:composanteId IS NULL OR comp.id = :composanteId)
     AND (:zoneId IS NULL OR z.id = :zoneId)
     AND (:departementId IS NULL OR d.id = :departementId)
     AND (:arrondissementId IS NULL OR a.id = :arrondissementId)
@@ -471,6 +489,8 @@ SELECT COUNT(DISTINCT pbf.formation)
 FROM ProjetBeneficiaireFormation pbf
 JOIN pbf.projetBeneficiaire pb
 JOIN pb.projet p
+LEFT JOIN p.composanteProjets cp
+LEFT JOIN cp.composante comp
 LEFT JOIN p.quartier q
 LEFT JOIN q.sectionCommunale sc
 LEFT JOIN sc.commune comm
@@ -478,7 +498,7 @@ LEFT JOIN comm.arrondissement a
 LEFT JOIN a.departement d
 LEFT JOIN d.zoneDepartements zd
 LEFT JOIN zd.zone z
-WHERE (:composanteId IS NULL OR p.composante.id = :composanteId)
+WHERE (:composanteId IS NULL OR comp.id = :composanteId)
 AND (:zoneId IS NULL OR z.id = :zoneId)
 AND (:departementId IS NULL OR d.id = :departementId)
 AND (:arrondissementId IS NULL OR a.id = :arrondissementId)
@@ -508,7 +528,11 @@ AND (:projetId IS NULL OR p.id = :projetId)
         JOIN pbf.projetBeneficiaire pb 
         JOIN pb.projet p 
         WHERE p.id = :projetId
-        AND (:composanteId IS NULL OR p.composante.id = :composanteId)
+        AND (:composanteId IS NULL OR EXISTS (
+            SELECT 1 FROM p.composanteProjets cp
+            JOIN cp.composante comp
+            WHERE comp.id = :composanteId
+        ))
         AND (:zoneId IS NULL OR EXISTS (
             SELECT 1 FROM p.quartier q 
             JOIN q.sectionCommunale sc 

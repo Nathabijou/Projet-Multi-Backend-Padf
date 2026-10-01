@@ -147,11 +147,30 @@ public class BeneficiaireImpl implements BeneficiaireIService {
         beneficiaire.setDomaineDeFormation(dto.getDomaineDeFormation());
         beneficiaire.setTypeIdentification(dto.getTypeIdentification());
         beneficiaire.setIdentification(dto.getIdentification());
-        beneficiaire.setLienNaissance(dto.getLienNaissance());
         beneficiaire.setQualification(dto.getQualification());
+        beneficiaire.setLieuNaissance(dto.getLieuNaissance());
+        beneficiaire.setPhoto(dto.getPhoto());
+        beneficiaire.setZoneFormation(dto.getZoneFormation());
+        beneficiaire.setDepartementFormation(dto.getDepartementFormation());
+        beneficiaire.setQuartierResidence(dto.getQuartierResidence());
+        beneficiaire.setRue(dto.getRue());
+        beneficiaire.setNumeroAdresse(dto.getNumeroAdresse());
+        beneficiaire.setLocalite(dto.getLocalite());
+        beneficiaire.setEtatMatrimonial(dto.getEtatMatrimonial());
+        beneficiaire.setRelationChefMenage(dto.getRelationChefMenage());
+        beneficiaire.setMilieuResidence(dto.getMilieuResidence());
+        beneficiaire.setSecuriteAlimentaire(dto.getSecuriteAlimentaire());
+        beneficiaire.setSanteExemptionMedecin(dto.getSanteExemptionMedecin());
+        beneficiaire.setSanteProblemeSante(dto.getSanteProblemeSante());
+        beneficiaire.setEnfantsNesVivants(dto.getEnfantsNesVivants());
+        beneficiaire.setEnfantsNesDecedes(dto.getEnfantsNesDecedes());
+        beneficiaire.setScolariteRecente(dto.getScolariteRecente());
+        beneficiaire.setActivitePrincipale(dto.getActivitePrincipale());
+        beneficiaire.setActivitePrincipaleAutre(dto.getActivitePrincipaleAutre());
         beneficiaire.setTelephoneContact(dto.getTelephoneContact());
         beneficiaire.setTelephonePaiement(dto.getTelephonePaiement());
         beneficiaire.setOperateurPaiement(dto.getOperateurPaiement());
+        beneficiaire.setLienNaissance(dto.getLienNaissance());
         beneficiaire.setTypeBeneficiaire(dto.getTypeBeneficiaire());
         beneficiaire.setIsGraduate(dto.getIsGraduate());
         beneficiaire.setFiliere(dto.getFiliere());
@@ -177,8 +196,13 @@ public class BeneficiaireImpl implements BeneficiaireIService {
         return new BeneficiaireDto(
                 b.getIdBeneficiaire(), b.getNom(), b.getPrenom(), b.getSexe(), b.getCommuneResidence(), b.getIsGraduate(), b.getFiliere(), b.getDateNaissance(),
                 b.getDomaineDeFormation(), b.getTypeIdentification(), b.getIdentification(),
-                b.getLienNaissance(), b.getQualification(), b.getTelephoneContact(),
-                b.getTelephonePaiement(), b.getOperateurPaiement(), b.getTypeBeneficiaire()
+                b.getQualification(), b.getLieuNaissance(), b.getPhoto(), b.getZoneFormation(),
+                b.getDepartementFormation(), b.getQuartierResidence(), b.getRue(), b.getNumeroAdresse(),
+                b.getLocalite(), b.getEtatMatrimonial(), b.getRelationChefMenage(), b.getMilieuResidence(),
+                b.getSecuriteAlimentaire(), b.getSanteExemptionMedecin(), b.getSanteProblemeSante(),
+                b.getEnfantsNesVivants(), b.getEnfantsNesDecedes(), b.getScolariteRecente(),
+                b.getActivitePrincipale(), b.getActivitePrincipaleAutre(), b.getTelephoneContact(),
+                b.getTelephonePaiement(), b.getOperateurPaiement(), b.getLienNaissance(), b.getTypeBeneficiaire()
         );
     }
 
@@ -201,11 +225,31 @@ public class BeneficiaireImpl implements BeneficiaireIService {
         b.setDomaineDeFormation(d.getDomaineDeFormation());
         b.setTypeIdentification(d.getTypeIdentification());
         b.setIdentification(d.getIdentification());
-        b.setLienNaissance(d.getLienNaissance());
         b.setQualification(d.getQualification());
+        b.setLieuNaissance(d.getLieuNaissance());
+        b.setPhoto(d.getPhoto());
+        b.setZoneFormation(d.getZoneFormation());
+        b.setDepartementFormation(d.getDepartementFormation());
+        b.setQuartierResidence(d.getQuartierResidence());
+        b.setRue(d.getRue());
+        b.setNumeroAdresse(d.getNumeroAdresse());
+        b.setLocalite(d.getLocalite());
+        b.setEtatMatrimonial(d.getEtatMatrimonial());
+        b.setRelationChefMenage(d.getRelationChefMenage());
+        b.setMilieuResidence(d.getMilieuResidence());
+        b.setSecuriteAlimentaire(d.getSecuriteAlimentaire());
+        b.setSanteExemptionMedecin(d.getSanteExemptionMedecin());
+        b.setSanteProblemeSante(d.getSanteProblemeSante());
+        b.setEnfantsNesVivants(d.getEnfantsNesVivants());
+        b.setEnfantsNesDecedes(d.getEnfantsNesDecedes());
+        b.setScolariteRecente(d.getScolariteRecente());
+        b.setActivitePrincipale(d.getActivitePrincipale());
+        b.setActivitePrincipaleAutre(d.getActivitePrincipaleAutre());
         b.setTelephoneContact(d.getTelephoneContact());
         b.setTelephonePaiement(d.getTelephonePaiement());
         b.setOperateurPaiement(d.getOperateurPaiement());
+        b.setLienNaissance(d.getLienNaissance());
+        b.setTypeBeneficiaire(d.getTypeBeneficiaire());
         return b;
     }
 

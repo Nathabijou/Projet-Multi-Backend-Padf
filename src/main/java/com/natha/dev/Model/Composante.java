@@ -11,6 +11,7 @@ import lombok.Setter;
 
 import javax.tools.Diagnostic;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -55,10 +56,27 @@ public class Composante {
     @OneToMany(mappedBy = "composante", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Zone> zones;
 
-    @OneToMany(mappedBy = "composante", cascade = CascadeType.ALL)
-    private List<Projet> projets;
+    @OneToMany(mappedBy = "composante", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ComposanteProjet> composanteProjets = new ArrayList<>();
 
+    public void addProjet(Projet projet) {
+        ComposanteProjet composanteProjet = new ComposanteProjet();
+        composanteProjet.setComposante(this);
+        composanteProjet.setProjet(projet);
+        composanteProjets.add(composanteProjet);
+        projet.getComposanteProjets().add(composanteProjet);
+    }
 
+    public void removeProjet(Projet projet) {
+        composanteProjets.removeIf(cp -> cp.getProjet().equals(projet));
+        projet.getComposanteProjets().removeIf(cp -> cp.getComposante().equals(this));
+    }
+
+    public List<Projet> getProjets() {
+        return composanteProjets.stream()
+                .map(ComposanteProjet::getProjet)
+                .collect(java.util.stream.Collectors.toList());
+    }
 
     @PreUpdate
     protected void onUpdate() {

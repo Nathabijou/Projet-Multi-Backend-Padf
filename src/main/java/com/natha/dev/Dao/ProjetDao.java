@@ -13,8 +13,27 @@ import java.util.Optional;
 @Repository
 @Transactional(readOnly = true)
 public interface ProjetDao extends JpaRepository<Projet, String> {
-    List<Projet> findByComposanteId(Long composanteId);
-    List<Projet> findByComposanteIdAndQuartierId(Long composanteId, String quartierId);
+    @Query("SELECT p FROM Projet p JOIN p.composanteProjets cp JOIN cp.composante c WHERE c.id = :composanteId")
+    List<Projet> findByComposanteId(@Param("composanteId") Long composanteId);
+
+    @Query("SELECT p FROM Projet p JOIN p.composanteProjets cp JOIN cp.composante c WHERE c.id = :composanteId AND p.quartier.id = :quartierId")
+    List<Projet> findByComposanteIdAndQuartierId(@Param("composanteId") Long composanteId, @Param("quartierId") String quartierId);
+
+    @Query("SELECT p FROM Projet p JOIN p.quartier q JOIN q.sectionCommunale sc JOIN sc.commune c JOIN c.arrondissement a JOIN a.departement d JOIN d.zoneDepartements zd JOIN zd.zone z WHERE z.id = :zoneId")
+    List<Projet> findByZoneId(@Param("zoneId") Long zoneId);
+
+    @Query("SELECT p FROM Projet p WHERE p.quartier.sectionCommunale.commune.arrondissement.id = :arrondissementId")
+    List<Projet> findByArrondissementId(@Param("arrondissementId") Long arrondissementId);
+
+    @Query("SELECT p FROM Projet p WHERE p.quartier.sectionCommunale.commune.id = :communeId")
+    List<Projet> findByCommuneId(@Param("communeId") Long communeId);
+
+    @Query("SELECT p FROM Projet p WHERE p.quartier.sectionCommunale.id = :sectionId")
+    List<Projet> findBySectionCommunaleId(@Param("sectionId") Long sectionId);
+
+    @Query("SELECT p FROM Projet p JOIN p.quartier q JOIN q.sectionCommunale sc JOIN sc.commune c JOIN c.arrondissement a JOIN a.departement d WHERE d.id = :departementId")
+    List<Projet> findByDepartementId(@Param("departementId") Long departementId);
+
     List<Projet> findAllByActiveTrue();
     Optional<Projet> findById(String idProjet);
 
@@ -23,6 +42,8 @@ public interface ProjetDao extends JpaRepository<Projet, String> {
     FROM Projet p 
     JOIN p.projetBeneficiaires pb
     JOIN pb.projetBeneficiaireFormations pbf
+    LEFT JOIN p.composanteProjets cp
+    LEFT JOIN cp.composante comp
     LEFT JOIN p.quartier q
     LEFT JOIN q.sectionCommunale sc
     LEFT JOIN sc.commune c
@@ -31,7 +52,7 @@ public interface ProjetDao extends JpaRepository<Projet, String> {
     LEFT JOIN d.zoneDepartements zd
     LEFT JOIN zd.zone z
     WHERE 1=1
-    AND (:composanteId IS NULL OR p.composante.id = :composanteId)
+    AND (:composanteId IS NULL OR comp.id = :composanteId)
     AND (:projetId IS NULL OR p.idProjet = :projetId)
     AND (:quartierId IS NULL OR q.id = :quartierId)
     AND (:sectionId IS NULL OR sc.id = :sectionId)
@@ -53,6 +74,8 @@ public interface ProjetDao extends JpaRepository<Projet, String> {
 
     @Query("""
         SELECT COUNT(DISTINCT p) FROM Projet p 
+        LEFT JOIN p.composanteProjets cp
+        LEFT JOIN cp.composante comp
         LEFT JOIN p.quartier q 
         LEFT JOIN q.sectionCommunale sc 
         LEFT JOIN sc.commune c 
@@ -60,7 +83,7 @@ public interface ProjetDao extends JpaRepository<Projet, String> {
         LEFT JOIN a.departement d 
         LEFT JOIN d.zoneDepartements zd 
         LEFT JOIN zd.zone z 
-        WHERE (:composanteId IS NULL OR p.composante.id = :composanteId)
+        WHERE (:composanteId IS NULL OR comp.id = :composanteId)
         AND (:zoneId IS NULL OR z.id = :zoneId)
         AND (:departementId IS NULL OR d.id = :departementId)
         AND (:arrondissementId IS NULL OR a.id = :arrondissementId)

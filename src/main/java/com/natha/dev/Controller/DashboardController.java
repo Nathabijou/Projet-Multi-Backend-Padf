@@ -41,7 +41,7 @@ public class DashboardController {
             @RequestParam(required = false) String projetId,
             Principal principal) {
 
-        // Kreye yon nouvo filt ak paramèt yo
+        // Creer Nouveau Filtre avec les paramatres
         DashboardFilter filter = new DashboardFilter();
         filter.setComposanteId(composanteId);
         filter.setZoneId(zoneId);

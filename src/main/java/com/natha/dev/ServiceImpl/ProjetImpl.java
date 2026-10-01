@@ -47,11 +47,13 @@ public class ProjetImpl implements ProjetIService {
         Projet p = projetDao.findById(idProjet)
                 .orElseThrow(() -> new RuntimeException("Projet non trouvé: " + idProjet));
         // verify li lye ak composante
-        if (!p.getComposante().getId().equals(composanteId))
+        if (p.getComposantes().isEmpty() || !p.getComposantes().get(0).getId().equals(composanteId))
             throw new RuntimeException("Projet pa dans composante: " + composanteId);
 
         applyDtoToEntity(dto, p);
-        p.setComposante(comp);
+        // Remove old composante and add new one
+        p.getComposantes().clear();
+        p.addComposante(comp);
         p.setUpdatedAt(LocalDateTime.now());
         Projet saved = projetDao.save(p);
         return convertToDto(saved);
@@ -68,14 +70,16 @@ public class ProjetImpl implements ProjetIService {
                 .orElseThrow(() -> new RuntimeException("Projet non trouvé: " + idProjet));
 
         Long qId = Long.valueOf(quartierId);
-        if (!p.getComposante().getId().equals(composanteId)
+        if (p.getComposantes().isEmpty() || !p.getComposantes().get(0).getId().equals(composanteId)
                 || !p.getQuartier().getId().equals(qId)) {
             throw new RuntimeException("Mismatch composante/quartier for Project: " + idProjet);
         }
 
 
         applyDtoToEntity(dto, p);
-        p.setComposante(comp);
+        // Remove old composante and add new one
+        p.getComposantes().clear();
+        p.addComposante(comp);
         p.setQuartier(q);
         p.setUpdatedAt(LocalDateTime.now());
         Projet saved = projetDao.save(p);
@@ -168,7 +172,7 @@ public class ProjetImpl implements ProjetIService {
 
         // 4) On lie
         p.setQuartier(q);
-        p.setComposante(c);
+        p.addComposante(c);
 
         // 5) Audit
         p.setCreatedAt(LocalDateTime.now());
@@ -272,20 +276,20 @@ public class ProjetImpl implements ProjetIService {
         dto.setModeExecution(p.getModeExecution());
         dto.setLot(p.getLot());
         dto.setMontantFraisCashInCashOut(p.getMontantFraisCashInCashOut());
-        dto.setComposanteId(p.getComposante() != null ? p.getComposante().getId() : null);
         dto.setQuartierId(p.getQuartier() != null ? p.getQuartier().getId() : null);
-        
+
         // Set section communale name
         dto.setSectionCommunaleName(p.getSectionCommunaleName());
 
-        if (p.getComposante() != null) {
-            dto.setComposanteId(p.getComposante().getId());
-            dto.setComposanteCode(p.getComposante().getCode());
-            dto.setComposanteNom(p.getComposante().getNom());
+        if (!p.getComposantes().isEmpty()) {
+            Composante composante = p.getComposantes().get(0);
+            dto.setComposanteId(composante.getId());
+            dto.setComposanteCode(composante.getCode());
+            dto.setComposanteNom(composante.getNom());
 
-            if (p.getComposante().getApplicationInstance() != null) {
-                dto.setApplicationCode(p.getComposante().getApplicationInstance().getCode());
-//        dto.setApplicationNom(p.getComposante().getApplicationInstance().getNom());
+            if (composante.getApplicationInstance() != null) {
+                dto.setApplicationCode(composante.getApplicationInstance().getCode());
+//        dto.setApplicationNom(composante.getApplicationInstance().getNom());
             }
         }
         return dto;

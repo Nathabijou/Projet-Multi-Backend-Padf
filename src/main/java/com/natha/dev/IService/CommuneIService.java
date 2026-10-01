@@ -17,6 +17,7 @@ public interface CommuneIService {
     void delete(Long id);
     List<CommuneDto> getAll();
     List<CommuneDto> getByArrondissementId(Long arrondissementId);
+    List<CommuneDto> getByDepartementId(Long departementId);
 
     List<CommuneDto> findByArrondissementId(Long arrondissementId);
 

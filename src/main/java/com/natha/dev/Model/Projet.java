@@ -89,9 +89,27 @@ public class Projet {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
-    @ManyToOne
-    @JoinColumn(name = "composante_id")
-    private Composante composante;
+    @OneToMany(mappedBy = "projet", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ComposanteProjet> composanteProjets = new ArrayList<>();
+
+    public void addComposante(Composante composante) {
+        ComposanteProjet composanteProjet = new ComposanteProjet();
+        composanteProjet.setProjet(this);
+        composanteProjet.setComposante(composante);
+        composanteProjets.add(composanteProjet);
+        composante.getComposanteProjets().add(composanteProjet);
+    }
+
+    public void removeComposante(Composante composante) {
+        composanteProjets.removeIf(cp -> cp.getComposante().equals(composante));
+        composante.getComposanteProjets().removeIf(cp -> cp.getProjet().equals(this));
+    }
+
+    public List<Composante> getComposantes() {
+        return composanteProjets.stream()
+                .map(ComposanteProjet::getComposante)
+                .collect(java.util.stream.Collectors.toList());
+    }
 
     @ManyToOne
     @JoinColumn(name = "quartier_id")

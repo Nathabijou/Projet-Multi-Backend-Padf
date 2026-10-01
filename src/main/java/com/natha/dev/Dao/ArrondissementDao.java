@@ -13,4 +13,6 @@ public interface ArrondissementDao extends JpaRepository<Arrondissement, Long> {
 
     @Query("SELECT DISTINCT p.quartier.sectionCommunale.commune.arrondissement FROM Projet p WHERE p.quartier.sectionCommunale.commune.arrondissement.departement.id = :departementId")
     List<Arrondissement> findByDepartementIdWithProjects(@Param("departementId") Long departementId);
+
+    List<Arrondissement> findAll();
 }

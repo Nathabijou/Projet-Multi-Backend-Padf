@@ -1,5 +1,6 @@
 package com.natha.dev.IService;
 
+import com.natha.dev.Dto.PayrollBatchDto;
 import com.natha.dev.Dto.PayrollDto;
 import com.natha.dev.Dto.PeriodeMethodePaiementDTO;
 import java.util.List;
@@ -15,5 +16,9 @@ public interface PayrollIService {
     List<PayrollDto> getPayrollsByProjet(String projetId);
 
     List<PeriodeMethodePaiementDTO> getMethodePaiementParPeriode(String projetId);
+
+    List<PayrollDto> importPayrollBatch(PayrollBatchDto batchDto);
+
+    List<PayrollDto> importPayrollFromCsv(String csvContent);
 
 }

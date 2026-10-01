@@ -1,5 +1,6 @@
 package com.natha.dev.Controller;
 
+import com.natha.dev.Dto.PayrollBatchDto;
 import com.natha.dev.Dto.PayrollDto;
 import com.natha.dev.Dto.PeriodeMethodePaiementDTO;
 import com.natha.dev.IService.PayrollIService;
@@ -57,4 +58,17 @@ public class PayrollController {
         return ResponseEntity.ok(updated);
     }
 
+    @PreAuthorize("hasAnyRole('Admin', 'Manager', 'User')")
+    @PostMapping("/import-batch")
+    public ResponseEntity<List<PayrollDto>> importPayrollBatch(@RequestBody PayrollBatchDto batchDto) {
+        List<PayrollDto> results = payrollIService.importPayrollBatch(batchDto);
+        return ResponseEntity.ok(results);
+    }
+
+    @PreAuthorize("hasAnyRole('Admin', 'Manager', 'User')")
+    @PostMapping("/import-csv")
+    public ResponseEntity<List<PayrollDto>> importPayrollFromCsv(@RequestBody String csvContent) {
+        List<PayrollDto> results = payrollIService.importPayrollFromCsv(csvContent);
+        return ResponseEntity.ok(results);
+    }
 }

@@ -20,4 +20,8 @@ public interface CommuneDao extends JpaRepository<Commune, Long> {
     @Query("SELECT DISTINCT c FROM Projet p JOIN p.quartier q JOIN q.sectionCommunale sc JOIN sc.commune c WHERE c.arrondissement.id = :arrondissementId")
     List<Commune> findCommunesWithProjetsByArrondissementId(@Param("arrondissementId") Long arrondissementId);
 
+    @Query("SELECT c FROM Commune c WHERE c.arrondissement.departement.id = :departementId")
+    List<Commune> findByDepartementId(@Param("departementId") Long departementId);
+
+    List<Commune> findAll();
 }

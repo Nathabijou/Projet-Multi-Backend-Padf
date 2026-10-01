@@ -24,4 +24,5 @@ public class PayrollDto {
     private int nbrejourTravail;
     private Double montantParJour;
     private Double fraisTransport;
+    private String projetBeneficiaireId;
 }

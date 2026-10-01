@@ -10,4 +10,6 @@ import java.util.List;
 public interface SectionCommunaleDao extends JpaRepository<SectionCommunale, Long> {
     @Query("SELECT DISTINCT sc FROM Projet p JOIN p.quartier q JOIN q.sectionCommunale sc WHERE sc.commune.id = :communeId")
     List<SectionCommunale> findByCommuneIdWithProjet(@Param("communeId") Long communeId);
+
+    List<SectionCommunale> findAll();
 }

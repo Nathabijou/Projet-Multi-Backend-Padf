@@ -29,6 +29,11 @@ public class CommuneController {
         return communeIService.getByArrondissementId(id);
     }
     @PreAuthorize("hasAnyRole('Admin', 'Manager', 'User')")
+    @GetMapping("/communes/departement/{id}")
+    public List<CommuneDto> getByDepartementId(@PathVariable Long id) {
+        return communeIService.getByDepartementId(id);
+    }
+    @PreAuthorize("hasAnyRole('Admin', 'Manager', 'User')")
     @GetMapping("/communes/all")
     public List<CommuneDto> all() {
         return communeIService.getAll();

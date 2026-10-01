@@ -13,4 +13,5 @@ public interface DepartementDao extends JpaRepository<Departement, Long> {
     @Query("SELECT zd.departement FROM ZoneDepartement zd WHERE zd.zone.id = :zoneId")
     List<Departement> findByZoneId(@Param("zoneId") Long zoneId);
 
+    List<Departement> findAll();
 }

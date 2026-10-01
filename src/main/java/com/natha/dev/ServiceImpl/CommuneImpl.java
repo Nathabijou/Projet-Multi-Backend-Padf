@@ -69,6 +69,11 @@ public class CommuneImpl implements CommuneIService {
         return communeDao.findCommunesWithProjetsByArrondissementId(arrondissementId).stream().map(this::convertToDto).toList();
     }
 
+    @Override
+    public List<CommuneDto> getByDepartementId(Long departementId) {
+        List<Commune> communes = communeDao.findByDepartementId(departementId);
+        return convertToDtoList(communes);
+    }
 
     @Override
     public CommuneDto save(CommuneDto communeDto) {

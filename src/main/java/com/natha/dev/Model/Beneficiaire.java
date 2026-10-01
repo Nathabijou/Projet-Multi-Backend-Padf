@@ -34,6 +34,26 @@ public class Beneficiaire {
     private String identification;
     private String qualification;
 
+    private String lieuNaissance;
+    private String photo;
+    private String zoneFormation;
+    private String departementFormation;
+    private String quartierResidence;
+    private String rue;
+    private String numeroAdresse;
+    private String localite;
+    private String etatMatrimonial;
+    private String relationChefMenage;
+    private String milieuResidence;
+    private String securiteAlimentaire;
+    private String santeExemptionMedecin;
+    private String santeProblemeSante;
+    private Integer enfantsNesVivants;
+    private Integer enfantsNesDecedes;
+    private String scolariteRecente;
+    private String activitePrincipale;
+    private String activitePrincipaleAutre;
+
     private String telephoneContact;
     private String telephonePaiement;
     private String operateurPaiement;
