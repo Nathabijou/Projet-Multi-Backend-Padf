@@ -3,6 +3,7 @@ package com.natha.dev.ServiceImpl;
 import com.natha.dev.Dao.PresenceDao;
 import com.natha.dev.Dao.ProjetBeneficiaireDao;
 import com.natha.dev.Dao.ProjetBeneficiaireFormationDao;
+import com.natha.dev.Dto.PresenceCountDto;
 import com.natha.dev.Dto.PresenceDto;
 import com.natha.dev.IService.PresenceIService;
 import com.natha.dev.Model.Presence;
@@ -11,6 +12,8 @@ import com.natha.dev.Model.ProjetBeneficiaireFormation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -108,8 +111,90 @@ public class PresenceImpl implements PresenceIService {
         );
     }
 
+    @Override
+    public PresenceCountDto getPresenceCountByPeriode(String projetId, String beneficiaireId, LocalDate debutPeriode, LocalDate finPeriode) {
+        ProjetBeneficiaire pb = projetBeneficiaireDao
+                .findByProjetAndBeneficiaire(projetId, beneficiaireId)
+                .orElseThrow(() -> new RuntimeException("Relasyon Projet-Bénéficiaire pa jwenn"));
 
+        List<Presence> presences = presenceDao.findByProjetBeneficiaireAndPeriode(
+                pb.getIdProjetBeneficiaire(),
+                debutPeriode,
+                finPeriode
+        );
 
+        List<LocalDate> dates = presences.stream()
+                .map(Presence::getDatePresence)
+                .collect(Collectors.toList());
 
+        return new PresenceCountDto(presences.size(), dates);
+    }
 
+    @Override
+    public PresenceDto checkOut(String idPresence, LocalTime heureSorti) {
+        Presence presence = presenceDao.findById(idPresence)
+                .orElseThrow(() -> new RuntimeException("Presence pa jwenn"));
+
+        if (presence.getHeurEntrer() == null) {
+            throw new RuntimeException("Check-in pa fèt ankò, ou pa ka check-out");
+        }
+
+        presence.setHeureSorti(heureSorti);
+
+        long heuresTravail = java.time.Duration.between(presence.getHeurEntrer(), heureSorti).toHours();
+
+        if (heuresTravail < 5) {
+            throw new RuntimeException("Presence la pa konte - ou dwe gen omwen 5 èdtan travay");
+        }
+
+        return convertToDto(presenceDao.save(presence));
+    }
+
+    @Override
+    public PresenceDto resetPresenceTime(String idPresence, String timeType) {
+        Presence presence = presenceDao.findById(idPresence)
+                .orElseThrow(() -> new RuntimeException("Presence pa jwenn"));
+
+        if ("checkin".equalsIgnoreCase(timeType)) {
+            presence.setHeurEntrer(null);
+        } else if ("checkout".equalsIgnoreCase(timeType)) {
+            presence.setHeureSorti(null);
+        } else {
+            throw new RuntimeException("TimeType dwe 'checkin' oswa 'checkout'");
+        }
+
+        return convertToDto(presenceDao.save(presence));
+    }
+
+    @Override
+    public PresenceDto updateCheckIn(String idPresence, LocalTime heurEntrer) {
+        Presence presence = presenceDao.findById(idPresence)
+                .orElseThrow(() -> new RuntimeException("Presence pa jwenn"));
+        presence.setHeurEntrer(heurEntrer);
+        return convertToDto(presenceDao.save(presence));
+    }
+
+    @Override
+    public PresenceDto updateCheckOut(String idPresence, LocalTime heureSorti) {
+        Presence presence = presenceDao.findById(idPresence)
+                .orElseThrow(() -> new RuntimeException("Presence pa jwenn"));
+        presence.setHeureSorti(heureSorti);
+        return convertToDto(presenceDao.save(presence));
+    }
+
+    @Override
+    public void deleteCheckIn(String idPresence) {
+        Presence presence = presenceDao.findById(idPresence)
+                .orElseThrow(() -> new RuntimeException("Presence pa jwenn"));
+        presence.setHeurEntrer(null);
+        presenceDao.save(presence);
+    }
+
+    @Override
+    public void deleteCheckOut(String idPresence) {
+        Presence presence = presenceDao.findById(idPresence)
+                .orElseThrow(() -> new RuntimeException("Presence pa jwenn"));
+        presence.setHeureSorti(null);
+        presenceDao.save(presence);
+    }
 }

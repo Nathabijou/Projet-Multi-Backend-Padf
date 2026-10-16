@@ -1,12 +1,14 @@
 package com.natha.dev.ServiceImpl;
 
 import com.natha.dev.Dao.PayrollDao;
+import com.natha.dev.Dao.PresenceDao;
 import com.natha.dev.Dao.ProjetBeneficiaireDao;
 import com.natha.dev.Dto.PayrollBatchDto;
 import com.natha.dev.Dto.PayrollDto;
 import com.natha.dev.Dto.PeriodeMethodePaiementDTO;
 import com.natha.dev.IService.PayrollIService;
 import com.natha.dev.Model.Payroll;
+import com.natha.dev.Model.Presence;
 import com.natha.dev.Model.ProjetBeneficiaire;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +27,7 @@ public class PayrollImpl implements PayrollIService {
 
     private final PayrollDao payrollDao;
     private final ProjetBeneficiaireDao projetBeneficiaireDao;
+    private final PresenceDao presenceDao;
 
     @Override
     public PayrollDto createPayroll(String projetId, String beneficiaireId, PayrollDto dto) {
@@ -37,11 +40,24 @@ public class PayrollImpl implements PayrollIService {
         payroll.setMethodePaiement(dto.getMethodePaiement());
         payroll.setDebutPeriode(dto.getDebutPeriode());
         payroll.setFinPeriode(dto.getFinPeriode());
-        payroll.setNbreJourTravail(dto.getNbrejourTravail());
         payroll.setStatut(dto.getStatut());
         payroll.setDatePaiement(dto.getDatePaiement());
         payroll.setProjetBeneficiaire(pb);
         payroll.setFraisTransport(dto.getFraisTransport());
+
+        // Kalkile nbreJourTravail soti nan Presence si peryòd la bay
+        int nbreJourTravail = 0;
+        if (dto.getDebutPeriode() != null && dto.getFinPeriode() != null) {
+            List<Presence> presences = presenceDao.findByProjetBeneficiaireAndPeriode(
+                    pb.getIdProjetBeneficiaire(),
+                    dto.getDebutPeriode(),
+                    dto.getFinPeriode()
+            );
+            nbreJourTravail = presences.size();
+        } else if (dto.getNbrejourTravail() > 0) {
+            nbreJourTravail = dto.getNbrejourTravail();
+        }
+        payroll.setNbreJourTravail(nbreJourTravail);
 
         // Kalkile montantPayer otomatik
         double montantParJour = dto.getMontantParJour() != null ? dto.getMontantParJour() : 0.0;
@@ -81,10 +97,23 @@ public class PayrollImpl implements PayrollIService {
         payroll.setMethodePaiement(dto.getMethodePaiement());
         payroll.setDebutPeriode(dto.getDebutPeriode());
         payroll.setFinPeriode(dto.getFinPeriode());
-        payroll.setNbreJourTravail(dto.getNbrejourTravail());
         payroll.setStatut(dto.getStatut());
         payroll.setDatePaiement(dto.getDatePaiement());
         payroll.setFraisTransport(dto.getFraisTransport());
+
+        // Kalkile nbreJourTravail soti nan Presence si peryòd la bay
+        int nbreJourTravail = 0;
+        if (dto.getDebutPeriode() != null && dto.getFinPeriode() != null) {
+            List<Presence> presences = presenceDao.findByProjetBeneficiaireAndPeriode(
+                    payroll.getProjetBeneficiaire().getIdProjetBeneficiaire(),
+                    dto.getDebutPeriode(),
+                    dto.getFinPeriode()
+            );
+            nbreJourTravail = presences.size();
+        } else if (dto.getNbrejourTravail() > 0) {
+            nbreJourTravail = dto.getNbrejourTravail();
+        }
+        payroll.setNbreJourTravail(nbreJourTravail);
 
         double montantParJour = dto.getMontantParJour() != null ? dto.getMontantParJour() : 0.0;
         payroll.setMontantPayer(payroll.getNbreJourTravail() * montantParJour);
@@ -112,20 +141,33 @@ public class PayrollImpl implements PayrollIService {
                     .orElseThrow(() -> new RuntimeException("ProjetBeneficiaire pa jwenn pou ID: " + dto.getProjetBeneficiaireId()));
 
             Payroll payroll = new Payroll();
-            
+
             if (dto.getIdPayroll() != null && !dto.getIdPayroll().isEmpty()) {
                 payroll.setIdPayroll(dto.getIdPayroll());
             }
-            
+
             payroll.setIdTransaction(dto.getIdTransaction());
             payroll.setMethodePaiement(dto.getMethodePaiement());
             payroll.setDebutPeriode(dto.getDebutPeriode());
             payroll.setFinPeriode(dto.getFinPeriode());
-            payroll.setNbreJourTravail(dto.getNbrejourTravail());
             payroll.setStatut(dto.getStatut());
             payroll.setDatePaiement(dto.getDatePaiement());
             payroll.setProjetBeneficiaire(pb);
             payroll.setFraisTransport(dto.getFraisTransport());
+
+            // Kalkile nbreJourTravail soti nan Presence si peryòd la bay
+            int nbreJourTravail = 0;
+            if (dto.getDebutPeriode() != null && dto.getFinPeriode() != null) {
+                List<Presence> presences = presenceDao.findByProjetBeneficiaireAndPeriode(
+                        pb.getIdProjetBeneficiaire(),
+                        dto.getDebutPeriode(),
+                        dto.getFinPeriode()
+                );
+                nbreJourTravail = presences.size();
+            } else if (dto.getNbrejourTravail() > 0) {
+                nbreJourTravail = dto.getNbrejourTravail();
+            }
+            payroll.setNbreJourTravail(nbreJourTravail);
 
             if (dto.getMontantPayer() != null) {
                 payroll.setMontantPayer(dto.getMontantPayer());
@@ -135,10 +177,10 @@ public class PayrollImpl implements PayrollIService {
             }
 
             Payroll saved = payrollDao.save(payroll);
-            
-            double montantParJour = dto.getMontantParJour() != null ? dto.getMontantParJour() : 
+
+            double montantParJour = dto.getMontantParJour() != null ? dto.getMontantParJour() :
                 (saved.getMontantPayer() / (saved.getNbreJourTravail() == 0 ? 1 : saved.getNbreJourTravail()));
-            
+
             results.add(convertToDto(saved, montantParJour));
         }
 
